@@ -59,6 +59,9 @@ class RecipeToIngredient(db.Model):
 	recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.recipe_id'), nullable=False)
 	ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.ingredient_id'), nullable=False)
 
+	recipe = db.relationship("Recipe", backref="recipes_to_ingredients")
+	ingredient = db.relationship("Ingredient", backref="recipes_to_ingredients")
+
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
@@ -89,6 +92,9 @@ class AmountToIngredient(db.Model):
 	amount_id = db.Column(db.Integer, db.ForeignKey('amounts.amount_id'), nullable=False)
 	ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.ingredient_id'), nullable=False)
 
+	amount = db.relationship("Amount", backref="amounts_to_ingredients")
+	ingredient = db.relationship("Ingredient", backref="amounts_to_ingredients")
+
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
@@ -104,14 +110,14 @@ class User(db.Model):
 	user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	fname = db.Column(db.String(20), nullable=False)
 	lname = db.Column(db.String(20), nullable=False)
-	user_name = db.Column(db.String(15), nullable=False)
+	user_email = db.Column(db.String(15), nullable=False)
 	user_password = db.Column(db.String(20), nullable=False)
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<User user_id={} fname={} lname ={} user_name={} user_password={}>".format(self.user_id, 
-			self.fname, self.lname, self.user_name, self.user_password)
+			self.fname, self.lname, self.user_email, self.user_password)
 
 
 class UserToRecipe(db.Model):
@@ -122,6 +128,10 @@ class UserToRecipe(db.Model):
 	user_recipe_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.recipe_id'), nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+
+	user = db.relationship("User", backref="users_to_recipes")
+	recipe = db.relationship("Recipe", backref="users_to_recipes")
+
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
@@ -139,7 +149,7 @@ def example_data():
 		carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000)
 	olive = Ingredient(ingredient_name='olive')
 	amount = Amount(ingredient_amount='1 can')
-	harry = User(fname='Harry', lname='Potter', user_name='hpotter', user_password='hufflepuff')
+	harry = User(fname='Harry', lname='Potter', user_email='hpotter@gmail.com', user_password='hufflepuff')
 
 
 	db.session.add_all([pizza, olive, amount, harry])
@@ -152,7 +162,6 @@ def connect_to_db(app):
 	""" Connect the database to our Flask App"""
 
 	# Configure to use our PstgreSQL database
-	# ASK WHAT I AM DOING WHEN I ADD LINE 152
 	app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///recipesdb'
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 	db.app = app

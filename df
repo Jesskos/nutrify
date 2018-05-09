@@ -1,0 +1,5 @@
+ recipe_id | recipe_name | recipe_image | recipe_url | calories | carbohydrates | protein | fiber | fat | potassium | phosphorus | sodium 
+-----------+-------------+--------------+------------+----------+---------------+---------+-------+-----+-----------+------------+--------
+         1 | pizza       | pizza.jpg    | pizza.com  |      500 |            60 |      10 |     1 |  30 |       200 |        230 |   1000
+(1 row)
+
