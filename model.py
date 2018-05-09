@@ -27,7 +27,6 @@ class Recipe(db.Model):
 	phosphorus = db.Column(db.Integer, nullable=False)
 	sodium = db.Column(db.Integer, nullable=False)
 
-
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
@@ -35,6 +34,7 @@ class Recipe(db.Model):
 		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}>".format(self.recipe_id, 
 			self.recipe_name, self.recipe_image, self.recipe_url, self.calories, self.carbohydrates, self.protein,
 			self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium )
+
 
 class Ingredient(db.Model):
 	""" Ingredient in recipes """
@@ -48,7 +48,7 @@ class Ingredient(db.Model):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<Ingredient ingredient_id={} ingredient_name={}>".format(self.ingredient_id, self.ingredient_name) 
-			
+
 
 class RecipeToIngredient(db.Model):
 	""" Middle table to connect recipes and ingredients """
@@ -59,14 +59,11 @@ class RecipeToIngredient(db.Model):
 	recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.recipe_id'), nullable=False)
 	ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.ingredient_id'), nullable=False)
 
-
-
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<RecipeToIngredient recipe_to_ingredient_id={} recipe_id={} ingredient_id={}>".format(
 			self.recipe_to_ingredient_id, self.recipe_id, self.ingredient_id)
-
 
 
 class Amount(db.Model):
@@ -77,9 +74,6 @@ class Amount(db.Model):
 	amount_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	ingredient_amount = db.Column(db.String(10), nullable=False)
 
-	
-
-	
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
@@ -89,7 +83,7 @@ class Amount(db.Model):
 class AmountToIngredient(db.Model):
 	""" Middle table between amounts and ingredients """
 
-	__tablename__ = "amounts to ingredients"
+	__tablename__ = "amounts_to_ingredients"
 
 	amount_to_ingredients_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	amount_id = db.Column(db.Integer, db.ForeignKey('amounts.amount_id'), nullable=False)
@@ -100,6 +94,7 @@ class AmountToIngredient(db.Model):
 
 		return "<AmountToIngredient amount_to_ingredients_id={} amount={} ingredient_id={}>".format(
 			self.amount_to_ingredients_id, self.amount, self.ingredient_id)
+
 
 class User(db.Model):
 	""" class of users and passwords """
@@ -118,6 +113,7 @@ class User(db.Model):
 		return "<User user_id={} fname={} lname ={} user_name={} user_password={}>".format(self.user_id, 
 			self.fname, self.lname, self.user_name, self.user_password)
 
+
 class UserToRecipe(db.Model):
 	""" Middle table connecting users and recipes """
 
@@ -126,7 +122,7 @@ class UserToRecipe(db.Model):
 	user_recipe_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.recipe_id'), nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
- 
+
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 

@@ -17,18 +17,24 @@ def index():
 
 		
 
-# @app.route("/login")
-# 	# user login 
+@app.route("/login")
+def login():
 	 
 
-# @app.route("/find-recipes")
-# 	# render template for find recipes
-# 	# allow for uses to query on certain ingredient
+@app.route("/find-recipes")
+def find_recipe():
+	# render template for find recipes
+	# allow for uses to query on certain ingredient
 	
 
-# @app.route("/view-recipes")
-# 	# need function to view recipes
-# 	# need function to add revipes amongst those found
+@app.route("/view-recipes")
+def view_recipe():
+	# need function to view recipes
+	# need function to add revipes amongst those found
+
+@app.route("/add-recipe")
+def add_recipe():
+
 	
 
 
