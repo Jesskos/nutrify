@@ -3,6 +3,11 @@
 
 
 {% block content %}
+<ul> 
+	{% for message in get_flashed_messages() %}
+	<li>{{ message }}</li>
+	{% endfor %}
+</ul>
 
 <h3> Welcome! Please fill out the following form to register</h3>
 

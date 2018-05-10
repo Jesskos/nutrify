@@ -5,11 +5,19 @@
 {% block content %}
 
 
-<h2> Please Log In! </h2>
 <ul> 
 	{% for message in get_flashed_messages() %}
 	<li>{{ message }}</li>
 	{% endfor %}
 </ul>
+
+<h2> Please Log In! </h2>
+
+<form action="/get-login-info" method="GET">
+	Email Address: <input type="text" name="email" required> <p>
+	Password: <input type="text" name="password" required> <p>
+	<input type="submit">
+</form>
+
 
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} User Portal {% endblock %}
+
+{% block content %}
+<h2> Welcome, {{ session["name"] }} </h2>
+
+<form action="/log-out"> 
+	<button type="submit" name="logout">Logout</button>
+</form>
+
+<form action="/find-recipe"> 
+	<button type="submit" name="findrecipe">Find Recipes</button>
+</form>
+
+<form action="/view-recipes"> 
+	<button type="submit" name="viewrecipe">View Recipes</button>
+</form>
+
+<h3> Please search for recipes using our cool (borrowed) API! </h3>
+
+{% endblock %}

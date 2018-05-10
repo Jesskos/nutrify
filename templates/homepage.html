@@ -3,11 +3,20 @@
 
 {% block title %}Homepage{% endblock %}
 
+<ul> 
+	{% for message in get_flashed_messages() %}
+	<li>{{ message }}</li>
+	{% endfor %}
+</ul>
+
 
 {% block content %}
 
-<h1> Welcome! </h1>
-<h2> What would you like to do? </h2>
+<h1> Welcome to the Homepage! </h1>
+
+<h3> Find recipes based on your dietary needs! </h3>
+
+<h2> Pleae login or register for an account to get started </h2>
 
 <form action="/register"> 
 	<button type="submit" name="register">Register</button>

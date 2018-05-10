@@ -12,26 +12,36 @@ app.secret_key="Apple"
 @app.route("/")
 def index():
 	""" Homepage """
+
+	if "name" in session:
+		return render_template("userportal.html")
+
 	return render_template("homepage.html")
 	
 
 @app.route("/register")
 def homepage_options():
 	""" opens registration page """
+
+	if "name" in session:
+		return render_template("userportal.html")
+
 	return render_template("register.html")
 
 
 @app.route("/login")
 def login():
-	 """ opens login page """
+	""" opens login page """
 
+	if "name" in session:
+		return render_template("userportal.html")
 
-	 return render_template("login.html") 
+	return render_template("login.html") 
 
 
 @app.route("/update-registration-info", methods=["POST"])
 def update_registration_info():
-	""" updates registration information if account does not exist """
+	""" updates registration information if account does not already exist """
 
 	first_name = request.form.get("firstname")
 	last_name = request.form.get("lastname")
@@ -51,19 +61,69 @@ def update_registration_info():
 		flash("You have now been registered! Please log in")
 		return redirect("/login")
 
-@app.route("/find-recipes")
+
+@app.route("/get-login-info", methods=["GET"])
+def get_login_info():
+	""" gets login info, checks if user in database, and checks password matches username in db"""
+
+	email = request.args.get('email')
+	password = request.args.get('password')
+
+	user = User.query.filter_by(user_email=email).first()
+
+	if user:
+		if user.user_password != password:
+			flash("Your password is incorrect! Please try again")
+			return redirect("/login")
+		else:
+			session['name'] = user.fname
+			return render_template('userportal.html')
+
+	else:
+		flash("You have not signed up yet. Please sign up!")
+		return redirect("/register")
+
+
+@app.route("/log-out")
+def log_out():
+	""" gets information from browser to log user out """
+
+	if "name" in session:
+		del session['name']
+
+	flash("You are now logged out!")
+	return redirect("/")
+
+
+
+
+@app.route("/user-portal")
+def open_user_portal():
+	"""renders template for user portal"""
+ 	
+ 	if "name" in session:
+ 		return render_template('userportal.html') 
+
+ 	else:
+ 		return redirect("/")
+
+@app.route("/find-recipe")
 def find_recipe():
- 
- 	pass 
+	""" renders template for view recipe """
+
+	return render_template('findrecipes.html')
+
 
 @app.route("/view-recipes")
 def view_recipe():
-	# need function to view recipes
-	# need function to add recipes amongst those found
-	pass 
+	""" views recipes which were added to database """ 
+
+	return render_template('viewrecipes.html') 
+
 
 @app.route("/add-recipe")
 def add_recipe():
+	""" adds recipe to database """
 
 	pass 
 
