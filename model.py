@@ -110,7 +110,7 @@ class User(db.Model):
 	user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	fname = db.Column(db.String(20), nullable=False)
 	lname = db.Column(db.String(20), nullable=False)
-	user_email = db.Column(db.String(15), nullable=False)
+	user_email = db.Column(db.String(60), nullable=False)
 	user_password = db.Column(db.String(20), nullable=False)
 
 	def __repr__(self):
@@ -150,7 +150,8 @@ def example_data():
 	olive = Ingredient(ingredient_name='olive')
 	amount = Amount(ingredient_amount='1 can')
 	harry = User(fname='Harry', lname='Potter', user_email='hpotter@gmail.com', user_password='hufflepuff')
-
+	Userpizza = UserToRecipe(recipe=pizza, user=harry)
+	
 
 	db.session.add_all([pizza, olive, amount, harry])
 	db.session.commit()

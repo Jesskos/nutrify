@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
+
+{% block title %}Log In {% endblock %}
+
 {% block content %}
-{% block title %}I am a Log In Page {% endblock %}
+
+
+<h2> Please Log In! </h2>
+<ul> 
+	{% for message in get_flashed_messages() %}
+	<li>{{ message }}</li>
+	{% endfor %}
+</ul>
 
 {% endblock %}

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}I am a Register Page {% endblock %}
+{% block title %}Registration Page {% endblock %}
 
 
 {% block content %}
@@ -11,19 +11,20 @@
 	Last Name: <input type="text" name="lastname" required> <p>
 	Email Address: <input type="text" name="email" required> <p>
 	Enter a Password: <input type="text" name="password" required> <p>
-</form>
-
-<form action="/update-registration-info" method="POST">
-	<h4> Types of Diet you would like to follow: (optional) </h4> 
-<!-- 	will not receive information nor from this yet, but will at the end if time permits -->
-	<input type="checkbox" name="diet" value="lowpotassium"> Low Potassium 
-	<input type="checkbox" name="diet" value="Hypertension"> Low Phosphorus <p>
-	<input type="checkbox" name="diet" value="lowsodium"> Low Sodium 
-	<input type="checkbox" name="diet" value="lowcalorie"> Low Calorie <p>
-	<input type="checkbox" name="diet" value="Carbcontrolled"> Carbohydrate Controlled 
-	<input type="checkbox" name="diet" value="highfiber"> High Fiber <p>
-	<input type="checkbox" name="diet" value="lowfiber"> Low Fiber <p>
 	<input type="submit">
 </form>
 
+<!-- <form action="/update-registration-info" method="POST"> -->
+<!-- 	<h4> Types of Diet you would like to follow: (optional) </h4>  -->
+<!-- 	will not receive information nor from this yet, but will at the end if time permits -->
+<!-- 	<input type="checkbox" name="diet" value="lowpotassium"> Low Potassium  -->
+<!-- 	<input type="checkbox" name="diet" value="Hypertension"> Low Phosphorus <p> -->
+<!-- 	<input type="checkbox" name="diet" value="lowsodium"> Low Sodium  -->
+<!-- 	<input type="checkbox" name="diet" value="lowcalorie"> Low Calorie <p> -->
+<!-- 	<input type="checkbox" name="diet" value="Carbcontrolled"> Carbohydrate Controlled  -->
+<!-- 	<input type="checkbox" name="diet" value="highfiber"> High Fiber <p> -->
+<!-- 	<input type="checkbox" name="diet" value="lowfiber"> Low Fiber <p>
+ -->	<!-- <input type="submit"> -->
+<!-- </form>
+ -->
 {% endblock %}

@@ -1,6 +1,6 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash, session)
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
 
 app = Flask(__name__)
@@ -42,14 +42,14 @@ def update_registration_info():
 
 	if user:
 		flash("You already have an account. Please log in!")
+		return redirect("/login")
 
 	else:
 		new_user = User(fname=first_name, lname=last_name, user_email=email, user_password=password)
 		db.session.add(new_user)
 		db.session.commit()
 		flash("You have now been registered! Please log in")
-
-	return redirect("/login")
+		return redirect("/login")
 
 @app.route("/find-recipes")
 def find_recipe():
@@ -59,7 +59,7 @@ def find_recipe():
 @app.route("/view-recipes")
 def view_recipe():
 	# need function to view recipes
-	# need function to add revipes amongst those found
+	# need function to add recipes amongst those found
 	pass 
 
 @app.route("/add-recipe")
@@ -80,6 +80,6 @@ if __name__ == "__main__":
     connect_to_db(app)
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     app.run(port=5000, host='0.0.0.0')
