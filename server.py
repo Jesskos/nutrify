@@ -76,7 +76,7 @@ def get_login_info():
 			flash("Your password is incorrect! Please try again")
 			return redirect("/login")
 		else:
-			session['name'] = user.fname
+			session['name'] = user
 			return render_template('userportal.html')
 
 	else:
@@ -110,6 +110,8 @@ def open_user_portal():
 @app.route("/find-recipe")
 def find_recipe():
 	""" renders template for view recipe """
+
+	# in 
 
 	return render_template('findrecipes.html')
 
