@@ -2,6 +2,8 @@ from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash, session)
 # from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
+import json 
+import requests 
 
 app = Flask(__name__)
 
@@ -76,7 +78,7 @@ def get_login_info():
 			flash("Your password is incorrect! Please try again")
 			return redirect("/login")
 		else:
-			session['name'] = user
+			session['name'] = user.fname
 			return render_template('userportal.html')
 
 	else:
@@ -107,20 +109,33 @@ def open_user_portal():
  	else:
  		return redirect("/")
 
+@app.route("/get-recipe.json")
+def get_recipe():
+	""" gets the jsonified recipe"""
+
+	food_choice = request.args.get("food")
+
+	r = requests.get('https://api.edamam.com/search?q='+ food_choice +'&app_id=701b2057&app_key=9f957ee3872be9ddfbadfd3ee005f3a2')
+
+	recipes_json = r
+
+	return render_template("viewrecipes.html", recipes=recipes_json)
+
+
 @app.route("/find-recipe")
 def find_recipe():
 	""" renders template for view recipe """
 
-	# in 
+	# 
 
 	return render_template('findrecipes.html')
 
 
-@app.route("/view-recipes")
-def view_recipe():
+@app.route("/view-saved-recipes")
+def view_saved_recipes():
 	""" views recipes which were added to database """ 
 
-	return render_template('viewrecipes.html') 
+	return render_template('viewsavedrecipes.html') 
 
 
 @app.route("/add-recipe")

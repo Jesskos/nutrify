@@ -3,7 +3,12 @@
 {% block title %} View Recipes {% endblock %}
 
 {% block content %}
-<h2> Hello, {{ session["name"] }} . Please view your saved recipes here! </h2>
+<h2> Hello, {{ session["name"] }} . Here are your recipes </h2>
+
+<ul>
+	{{ recipes }}
+	</ul>
+	}
 
 
 {% endblock %}
