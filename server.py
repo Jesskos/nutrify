@@ -117,7 +117,9 @@ def get_recipe():
 
 	r = requests.get('https://api.edamam.com/search?q='+ food_choice +'&app_id=701b2057&app_key=9f957ee3872be9ddfbadfd3ee005f3a2')
 
-	recipes_json = r
+	recipes_json = r.json()
+
+	url = recipes_json['hits'][0]['recipe']['url']
 
 	return render_template("viewrecipes.html", recipes=recipes_json)
 

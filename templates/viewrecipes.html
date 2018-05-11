@@ -6,9 +6,10 @@
 <h2> Hello, {{ session["name"] }} . Here are your recipes </h2>
 
 <ul>
-	{{ recipes }}
+	{% for recipe in recipes %}
+	<li>{{ recipe['hits'][0]['recipe']['url'] }} </li>
+	{% endfor %}
 	</ul>
-	}
-
+	
 
 {% endblock %}

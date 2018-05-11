@@ -18,14 +18,15 @@ class Recipe(db.Model):
 	recipe_name = db.Column(db.String(60), nullable=False)
 	recipe_image = db.Column(db.String(100), nullable=True)
 	recipe_url = db.Column(db.String(100), nullable=False)
+	ingredients_list = db.Column(db.Integer, nullable=False)
 	calories = db.Column(db.Integer, nullable=False)
-	carbohydrates = db.Column(db.Integer, nullable=False)
-	protein = db.Column(db.Integer, nullable=False)
+	carbohydrates = db.Column(db.Integer, nullable=True)
+	protein = db.Column(db.Integer, nullable=True)
 	fiber = db.Column(db.Integer, nullable=True)
-	fat = db.Column(db.Integer, nullable=False)
-	potassium = db.Column(db.Integer, nullable=False)
-	phosphorus = db.Column(db.Integer, nullable=False)
-	sodium = db.Column(db.Integer, nullable=False)
+	fat = db.Column(db.Integer, nullable=True)
+	potassium = db.Column(db.Integer, nullable=True)
+	phosphorus = db.Column(db.Integer, nullable=True)
+	sodium = db.Column(db.Integer, nullable=True)
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
@@ -34,6 +35,23 @@ class Recipe(db.Model):
 		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}>".format(self.recipe_id, 
 			self.recipe_name, self.recipe_image, self.recipe_url, self.calories, self.carbohydrates, self.protein,
 			self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium )
+
+class RecipeLabel(db.Model):
+
+	""" Nutrition and Diet Labels on Recipes """
+
+	__tablename__ = "recipes_labels"
+
+	recipes_nutrition_label_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+	recipes_id = db.Column(db.Integer, db.ForeignKey('recipes.recipe_id'), nullable=False)
+	diet_label = db.Column(db.String(30), nullable=True)
+	nutrition_label = db.Column(db.String(30), nullable=True)
+
+	def __repr__(self):
+		""" Provide helpful representation of recipe object when printed"""
+
+		return "<RecipeLabel recipes_nutrition_label_id={} recipe_id={} diet_label ={} nutrition_label={}>".format(
+			self.recipes_nutrition_label_id, self.recipe_id, self.diet_label, self.nutrition_label)
 
 
 class Ingredient(db.Model):
