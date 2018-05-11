@@ -7,7 +7,9 @@
 
 <ul>
 	{% for recipe in recipes %}
-	<li>{{ recipe['hits'][0]['recipe']['url'] }} </li>
+	<img src= {{ recipe['recipe']['image'] }} >
+	<h3>{{ recipe['recipe']['label'] }} </h3>
+	<p><a href="{{ recipe['recipe']['url'] }}"> Find Instructions Here! </a></p>
 	{% endfor %}
 	</ul>
 	

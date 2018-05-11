@@ -115,13 +115,21 @@ def get_recipe():
 
 	food_choice = request.args.get("food")
 
-	r = requests.get('https://api.edamam.com/search?q='+ food_choice +'&app_id=701b2057&app_key=9f957ee3872be9ddfbadfd3ee005f3a2')
+	
+
+	api_url = 'https://api.edamam.com/search?q='+ food_choice +'&app_id=701b2057&app_key=9f957ee3872be9ddfbadfd3ee005f3a2'
+
+	r = requests.get('api_url')
 
 	recipes_json = r.json()
 
-	url = recipes_json['hits'][0]['recipe']['url']
+	list_of_recipes=[]
 
-	return render_template("viewrecipes.html", recipes=recipes_json)
+	parsed_recipes = recipes_json['hits']
+
+	# url = recipes_json['hits'][0]['recipe']['url']
+
+	return render_template("viewrecipes.html", recipes=parsed_recipes)
 
 
 @app.route("/find-recipe")
