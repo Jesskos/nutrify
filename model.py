@@ -180,7 +180,7 @@ def example_data():
 
 
 ###########################################################################################################
-def connect_to_db(app, uri='postgresql:///recipesdb'):
+def connect_to_db(app, uri='postgresql:///testdb'):
 	""" Connect the database to our Flask App"""
 
 	# Configure to use our PstgreSQL database

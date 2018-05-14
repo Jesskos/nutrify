@@ -77,8 +77,11 @@ def get_login_info():
 
 	email = request.args.get('email')
 	password = request.args.get('password')
+	print email 
+	print password 
 
 	user = User.query.filter_by(user_email=email).first()
+	print user 
 
 	if user:
 		if user.user_password != password:
