@@ -18,7 +18,7 @@ class Recipe(db.Model):
 	recipe_name = db.Column(db.String(60), nullable=False)
 	recipe_image = db.Column(db.String(100), nullable=True)
 	recipe_url = db.Column(db.String(100), nullable=False)
-	ingredients_list = db.Column(db.Integer, nullable=False)
+	ingredients_list = db.Column(db.String(30), nullable=False)
 	calories = db.Column(db.Integer, nullable=False)
 	carbohydrates = db.Column(db.Integer, nullable=True)
 	protein = db.Column(db.Integer, nullable=True)
@@ -31,27 +31,27 @@ class Recipe(db.Model):
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
-		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} calories={} \
+		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} ingredients_list={} calories={} \
 		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}>".format(self.recipe_id, 
-			self.recipe_name, self.recipe_image, self.recipe_url, self.calories, self.carbohydrates, self.protein,
-			self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium )
+			self.recipe_name, self.recipe_image, self.recipe_url, self.calories, self.ingredients_list, self.carbohydrates, 
+			self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium)
 
 class RecipeLabel(db.Model):
-
 	""" Nutrition and Diet Labels on Recipes """
 
 	__tablename__ = "recipes_labels"
 
 	recipes_nutrition_label_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-	recipes_id = db.Column(db.Integer, db.ForeignKey('recipes.recipe_id'), nullable=False)
+	recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.recipe_id'), nullable=False)
 	diet_label = db.Column(db.String(30), nullable=True)
-	nutrition_label = db.Column(db.String(30), nullable=True)
+
+	recipe = db.relationship("Recipe", backref="recipes_labels")
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<RecipeLabel recipes_nutrition_label_id={} recipe_id={} diet_label ={} nutrition_label={}>".format(
-			self.recipes_nutrition_label_id, self.recipe_id, self.diet_label, self.nutrition_label)
+			self.recipes_nutrition_label_id, self.recipe_id, self.diet_label)
 
 
 class Ingredient(db.Model):
@@ -163,26 +163,30 @@ class UserToRecipe(db.Model):
 def example_data():
 	"""Create some sample data, and test models"""
 
-	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', calories= 500, 
+	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', ingredients_list="[]", calories= 500, 
 		carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000)
 	olive = Ingredient(ingredient_name='olive')
-	amount = Amount(ingredient_amount='1 can')
-	harry = User(fname='Harry', lname='Potter', user_email='hpotter@gmail.com', user_password='hufflepuff')
-	Userpizza = UserToRecipe(recipe=pizza, user=harry)
+	onecan = Amount(ingredient_amount='1 can')
+	harry = User(fname='Harry', lname='Potter', user_email='hpotter@hogwarts.edu', user_password='hufflepuff')
+	user_to_pizza = UserToRecipe(recipe=pizza, user=harry)
+	halfcup_to_milk = AmountToIngredient(amount=onecan, ingredient=olive)
+	pizza_to_olive = RecipeToIngredient(recipe=pizza, ingredient=olive)
+	low_fat = RecipeLabel(recipe=pizza, diet_label="low-fat") 
 	
 
-	db.session.add_all([pizza, olive, amount, harry])
+	db.session.add_all([pizza, olive, onecan, harry, user_to_pizza, halfcup_to_milk, pizza_to_olive, low_fat])
 	db.session.commit()
 
 
 
 ###########################################################################################################
-def connect_to_db(app):
+def connect_to_db(app, uri='postgresql:///recipesdb'):
 	""" Connect the database to our Flask App"""
 
 	# Configure to use our PstgreSQL database
-	app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///recipesdb'
+	app.config['SQLALCHEMY_DATABASE_URI'] = uri 
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+	app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 	db.app = app
 	db.init_app(app)
 	db.create_all()

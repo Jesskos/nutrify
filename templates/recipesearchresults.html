@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} View Recipes {% endblock %}
+
+{% block content %}
+
+<ul>
+	{% if recipes != [] %}
+		<h2> Hello, {{ session["name"] }} . Here are your recipes </h2>
+		  {% for recipe in recipes %}
+		
+		   <p><img src= {{ recipe['recipe']['image'] }} ></p>
+		   <p><h3>{{ recipe['recipe']['label'] }} </h3></p>
+		   <p><a href="{{ recipe['recipe']['url'] }}"> Find Instructions Here! </a></p>
+		    <p><h3>{{ recipe['recipe']['healthLabels'] }} </h3></p>
+		   <form action="/save-recipe">
+		   	<button type="submit" name= {{ recipe['recipe']['url'] }} >Save Recipe</button>
+		   </form>
+		{% endfor %}
+	{% else %}
+	    <h2> Sorry, {{ session["name"] }}. No recipes found with those criteria. Try to narrow your search. </h2>
+ 	{% endif %}
+	</ul>
+
+{% endblock %}

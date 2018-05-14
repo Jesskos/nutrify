@@ -4,6 +4,11 @@
 
 {% block content %}
 
+<ul> 
+	{% for message in get_flashed_messages() %}
+	<li>{{ message }}</li>
+	{% endfor %}
+</ul>
 <h2> This is where the user will view saved recipes</h2>
 
 
