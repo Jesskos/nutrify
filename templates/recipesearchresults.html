@@ -11,14 +11,14 @@
 		
 		   <p><img src= {{ recipe['recipe']['image'] }} ></p>
 		   <p><h3>{{ recipe['recipe']['label'] }} </h3></p>
-		   <p><a href="{{ recipe['recipe']['url'] }}"> Find Instructions Here! </a></p>
-		   		<h4> Health Labels: </h4> 
+		   <p><a href="{{ recipe['recipe']['shareAs'] }}"> Find Instructions Here </a></p>
+		   <p><a href="{{ recipe['recipe']['url'] }}"> Link to Blog </a></p>
+		   		<b><h4> Health Labels:</b>  
 		        {% for label in recipe['recipe']['healthLabels'] %}
-		    <div> <h4> {{ label }} </h4>  </div>
-		     {% endfor %}
-		    <form action="/save-recipe">
-		   	<button type="submit" name= {{ recipe['recipe']['url'] }} >Save Recipe</button>
-
+		   		 {{ label }} 
+		     	{% endfor %} </h4> 
+		    <form action="/save-recipe" method="POST">
+		   	<button type="submit" name='recipe' value='{{recipe}}'>Save Recipe</button>
 		   </form>
 		{% endfor %}
 	{% else %}

@@ -144,7 +144,57 @@ def get_recipe():
 
 	parsed_recipes = recipes_json['hits'] 
 
-	# url = recipes_json['hits'][0]['recipe']['url']
+	for recipe in parsed_recipes:
+
+		recipe_name = recipe["recipe"]["label"]
+		recipe_image = recipe["recipe"]["image"]
+		recipe_url = recipe["recipe"]["url"]
+		recipe_yield = recipe["recipe"]["yield"]
+		recipe_ingredients_list = recipe["recipe"]["ingredientLines"]
+		recipe_calories = recipe["recipe"]["totalNutrients"]["ENERC_KCAL"]["quantity"]
+		recipe_carbohydrates = recipe["recipe"]["totalNutrients"]["CHOCDF"]["quantity"]
+		recipe_protein = recipe["recipe"]["totalNutrients"]["PROCNT"]["quantity"]
+		recipe_fiber = recipe["recipe"]["totalNutrients"]["FIBTG"]["quantity"]
+		recipe_fat = recipe["recipe"]["totalNutrients"]["FAT"]["quantity"]
+		recipe_potassium = recipe["recipe"]["totalNutrients"]["K"]["quantity"]
+		recipe_phosphorus = recipe["recipe"]["totalNutrients"]["P"]["quantity"]
+		recipe_sodium = recipe["recipe"]["totalNutrients"]["NA"]["quantity"]
+
+		recipe_to_be_added = Recipe(recipe_name=recipe_name, recipe_image=recipe_image, recipe_url=recipe_url, 
+					ingredients_list=recipe_ingredients_list, recipe_yield=recipe_yield, 
+					calories=recipe_calories, carbohydrates=recipe_carbohydrates, protein=recipe_protein, 
+					fiber=recipe_fiber, fat=recipe_fat, potassium=recipe_potassium, 
+					phosphorus=recipe_phosphorus, sodium=recipe_sodium)
+
+		db.session.add(recipe_to_be_added)
+		db.session.commit()	
+
+
+
+
+		recipe_diet_labels = recipe["recipe"]["dietLabels"]
+		recipe_health_labels = recipe["recipe"]["healthLabels"]
+		recipe_caution_labels = recipe["recipe"]["healthLabels"]
+
+		for diet_label in recipe_diet_labels:
+			label_to_be_added = RecipeLabel(recipe=recipe, diet_label=diet_label)
+			db.session.add(label_to_be_added)
+			db.session.commit()	 
+
+		for health_label in recipe_diet_labels:
+			label_to_be_added = RecipeLabel(recipe=recipe, diet_label=health_label) 
+			db.session.add(label_to_be_added)
+			db.session.commit()	 
+
+
+		for caution_label in recipe_caution_labels:
+			label_to_be_added = RecipeLabel(recipe=recipe, diet_label=caution_label)
+			db.session.add(label_to_be_added)
+			db.session.commit()	 
+
+
+
+
 
 	return render_template("recipesearchresults.html", recipes=parsed_recipes)
 
@@ -164,7 +214,7 @@ def view_save_recipe():
 	return render_template('viewsavedrecipes.html') 
 
 
-@app.route("/save-recipe")
+@app.route("/save-recipe", methods=['POST'])
 def save_recipe():
 	""" adds a recipes to the datebase, and renders template with all saved recipes""" 
 
@@ -172,14 +222,11 @@ def save_recipe():
 		return redirect("/")
 
 	user_id = session['id']
-	user = User.query.get(user_id)
+	logged_in_user = User.query.get(user_id)
 
+	saved_recipe = request.form.get('recipe')
 
-
-
-
-
-
+	recipe_and_user = UserToRecipe(recipe=recipe_to_be_added, user=logged_in_user)
 
 
 	flash("Your recipe has been saved!")
@@ -202,3 +249,4 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
 
     app.run(port=5000, host='0.0.0.0')
+

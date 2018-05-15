@@ -3,13 +3,14 @@ from unittest import TestCase
 from server import app 
 from model import connect_to_db, db, example_data, Recipe, Ingredient, Amount, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
 from flask import session 
+from helperfunctions import *
 
 ############################################################################################################################
 
 # REGISTRATION
 
 class FlaskTestsRegistration(TestCase):
-    """Flask tests that make sure log in form renders appropriately"""
+    """Flask tests to test registration is happenign correctly """
 
     def setUp(self):
         """Stuff to do before every test."""
@@ -38,6 +39,7 @@ class FlaskTestsRegistration(TestCase):
 
     def test_for_new_user_registering(self):
         """ checks for new user """
+
         result = self.client.post("/add-registration-info", data= {'firstname':'Ron',
                                                                 'lastname':'Weasley',
                                                                 'email':'rweisley@hogwarts.edu',
@@ -60,7 +62,7 @@ class FlaskTestsRegistration(TestCase):
 # LOGGED IN CORRECTLY 
 
 class FlaskTestsLoggedInForm(TestCase):
-    """Flask tests that use the database."""
+    """Flask tests to check Log In before user is logged in"""
 
     def setUp(self):
         """ stuff to do before every test """
@@ -115,11 +117,6 @@ class FlaskTestsLoggedInForm(TestCase):
         self.assertIn('You have not signed up yet. Please sign up!', result.data)
 
 
- 
-
-    def test_user_session_logged_in(self):
-        """ makes sure session is added when user logs in """ 
-
 
 ############################################################################################################################
 
@@ -127,7 +124,7 @@ class FlaskTestsLoggedInForm(TestCase):
 
 
 class FlaskTestsLoggedIn(TestCase):
-    """Flask Tests once logged in"""
+    """Flask Tests that require login status"""
 
     def setUp(self):
         """ stuff to do before every test """
@@ -158,15 +155,39 @@ class FlaskTestsLoggedIn(TestCase):
         db.drop_all()
         
 
-    def test_response_from_API(self):
-        """ tests response from Edamam API """
+    def test_route_find_recipe(self):
+        """ tests response from find recipe """
 
-        result =self.client.get("/get-recipe.json")
+        result =self.client.get("/find-recipe")
         self.assertEqual(result.status_code, 200)
-        self.assertIn("Here are your recipes")
+        self.assertIn("What food are you searching for?", result.data)
 
-    def test_search_results_matching_criteria(self):
-        """ tests response from Edamam API """
+    def test_route_view_recipe(self):
+        """ tests response from view recipe """
+
+        result =self.client.get("/view-saved-recipe")
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('View Saved Recipes', result.data)
+
+    def test_route_save_recipe(self):
+        """ tests response from view recipe """
+
+        # get key error
+        result =self.client.get("/save-recipe")
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('View Saved Recipes', result.data)
+
+    def test_response_from_API(self):
+        """ tests response from Edamam API
+
+            checks to make sure an item searched for appears in response """
+
+
+    def test_view_saved_recipes(self):
+        """ tests response from Edamam API 
+
+        Query db at this point """
+
 
 
     def test_user_session_logged_out(self):

@@ -18,7 +18,8 @@ class Recipe(db.Model):
 	recipe_name = db.Column(db.String(60), nullable=False)
 	recipe_image = db.Column(db.String(100), nullable=True)
 	recipe_url = db.Column(db.String(100), nullable=False)
-	ingredients_list = db.Column(db.String(30), nullable=False)
+	ingredients_list = db.Column(db.String(1000), nullable=False)
+	recipe_yield = db.Column(db.Integer, nullable=True)
 	calories = db.Column(db.Integer, nullable=False)
 	carbohydrates = db.Column(db.Integer, nullable=True)
 	protein = db.Column(db.Integer, nullable=True)
@@ -31,9 +32,9 @@ class Recipe(db.Model):
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
-		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} ingredients_list={} calories={} \
+		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} ingredients_list={} recipe_yield ={} calories={} \
 		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}>".format(self.recipe_id, 
-			self.recipe_name, self.recipe_image, self.recipe_url, self.calories, self.ingredients_list, self.carbohydrates, 
+			self.recipe_name, self.recipe_image, self.recipe_url, self.recipe_yield, self.calories, self.ingredients_list, self.carbohydrates, 
 			self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium)
 
 class RecipeLabel(db.Model):
@@ -163,7 +164,7 @@ class UserToRecipe(db.Model):
 def example_data():
 	"""Create some sample data, and test models"""
 
-	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', ingredients_list="[]", calories= 500, 
+	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', recipe_yield=12, ingredients_list="[]", calories= 500, 
 		carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000)
 	olive = Ingredient(ingredient_name='olive')
 	onecan = Amount(ingredient_amount='1 can')
@@ -180,7 +181,7 @@ def example_data():
 
 
 ###########################################################################################################
-def connect_to_db(app, uri='postgresql:///testdb'):
+def connect_to_db(app, uri='postgresql:///recipesdb'):
 	""" Connect the database to our Flask App"""
 
 	# Configure to use our PstgreSQL database
