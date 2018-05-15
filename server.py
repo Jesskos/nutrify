@@ -2,9 +2,10 @@ from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash, session)
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
-import json 
+import json
 import requests 
 from helperfunctions import *
+import ast
 
 app = Flask(__name__)
 
@@ -202,6 +203,16 @@ def find_recipe():
 def view_save_recipe():
 	""" adds a recipes to the datebase, and renders template with all saved recipes""" 
 
+	if "name" not in session:
+		return redirect("/")
+
+	session_user_id = session['id']
+
+	logged_in_user_recipes = UserToRecipe.query.filter_by(user_id=session_user_id).all()
+
+	print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 
+	print logged_in_user_recipes 
+
 
 	return render_template('viewsavedrecipes.html') 
 	#CSS 
@@ -217,63 +228,57 @@ def save_recipe():
 	user_id = session['id']
 	logged_in_user = User.query.get(user_id)
 
-	saved_recipe = request.form.get('recipe')
-	print type(saved_recipe)
+	saved_recipe= request.form.get('recipe')
+	
+	# converts unicode to one with single quotes
+	# tried json.loads, but expecting double quotes 
+	saved_recipe = ast.literal_eval(saved_recipe)
 
-	saved_recipe_to_add_to_db =	Recipe(recipe_name=saved_recipe['recipe_name'], recipe_image=saved_recipe['recipe_image'], 
-								recipe_url=saved_recipe['recipe_url'], recipe_blog_url=saved_recipe['recipe_blog_url'],
+	saved_recipe_to_add_to_db = Recipe(recipe_name=saved_recipe['recipe_name'], recipe_image=saved_recipe['recipe_image'], 
+								recipe_url=saved_recipe['recipe_url'], blog_url=saved_recipe['recipe_blog_url'],
 								recipe_yield=saved_recipe['recipe_yield'], ingredients_list=saved_recipe['recipe_ingredients_list'],
 								calories=saved_recipe['recipe_calories'], carbohydrates=saved_recipe['recipe_carbohydrates'],
-								protein=saved_recipe['recipe_protein'], fiber=saved_recipe[recipe_fiber], fat=saved_recipe[recipe_fat],
-								potassium=saved_recipe[recipe_potassium], phosphorus=saved_recipe[recipe_phosphorus], 
-								sodium=saved_recipe[recipe_sodium] ) 
-
+								protein=saved_recipe['recipe_protein'], fiber=saved_recipe['recipe_fiber'], fat=saved_recipe['recipe_fat'],
+								potassium=saved_recipe['recipe_potassium'], phosphorus=saved_recipe['recipe_phosphorus'], 
+								sodium=saved_recipe['recipe_sodium'] ) 
 
 	db.session.add(saved_recipe_to_add_to_db)
 	db.session.commit()	 
+
+	recipe_saved_by_user = UserToRecipe(recipe=saved_recipe_to_add_to_db, user=logged_in_user)
+
+	saved_recipe_labels = saved_recipe['recipe_labels']
+
+	if saved_recipe_labels: 
+		
+		for saved_recipe_label in saved_recipe_labels:
+
+				saved_label_to_add = RecipeLabel(recipe=saved_recipe_to_add_to_db, diet_label=saved_recipe_label)
+				db.session.add(saved_label_to_add)
+
+		db.session.commit()	 
+
+
+	recipe_ingredients_list = saved_recipe['recipe_ingredients_list']
+	
+	for ingredient in recipe_ingredients_list:
+
+		ingredient_to_be_added = Ingredient(ingredient_name=ingredient)
+		db.session.add(ingredient_to_be_added)
+		db.session.commit()	 
+
+		ingredient_for_recipe_to_be_added = RecipeToIngredient(recipe=saved_recipe_to_add_to_db, ingredient=ingredient_to_be_added)
+		db.session.add(ingredient_for_recipe_to_be_added)
+		db.session.commit()
+
 
 	# use ajax AFTER THIS is working 
 
 
 	flash("Your recipe has been saved!")
-	return render_template('viewsavedrecipes.html')
+	return redirect("/view-saved-recipe")
 
 
-
-
-
-
-	# recipe_and_user = UserToRecipe(recipe=recipe_to_be_added, user=logged_in_user)
-
-			# if labels: 
-		
-			# for diet_label in recipe_diet_labels:
-			# 	label_for_recipe_to_be_added = RecipeLabel(recipe=recipe_to_be_added, diet_label=diet_label)
-
-	# 	db.session.add(recipe_to_be_added)
-	# 	db.session.commit()	
-
-		# recipe_to_be_added = Recipe(recipe_name=recipe_name, recipe_image=recipe_image, recipe_url=recipe_url, 
-		# 			ingredients_list=recipe_ingredients_list, recipe_yield=recipe_yield, 
-		# 			calories=recipe_calories, carbohydrates=recipe_carbohydrates, protein=recipe_protein, 
-		# 			fiber=recipe_fiber, fat=recipe_fat, potassium=recipe_potassium, 
-		# 			phosphorus=recipe_phosphorus, sodium=recipe_sodium)
-
-
-
-	# 			
-
-	# 	for ingredient in recipe_ingredients_list:
-
-	# 		ingredient_to_be_added = Ingredient(ingredient_name=ingredient)
-	# 		db.session.add(ingredient_to_be_added)
-	# 		db.session.commit()	 
-	# 		ingredient_for_recipe_to_be_added = RecipeToIngredient(recipe=recipe_to_be_added, ingredient=ingredient_to_be_added)
-	# 		db.session.add(ingredient_for_recipe_to_be_added)
-	# 		db.session.commit()
-
-
-	
  
 
 

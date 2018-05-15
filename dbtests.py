@@ -1,6 +1,6 @@
 
 from unittest import TestCase
-from server import app 
+from server import app, save_recipe 
 from model import connect_to_db, db, example_data, Recipe, Ingredient, Amount, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
 from flask import session 
 from helperfunctions import *
