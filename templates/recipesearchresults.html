@@ -9,12 +9,12 @@
 		<h2> Hello, {{ session["name"] }} . Here are your recipes </h2>
 		  {% for recipe in recipes %}
 		
-		   <p><img src= {{ recipe['recipe']['image'] }} ></p>
-		   <p><h3>{{ recipe['recipe']['label'] }} </h3></p>
-		   <p><a href="{{ recipe['recipe']['shareAs'] }}"> Find Instructions Here </a></p>
-		   <p><a href="{{ recipe['recipe']['url'] }}"> Link to Blog </a></p>
+		   <p><img src= {{ recipe['recipe_image'] }} ></p>
+		   <p><h3>{{ recipe['recipe_name'] }} </h3></p>
+		   <p><a href="{{ recipe['recipe_blog_url'] }}"> Find Instructions Here </a></p>
+		   <p><a href="{{ recipe['recipe_url'] }}"> Link to Nutrition Facts </a></p>
 		   		<b><h4> Health Labels:</b>  
-		        {% for label in recipe['recipe']['healthLabels'] %}
+		        {% for label in recipe['recipe_labels'] %}
 		   		 {{ label }} 
 		     	{% endfor %} </h4> 
 		    <form action="/save-recipe" method="POST">

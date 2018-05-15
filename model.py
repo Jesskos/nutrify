@@ -15,9 +15,10 @@ class Recipe(db.Model):
 	__tablename__ = "recipes"
 
 	recipe_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-	recipe_name = db.Column(db.String(60), nullable=False)
-	recipe_image = db.Column(db.String(100), nullable=True)
-	recipe_url = db.Column(db.String(100), nullable=False)
+	recipe_name = db.Column(db.String(100), nullable=False)
+	recipe_image = db.Column(db.String(200), nullable=True)
+	recipe_url = db.Column(db.String(200), nullable=False)
+	blog_url = db.Column(db.String(200), nullable=True)
 	ingredients_list = db.Column(db.String(1000), nullable=False)
 	recipe_yield = db.Column(db.Integer, nullable=True)
 	calories = db.Column(db.Integer, nullable=False)
@@ -32,10 +33,10 @@ class Recipe(db.Model):
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
-		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} ingredients_list={} recipe_yield ={} calories={} \
+		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} blog_url ={} ingredients_list={} recipe_yield ={} calories={} \
 		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}>".format(self.recipe_id, 
-			self.recipe_name, self.recipe_image, self.recipe_url, self.recipe_yield, self.calories, self.ingredients_list, self.carbohydrates, 
-			self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium)
+			self.recipe_name, self.recipe_image, self.recipe_url, self.blog_url, self.recipe_yield, self.calories, self.ingredients_list, 
+			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium)
 
 class RecipeLabel(db.Model):
 	""" Nutrition and Diet Labels on Recipes """
@@ -61,7 +62,7 @@ class Ingredient(db.Model):
 	__tablename__ = "ingredients"
 
 	ingredient_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-	ingredient_name = db.Column(db.String(30), nullable=False)
+	ingredient_name = db.Column(db.String(200), nullable=False)
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
@@ -164,8 +165,8 @@ class UserToRecipe(db.Model):
 def example_data():
 	"""Create some sample data, and test models"""
 
-	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', recipe_yield=12, ingredients_list="[]", calories= 500, 
-		carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000)
+	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', blog_url='pizza.blog.com', recipe_yield=12, 
+		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000)
 	olive = Ingredient(ingredient_name='olive')
 	onecan = Amount(ingredient_amount='1 can')
 	harry = User(fname='Harry', lname='Potter', user_email='hpotter@hogwarts.edu', user_password='hufflepuff')

@@ -1,7 +1,7 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash, session)
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
+from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
 import json 
 import requests 
 from helperfunctions import *
@@ -149,6 +149,7 @@ def get_recipe():
 		recipe_name = recipe["recipe"]["label"]
 		recipe_image = recipe["recipe"]["image"]
 		recipe_url = recipe["recipe"]["url"]
+		recipe_blog_url = recipe["recipe"]["shareAs"]
 		recipe_yield = recipe["recipe"]["yield"]
 		recipe_ingredients_list = recipe["recipe"]["ingredientLines"]
 		recipe_calories = recipe["recipe"]["totalNutrients"]["ENERC_KCAL"]["quantity"]
@@ -160,43 +161,34 @@ def get_recipe():
 		recipe_phosphorus = recipe["recipe"]["totalNutrients"]["P"]["quantity"]
 		recipe_sodium = recipe["recipe"]["totalNutrients"]["NA"]["quantity"]
 
-		recipe_to_be_added = Recipe(recipe_name=recipe_name, recipe_image=recipe_image, recipe_url=recipe_url, 
-					ingredients_list=recipe_ingredients_list, recipe_yield=recipe_yield, 
-					calories=recipe_calories, carbohydrates=recipe_carbohydrates, protein=recipe_protein, 
-					fiber=recipe_fiber, fat=recipe_fat, potassium=recipe_potassium, 
-					phosphorus=recipe_phosphorus, sodium=recipe_sodium)
-
-		db.session.add(recipe_to_be_added)
-		db.session.commit()	
-
-
-
-
 		recipe_diet_labels = recipe["recipe"]["dietLabels"]
 		recipe_health_labels = recipe["recipe"]["healthLabels"]
-		recipe_caution_labels = recipe["recipe"]["healthLabels"]
+		recipe_caution_labels = recipe["recipe"]["cautions"]
 
-		for diet_label in recipe_diet_labels:
-			label_to_be_added = RecipeLabel(recipe=recipe, diet_label=diet_label)
-			db.session.add(label_to_be_added)
-			db.session.commit()	 
-
-		for health_label in recipe_diet_labels:
-			label_to_be_added = RecipeLabel(recipe=recipe, diet_label=health_label) 
-			db.session.add(label_to_be_added)
-			db.session.commit()	 
+		labels = recipe_diet_labels + recipe_health_labels + recipe_caution_labels
+		# instantiate a row for the 
+		# check in database each times it runs 
+		# can see previous recipe search. Need to check if a specific query has been done
+		# if the ingredient in the recipe, then don't add to database 
+		# Check if it's already in database after we call API
+		#
 
 
-		for caution_label in recipe_caution_labels:
-			label_to_be_added = RecipeLabel(recipe=recipe, diet_label=caution_label)
-			db.session.add(label_to_be_added)
-			db.session.commit()	 
+		recipe_components = {'recipe_name': recipe_name, 'recipe_image':recipe_image, 'recipe_url':recipe_url, 
+							'recipe_blog_url': recipe_blog_url, 'recipe_yield':recipe_yield, 
+							'recipe_ingredients_list':recipe_ingredients_list, 'recipe_labels': labels,
+							'recipe_calories':(recipe_calories/recipe_yield), 'recipe_carbohydrates':(recipe_carbohydrates/recipe_yield),
+							'recipe_protein':(recipe_protein)/recipe_yield, 'recipe_fiber':(recipe_fiber/recipe_yield), 
+							'recipe_fat':(recipe_fat/recipe_yield), 'recipe_potassium':(recipe_potassium/recipe_yield), 
+							'recipe_phosphorus':(recipe_phosphorus/recipe_yield), 
+							'recipe_sodium':(recipe_sodium/recipe_yield) }
+
+		
+		list_of_recipes.append(recipe_components)
 
 
-
-
-
-	return render_template("recipesearchresults.html", recipes=parsed_recipes)
+	# How do I prevent recipes from repeating? Does SQLalchemy do this when filtering?
+	return render_template("recipesearchresults.html", recipes=list_of_recipes)
 
 
 @app.route("/find-recipe")
@@ -212,6 +204,7 @@ def view_save_recipe():
 
 
 	return render_template('viewsavedrecipes.html') 
+	#CSS 
 
 
 @app.route("/save-recipe", methods=['POST'])
@@ -225,12 +218,63 @@ def save_recipe():
 	logged_in_user = User.query.get(user_id)
 
 	saved_recipe = request.form.get('recipe')
+	print type(saved_recipe)
 
-	recipe_and_user = UserToRecipe(recipe=recipe_to_be_added, user=logged_in_user)
+	saved_recipe_to_add_to_db =	Recipe(recipe_name=saved_recipe['recipe_name'], recipe_image=saved_recipe['recipe_image'], 
+								recipe_url=saved_recipe['recipe_url'], recipe_blog_url=saved_recipe['recipe_blog_url'],
+								recipe_yield=saved_recipe['recipe_yield'], ingredients_list=saved_recipe['recipe_ingredients_list'],
+								calories=saved_recipe['recipe_calories'], carbohydrates=saved_recipe['recipe_carbohydrates'],
+								protein=saved_recipe['recipe_protein'], fiber=saved_recipe[recipe_fiber], fat=saved_recipe[recipe_fat],
+								potassium=saved_recipe[recipe_potassium], phosphorus=saved_recipe[recipe_phosphorus], 
+								sodium=saved_recipe[recipe_sodium] ) 
+
+
+	db.session.add(saved_recipe_to_add_to_db)
+	db.session.commit()	 
+
+	# use ajax AFTER THIS is working 
 
 
 	flash("Your recipe has been saved!")
-	return redirect("/view-saved-recipe") 
+	return render_template('viewsavedrecipes.html')
+
+
+
+
+
+
+	# recipe_and_user = UserToRecipe(recipe=recipe_to_be_added, user=logged_in_user)
+
+			# if labels: 
+		
+			# for diet_label in recipe_diet_labels:
+			# 	label_for_recipe_to_be_added = RecipeLabel(recipe=recipe_to_be_added, diet_label=diet_label)
+
+	# 	db.session.add(recipe_to_be_added)
+	# 	db.session.commit()	
+
+		# recipe_to_be_added = Recipe(recipe_name=recipe_name, recipe_image=recipe_image, recipe_url=recipe_url, 
+		# 			ingredients_list=recipe_ingredients_list, recipe_yield=recipe_yield, 
+		# 			calories=recipe_calories, carbohydrates=recipe_carbohydrates, protein=recipe_protein, 
+		# 			fiber=recipe_fiber, fat=recipe_fat, potassium=recipe_potassium, 
+		# 			phosphorus=recipe_phosphorus, sodium=recipe_sodium)
+
+
+
+	# 			
+
+	# 	for ingredient in recipe_ingredients_list:
+
+	# 		ingredient_to_be_added = Ingredient(ingredient_name=ingredient)
+	# 		db.session.add(ingredient_to_be_added)
+	# 		db.session.commit()	 
+	# 		ingredient_for_recipe_to_be_added = RecipeToIngredient(recipe=recipe_to_be_added, ingredient=ingredient_to_be_added)
+	# 		db.session.add(ingredient_for_recipe_to_be_added)
+	# 		db.session.commit()
+
+
+	
+ 
 
 
 	
