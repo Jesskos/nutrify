@@ -9,11 +9,26 @@
 	<li>{{ message }}</li>
 	{% endfor %}
 </ul>
-<h2> This is where the user will view saved recipes</h2>
+
+<ul>
+	{% if recipes != [] %}
+		<h2> Hello, {{ session["name"] }} . Here are your recipes </h2>
+	
+		  {% for recipe in recipes %}
+		 
+		   <p><img src= {{ recipe.recipe_image}} ></p>
+		   <p><h3>{{ recipe.recipe_name }} </h3></p>
+		   <p><a href="{{ recipe.blog_url }}"> Link to Nutrition Facts </a></p>
+		   <p><a href="{{ recipe.recipe_url }}"> Find Instructions Here </a></p>
+		   		<b><h4> Health Labels:</b>  
+
+		{% endfor %}
+	{% else %}
+	    <h2> Sorry, {{ session["name"] }}. No recipes found with those criteria. Try to narrow your search. </h2>
+ 	{% endif %}
+	</ul>
 
 
-<script>
-
-</script>
 
 {% endblock %}
+

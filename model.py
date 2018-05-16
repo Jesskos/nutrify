@@ -35,7 +35,7 @@ class Recipe(db.Model):
 
 		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} blog_url ={} ingredients_list={} recipe_yield ={} calories={} \
 		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}>".format(self.recipe_id, 
-			self.recipe_name, self.recipe_image, self.recipe_url, self.blog_url, self.recipe_yield, self.calories, self.ingredients_list, 
+			self.recipe_name, self.recipe_image, self.recipe_url, self.blog_url, self.ingredients_list, self.recipe_yield, self.calories, 
 			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium)
 
 class RecipeLabel(db.Model):
@@ -150,13 +150,13 @@ class UserToRecipe(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
 
 	user = db.relationship("User", backref="users_to_recipes")
-	recipe = db.relationship("Recipe", backref="users_to_recipes")
+	recipe = db.relationship("Recipe", backref=db.backref("users_to_recipes", order_by=user_recipe_id))
 
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
-		return "<UserToRecipe user_recipe_id={} recipe_id={} user_recipe_id={}>".format(
+		return "<UserToRecipe user_recipe_id={} recipe_id={} user_id={}>".format(
 			self.user_recipe_id, self.recipe_id, self.user_id)
 
 ###########################################################################################################

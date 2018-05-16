@@ -208,13 +208,27 @@ def view_save_recipe():
 
 	session_user_id = session['id']
 
+	recipes_to_display = []
+
+	labels_to_display = []
+
 	logged_in_user_recipes = UserToRecipe.query.filter_by(user_id=session_user_id).all()
 
-	print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 
-	print logged_in_user_recipes 
+	for logged_in_user_recipe in logged_in_user_recipes:
+
+		recipe = logged_in_user_recipe.recipe
+
+		recipes_to_display.append(recipe)
 
 
-	return render_template('viewsavedrecipes.html') 
+
+
+	# print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 
+	# print list_of_users_recipes
+	# print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 
+
+
+	return render_template('viewsavedrecipes.html', recipes=recipes_to_display) 
 	#CSS 
 
 
