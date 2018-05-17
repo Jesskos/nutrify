@@ -20,6 +20,8 @@ class Recipe(db.Model):
 	recipe_url = db.Column(db.String(200), nullable=False)
 	blog_url = db.Column(db.String(200), nullable=True)
 	ingredients_list = db.Column(db.String(1000), nullable=False)
+
+	# can covert to 'blob'
 	recipe_yield = db.Column(db.Integer, nullable=True)
 	calories = db.Column(db.Integer, nullable=False)
 	carbohydrates = db.Column(db.Integer, nullable=True)
@@ -29,14 +31,15 @@ class Recipe(db.Model):
 	potassium = db.Column(db.Integer, nullable=True)
 	phosphorus = db.Column(db.Integer, nullable=True)
 	sodium = db.Column(db.Integer, nullable=True)
+	labels = db.Column(db.String(100), nullable=False)
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} blog_url ={} ingredients_list={} recipe_yield ={} calories={} \
-		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}>".format(self.recipe_id, 
-			self.recipe_name, self.recipe_image, self.recipe_url, self.blog_url, self.ingredients_list, self.recipe_yield, self.calories, 
-			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium)
+		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}, labels = {}>".format(self.recipe_id, 
+			self.recipe_name, self.recipe_image, self.recipe_url, self.blog_url, self.ingredients_list.encode('ascii', 'ignore'), self.recipe_yield, self.calories, 
+			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium, self.labels)
 
 class RecipeLabel(db.Model):
 	""" Nutrition and Diet Labels on Recipes """
@@ -71,7 +74,7 @@ class Ingredient(db.Model):
 
 
 class RecipeToIngredient(db.Model):
-	""" Middle table to connect recipes and ingredients """
+	""" Association table to connect recipes and ingredients """
 
 	__tablename__ = "recipes_to_ingredients"
 
@@ -166,7 +169,7 @@ def example_data():
 	"""Create some sample data, and test models"""
 
 	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', blog_url='pizza.blog.com', recipe_yield=12, 
-		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000)
+		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000, labels=['low-fat'])
 	olive = Ingredient(ingredient_name='olive')
 	onecan = Amount(ingredient_amount='1 can')
 	harry = User(fname='Harry', lname='Potter', user_email='hpotter@hogwarts.edu', user_password='hufflepuff')

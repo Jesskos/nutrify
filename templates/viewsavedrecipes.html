@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+ {% extends 'base.html' %}
 
 {% block title %} View Saved Recipes  {% endblock %}
 
@@ -21,10 +21,13 @@
 		   <p><a href="{{ recipe.blog_url }}"> Link to Nutrition Facts </a></p>
 		   <p><a href="{{ recipe.recipe_url }}"> Find Instructions Here </a></p>
 		   		<b><h4> Health Labels:</b>  
+		   			{% for label in recipe.labels %}
+		   		 		{{ label }} 
+		     		{% endfor %} </h4> 
 
 		{% endfor %}
 	{% else %}
-	    <h2> Sorry, {{ session["name"] }}. No recipes found with those criteria. Try to narrow your search. </h2>
+
  	{% endif %}
 	</ul>
 
