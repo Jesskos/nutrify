@@ -233,6 +233,7 @@ def view_save_recipe():
 
 	logged_in_user_recipes = UserToRecipe.query.filter_by(user_id=session_user_id).all()
 
+	recipes_to_display = [logged_in_user_recipe.recipe for logged_in_user_recipe in logged_in_user_recipes]
 	for logged_in_user_recipe in logged_in_user_recipes:
 
 		recipe = logged_in_user_recipe.recipe
