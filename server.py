@@ -145,26 +145,47 @@ def get_recipe():
 
 	parsed_recipes = recipes_json['hits'] 
 
-	for recipe in parsed_recipes:
+	for parsed_recipe in parsed_recipes:
 
-		recipe_name = recipe["recipe"]["label"]
-		recipe_image = recipe["recipe"]["image"]
-		recipe_url = recipe["recipe"]["url"]
-		recipe_blog_url = recipe["recipe"]["shareAs"]
-		recipe_yield = recipe["recipe"]["yield"]
-		recipe_ingredients_list = recipe["recipe"]["ingredientLines"]
-		recipe_calories = recipe["recipe"]["totalNutrients"]["ENERC_KCAL"]["quantity"]
-		recipe_carbohydrates = recipe["recipe"]["totalNutrients"]["CHOCDF"]["quantity"]
-		recipe_protein = recipe["recipe"]["totalNutrients"]["PROCNT"]["quantity"]
-		recipe_fiber = recipe["recipe"]["totalNutrients"]["FIBTG"]["quantity"]
-		recipe_fat = recipe["recipe"]["totalNutrients"]["FAT"]["quantity"]
-		recipe_potassium = recipe["recipe"]["totalNutrients"]["K"]["quantity"]
-		recipe_phosphorus = recipe["recipe"]["totalNutrients"]["P"]["quantity"]
-		recipe_sodium = recipe["recipe"]["totalNutrients"]["NA"]["quantity"]
+		recipe = parsed_recipe["recipe"]
+		recipe_nutrient = recipe["totalNutrients"]
 
-		recipe_diet_labels = recipe["recipe"]["dietLabels"]
-		recipe_health_labels = recipe["recipe"]["healthLabels"]
-		recipe_caution_labels = recipe["recipe"]["cautions"]
+		recipe_name = recipe.get("label", "no name available") 
+		recipe_image = recipe.get("image", "no image available")
+		recipe_url = recipe.get("url", "no url available")
+		recipe_blog_url = recipe.get("shareAs")
+		recipe_yield = recipe.get("yield", 0)
+		recipe_ingredients_list = recipe.get("ingredientLines", "No Ingredients Available")
+	
+		# This should not need get method since empty diet labels have empty list
+		recipe_diet_labels = recipe["dietLabels"]
+		recipe_health_labels = recipe["healthLabels"]
+		recipe_caution_labels = recipe["cautions"]
+
+		
+		test_for_null = {}
+
+		recipe_nutrient_calories = recipe_nutrient.get("ENERC_KCAL", test_for_null)
+		recipe_nutrient_carbohydrates = recipe_nutrient.get("CHOCDF", test_for_null)
+		recipe_nutrient_protein = recipe_nutrient.get("PROCNT", test_for_null)
+		recipe_nutrient_fiber = recipe_nutrient.get("FIBTG", test_for_null)
+		recipe_nutrient_fat = recipe_nutrient.get("FAT", test_for_null)
+		recipe_nutrient_potassium = recipe_nutrient.get("K", test_for_null)
+		recipe_nutrient_phosphorus = recipe_nutrient.get("P", test_for_null)
+		recipe_nutrient_sodium = recipe_nutrient.get("NA", test_for_null)
+
+		recipe_calories = recipe_nutrient_calories.get("quantity", 0)
+		recipe_carbohydrates = recipe_nutrient_carbohydrates.get("quantity", 0) 
+		recipe_protein = recipe_nutrient_protein.get("quantity", 0)
+		recipe_fiber = recipe_nutrient_fiber.get("quantity", 0)
+		recipe_fat = recipe_nutrient_fat.get("quantity", 0)
+		recipe_potassium = recipe_nutrient_potassium.get("quantity", 0)
+		recipe_phosphorus = recipe_nutrient_phosphorus.get("quantity", 0)
+		recipe_sodium = recipe_nutrient_sodium.get("quantity", 0)
+
+
+
+
 
 		labels = recipe_diet_labels + recipe_health_labels + recipe_caution_labels
 		# instantiate a row for the 
@@ -176,13 +197,13 @@ def get_recipe():
 
 
 		recipe_components = {'recipe_name': recipe_name, 'recipe_image':recipe_image, 'recipe_url':recipe_url, 
-							'recipe_blog_url': recipe_blog_url, 'recipe_yield':recipe_yield, 
-							'recipe_ingredients_list':recipe_ingredients_list, 'recipe_labels': labels,
+							'recipe_blog_url': recipe_blog_url, 'recipe_ingredients_list':recipe_ingredients_list, 
+							'recipe_yield':recipe_yield, 
 							'recipe_calories':(recipe_calories/recipe_yield), 'recipe_carbohydrates':(recipe_carbohydrates/recipe_yield),
 							'recipe_protein':(recipe_protein)/recipe_yield, 'recipe_fiber':(recipe_fiber/recipe_yield), 
 							'recipe_fat':(recipe_fat/recipe_yield), 'recipe_potassium':(recipe_potassium/recipe_yield), 
 							'recipe_phosphorus':(recipe_phosphorus/recipe_yield), 
-							'recipe_sodium':(recipe_sodium/recipe_yield) }
+							'recipe_sodium':(recipe_sodium/recipe_yield), 'labels': labels}
 
 		
 		list_of_recipes.append(recipe_components)
@@ -210,8 +231,6 @@ def view_save_recipe():
 
 	recipes_to_display = []
 
-	labels_to_display = []
-
 	logged_in_user_recipes = UserToRecipe.query.filter_by(user_id=session_user_id).all()
 
 	recipes_to_display = [logged_in_user_recipe.recipe for logged_in_user_recipe in logged_in_user_recipes]
@@ -220,9 +239,6 @@ def view_save_recipe():
 		recipe = logged_in_user_recipe.recipe
 
 		recipes_to_display.append(recipe)
-
-		
-
 
 
 	# print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 
@@ -241,51 +257,92 @@ def save_recipe():
 	if "name" not in session:
 		return redirect("/")
 
+	# find out logged in user from id stored in session, and queries for that user
 	user_id = session['id']
 	logged_in_user = User.query.get(user_id)
 
+	# gets saved recipe from form
 	saved_recipe= request.form.get('recipe')
 	
 	# converts unicode to one with single quotes
-	# tried json.loads, but expecting double quotes 
+	# tried json.loads, but expecting double quotes
+	# converts unicode to dictionary.  
 	saved_recipe = ast.literal_eval(saved_recipe)
 
-	saved_recipe_to_add_to_db = Recipe(recipe_name=saved_recipe['recipe_name'], recipe_image=saved_recipe['recipe_image'], 
-								recipe_url=saved_recipe['recipe_url'], blog_url=saved_recipe['recipe_blog_url'],
-								recipe_yield=saved_recipe['recipe_yield'], ingredients_list=saved_recipe['recipe_ingredients_list'],
-								calories=saved_recipe['recipe_calories'], carbohydrates=saved_recipe['recipe_carbohydrates'],
-								protein=saved_recipe['recipe_protein'], fiber=saved_recipe['recipe_fiber'], fat=saved_recipe['recipe_fat'],
-								potassium=saved_recipe['recipe_potassium'], phosphorus=saved_recipe['recipe_phosphorus'], 
-								sodium=saved_recipe['recipe_sodium'] ) 
 
-	db.session.add(saved_recipe_to_add_to_db)
-	db.session.commit()	 
+	# checks if recipe saved by user already in database by checking recipes table
+	check_if_recipe_in_database = Recipe.query.filter_by(recipe_url=saved_recipe['recipe_url']).first()
 
-	recipe_saved_by_user = UserToRecipe(recipe=saved_recipe_to_add_to_db, user=logged_in_user)
+	# if recipe is not already in database, will add it to the recipes table in the database. 
+	if check_if_recipe_in_database  == None:
 
-	saved_recipe_labels = saved_recipe['recipe_labels']
+		# adds recipe to database based by indexing into response (havign been coverted to dictionary)
+		saved_recipe_to_add_to_db = Recipe(recipe_name=saved_recipe['recipe_name'], recipe_image=saved_recipe['recipe_image'], 
+									recipe_url=saved_recipe['recipe_url'], blog_url=saved_recipe['recipe_blog_url'],
+									ingredients_list=saved_recipe['recipe_ingredients_list'], recipe_yield=saved_recipe['recipe_yield'], 
+									calories=saved_recipe['recipe_calories'], carbohydrates=saved_recipe['recipe_carbohydrates'],
+									protein=saved_recipe['recipe_protein'], fiber=saved_recipe['recipe_fiber'], fat=saved_recipe['recipe_fat'],
+									potassium=saved_recipe['recipe_potassium'], phosphorus=saved_recipe['recipe_phosphorus'], 
+									sodium=saved_recipe['recipe_sodium'], labels=saved_recipe['labels'])  
+		# adds and comits to recipe
+		db.session.add(saved_recipe_to_add_to_db)
+		db.session.commit()	 
 
-	if saved_recipe_labels: 
+		# will also add recipe to user 
+		recipe_saved_by_user = UserToRecipe(recipe=saved_recipe_to_add_to_db, user=logged_in_user)
+		db.session.add(recipe_saved_by_user)
+		db.session.commit()	
+
+
+	# However, while recipe may already be in the database, it may have been saved by that user
+	#  need to check to see if the user logged in has that recipe by looking at the user to recipes table
+	else:
+
+		# checks if user to recipes table has the recipe the user saved. If it does, returns that recipe. If doesn't, returns none. 
+		check_if_user_has_recipe = UserToRecipe.query.filter(saved_recipe['recipe_url'] == UserToRecipe.recipe.recipe_url).first()
+
+		print "!!!!!!!!!!!!!!!!!!!"
+		print "check_if_user_has_recipe"
+
+
+		if check_if_user_has_recipe == True:
+
+			#redirects back to saved recipes
+			flash("recipe already exists!")
+			return redirect("/view-saved-recipe")
+
+		# if it does doesn't, will add recipe to users to recipe table. 
+		else:
+			recipe_saved_by_user = UserToRecipe(user=logged_in_user, recipe=check_if_recipe_in_database)
+			db.session.add(recipe_saved_by_user)
+			db.session.commit()
+			flash("recipe saved!")
+			return redirect("/view-saved-recipe")
+
+
+	# saved_recipe_labels = saved_recipe['recipe_labels']
+
+	# if saved_recipe_labels: 
 		
-		for saved_recipe_label in saved_recipe_labels:
+	# 	for saved_recipe_label in saved_recipe_labels:
 
-				saved_label_to_add = RecipeLabel(recipe=saved_recipe_to_add_to_db, diet_label=saved_recipe_label)
-				db.session.add(saved_label_to_add)
+	# 			saved_label_to_add = RecipeLabel(recipe=saved_recipe_to_add_to_db, diet_label=saved_recipe_label)
+	# 			db.session.add(saved_label_to_add)
 
-		db.session.commit()	 
+	# 	db.session.commit()	 
 
 
-	recipe_ingredients_list = saved_recipe['recipe_ingredients_list']
+	# recipe_ingredients_list = saved_recipe['recipe_ingredients_list']
 	
-	for ingredient in recipe_ingredients_list:
+	# for ingredient in recipe_ingredients_list:
 
-		ingredient_to_be_added = Ingredient(ingredient_name=ingredient)
-		db.session.add(ingredient_to_be_added)
-		db.session.commit()	 
+	# 	ingredient_to_be_added = Ingredient(ingredient_name=ingredient)
+	# 	db.session.add(ingredient_to_be_added)
+	# 	db.session.commit()	 
 
-		ingredient_for_recipe_to_be_added = RecipeToIngredient(recipe=saved_recipe_to_add_to_db, ingredient=ingredient_to_be_added)
-		db.session.add(ingredient_for_recipe_to_be_added)
-		db.session.commit()
+	# 	ingredient_for_recipe_to_be_added = RecipeToIngredient(recipe=saved_recipe_to_add_to_db, ingredient=ingredient_to_be_added)
+	# 	db.session.add(ingredient_for_recipe_to_be_added)
+	# 	db.session.commit()
 
 
 	# use ajax AFTER THIS is working 

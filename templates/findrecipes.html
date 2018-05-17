@@ -5,8 +5,16 @@
 {% block content %}
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"> </script>
 
+<ul> 
+	{% for message in get_flashed_messages() %}
+	<li>{{ message }}</li>
+	{% endfor %}
+</ul>
+
 <h2> Hello, {{ session["name"] }} . Please find recipes here! </h2>
 <h3> Please search for recipes using our cool API! </h3>
+
+
 
 <form action="/get-recipe.json">
 	What food are you searching for? (ex: tofu, apple, chocolate) <input type="text" name="food" required> <p>
@@ -28,7 +36,6 @@
     <p> <input type="submit">
 
 </form>
-
 
 
 
