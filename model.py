@@ -1,4 +1,4 @@
-"""Models and database for Recipe Storage"""
+"Models and database for Recipe Storage"""
 
 from flask_sqlalchemy import SQLAlchemy
 

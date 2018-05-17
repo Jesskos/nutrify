@@ -185,9 +185,8 @@ def get_recipe():
 
 
 
-
-
 		labels = recipe_diet_labels + recipe_health_labels + recipe_caution_labels
+
 		# instantiate a row for the 
 		# check in database each times it runs 
 		# can see previous recipe search. Need to check if a specific query has been done
@@ -298,11 +297,23 @@ def save_recipe():
 	else:
 
 		# checks if user to recipes table has the recipe the user saved. If it does, returns that recipe. If doesn't, returns none. 
-		check_if_user_has_recipe = UserToRecipe.query.filter(UserToRecipe.recipe_id==check_if_recipe_in_database.recipe_id, 
-			UserToRecipe.user_id==logged_in_user).first()
-		print check_if_user_has_recipe
+		# check if logged in users. Check if there is a row with current recipe id and user recipe id. 
+		# we want to see if that user has that recipe 
+
+		# then, check if the recipe id of that recipe is in that users recipes
+		#first, find all of the recipes that that user has.
+
+		# finds the users that have that session id in recipes_to_users table
+		users_with_session_id = UserToRecipe.query.filter(UserToRecipe.user_id==session_user_id, UserToRecipe.recipe_id==check_if_recipe_in_database.recipe_id).first()
+
+		#check if the id of recipe exists within that table 
 
 
+
+		# check_if_user_has_recipe = db.session.execute("SELECT user_id FROM user_to_recipes WHERE user_id=session_user_id AND \
+		# 	recipe_id=check_if_recipe_in_database")
+	
+	
 		if check_if_user_has_recipe:
 
 			#redirects back to saved recipes
