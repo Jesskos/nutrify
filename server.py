@@ -233,7 +233,7 @@ def view_save_recipe():
 
 	logged_in_user_recipes = UserToRecipe.query.filter_by(user_id=session_user_id).all()
 
-	recipes_to_display = [logged_in_user_recipe.recipe for logged_in_user_recipe in logged_in_user_recipes]
+	# recipes_to_display = [logged_in_user_recipe.recipe for logged_in_user_recipe in logged_in_user_recipes]
 	for logged_in_user_recipe in logged_in_user_recipes:
 
 		recipe = logged_in_user_recipe.recipe
@@ -258,23 +258,22 @@ def save_recipe():
 		return redirect("/")
 
 	# find out logged in user from id stored in session, and queries for that user
-	user_id = session['id']
-	logged_in_user = User.query.get(user_id)
+	session_user_id = session['id']
+	logged_in_user = User.query.get(session_user_id)
 
-	# gets saved recipe from form
 	saved_recipe= request.form.get('recipe')
 	
-	# converts unicode to one with single quotes
-	# tried json.loads, but expecting double quotes
-	# converts unicode to dictionary.  
+
 	saved_recipe = ast.literal_eval(saved_recipe)
 
 
 	# checks if recipe saved by user already in database by checking recipes table
 	check_if_recipe_in_database = Recipe.query.filter_by(recipe_url=saved_recipe['recipe_url']).first()
 
+
+
 	# if recipe is not already in database, will add it to the recipes table in the database. 
-	if check_if_recipe_in_database  == None:
+	if not check_if_recipe_in_database:
 
 		# adds recipe to database based by indexing into response (havign been coverted to dictionary)
 		saved_recipe_to_add_to_db = Recipe(recipe_name=saved_recipe['recipe_name'], recipe_image=saved_recipe['recipe_image'], 
@@ -288,7 +287,7 @@ def save_recipe():
 		db.session.add(saved_recipe_to_add_to_db)
 		db.session.commit()	 
 
-		# will also add recipe to user 
+		# # will also add recipe to user 
 		recipe_saved_by_user = UserToRecipe(recipe=saved_recipe_to_add_to_db, user=logged_in_user)
 		db.session.add(recipe_saved_by_user)
 		db.session.commit()	
@@ -299,16 +298,15 @@ def save_recipe():
 	else:
 
 		# checks if user to recipes table has the recipe the user saved. If it does, returns that recipe. If doesn't, returns none. 
-		check_if_user_has_recipe = UserToRecipe.query.filter(saved_recipe['recipe_url'] == UserToRecipe.recipe.recipe_url).first()
+		check_if_user_has_recipe = UserToRecipe.query.filter(UserToRecipe.recipe_id==check_if_recipe_in_database.recipe_id, 
+			UserToRecipe.user_id==logged_in_user).first()
+		print check_if_user_has_recipe
 
-		print "!!!!!!!!!!!!!!!!!!!"
-		print "check_if_user_has_recipe"
 
-
-		if check_if_user_has_recipe == True:
+		if check_if_user_has_recipe:
 
 			#redirects back to saved recipes
-			flash("recipe already exists!")
+			flash("recipe already exist")
 			return redirect("/view-saved-recipe")
 
 		# if it does doesn't, will add recipe to users to recipe table. 
