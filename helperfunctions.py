@@ -28,13 +28,10 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 	'lowsaturatedfat':'&nutrients[FASAT]=2', 'lowfiber':'&nutrients[FIBTG]=2'}
 
 	if unicode_nutrients_list == []:
-
 		return nutrients_string
 
 	for unicode_nutrient in unicode_nutrients_list:
-
 		search_parameter = nutrient_choice_to_search_parameter[unicode_nutrient]
-
 		nutrients_string += search_parameter
 
 	return nutrients_string
