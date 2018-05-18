@@ -162,17 +162,15 @@ def get_recipe():
 		recipe_health_labels = recipe["healthLabels"]
 		recipe_caution_labels = recipe["cautions"]
 
-		
-		test_for_null = {}
 
-		recipe_nutrient_calories = recipe_nutrient.get("ENERC_KCAL", test_for_null)
-		recipe_nutrient_carbohydrates = recipe_nutrient.get("CHOCDF", test_for_null)
-		recipe_nutrient_protein = recipe_nutrient.get("PROCNT", test_for_null)
-		recipe_nutrient_fiber = recipe_nutrient.get("FIBTG", test_for_null)
-		recipe_nutrient_fat = recipe_nutrient.get("FAT", test_for_null)
-		recipe_nutrient_potassium = recipe_nutrient.get("K", test_for_null)
-		recipe_nutrient_phosphorus = recipe_nutrient.get("P", test_for_null)
-		recipe_nutrient_sodium = recipe_nutrient.get("NA", test_for_null)
+		recipe_nutrient_calories = recipe_nutrient.get("ENERC_KCAL", {})
+		recipe_nutrient_carbohydrates = recipe_nutrient.get("CHOCDF", {})
+		recipe_nutrient_protein = recipe_nutrient.get("PROCNT", {})
+		recipe_nutrient_fiber = recipe_nutrient.get("FIBTG", {})
+		recipe_nutrient_fat = recipe_nutrient.get("FAT", {})
+		recipe_nutrient_potassium = recipe_nutrient.get("K", {})
+		recipe_nutrient_phosphorus = recipe_nutrient.get("P", {})
+		recipe_nutrient_sodium = recipe_nutrient.get("NA", {})
 
 		recipe_calories = recipe_nutrient_calories.get("quantity", 0)
 		recipe_carbohydrates = recipe_nutrient_carbohydrates.get("quantity", 0) 
@@ -267,7 +265,7 @@ def save_recipe():
 
 
 	# checks if recipe saved by user already in database by checking recipes table
-	check_if_recipe_in_database = Recipe.query.filter_by(recipe_url=saved_recipe['recipe_url']).first()
+	check_if_recipe_in_database = Recipe.query.filter_by(recipe_url=saved_recipe['recipe_url']).first() 
 
 
 
@@ -291,6 +289,27 @@ def save_recipe():
 		db.session.add(recipe_saved_by_user)
 		db.session.commit()	
 
+		if saved_recipe['labels']:
+
+			for label in saved_recipe['labels']:
+
+				saved_label_to_add = RecipeLabel(recipe=saved_recipe_to_add_to_db, diet_label=label)
+				db.session.add(saved_label_to_add)
+			db.session.commit()	
+
+
+		for ingredient in saved_recipe['recipe_ingredients_list']:
+
+			saved_ingredient_to_add = Ingredient(ingredient_name=ingredient)
+			db.session.add(saved_ingredient_to_add)
+
+			recipe_to_ingredient_to_add = RecipeToIngredient(recipe=saved_recipe_to_add_to_db, ingredient=saved_ingredient_to_add)
+			db.session.add(recipe_to_ingredient_to_add)
+
+		db.session.commit()	
+
+
+
 
 	# However, while recipe may already be in the database, it may have been saved by that user
 	#  need to check to see if the user logged in has that recipe by looking at the user to recipes table
@@ -298,21 +317,11 @@ def save_recipe():
 
 		# checks if user to recipes table has the recipe the user saved. If it does, returns that recipe. If doesn't, returns none. 
 		# check if logged in users. Check if there is a row with current recipe id and user recipe id. 
-		# we want to see if that user has that recipe 
-
-		# then, check if the recipe id of that recipe is in that users recipes
-		#first, find all of the recipes that that user has.
-
-		# finds the users that have that session id in recipes_to_users table
-		users_with_session_id = UserToRecipe.query.filter(UserToRecipe.user_id==session_user_id, UserToRecipe.recipe_id==check_if_recipe_in_database.recipe_id).first()
+	
+		check_if_user_has_recipe = UserToRecipe.query.filter(UserToRecipe.user_id==session_user_id, UserToRecipe.recipe_id==check_if_recipe_in_database.recipe_id).first()
 
 		#check if the id of recipe exists within that table 
 
-
-
-		# check_if_user_has_recipe = db.session.execute("SELECT user_id FROM user_to_recipes WHERE user_id=session_user_id AND \
-		# 	recipe_id=check_if_recipe_in_database")
-	
 	
 		if check_if_user_has_recipe:
 
@@ -328,30 +337,6 @@ def save_recipe():
 			flash("recipe saved!")
 			return redirect("/view-saved-recipe")
 
-
-	# saved_recipe_labels = saved_recipe['recipe_labels']
-
-	# if saved_recipe_labels: 
-		
-	# 	for saved_recipe_label in saved_recipe_labels:
-
-	# 			saved_label_to_add = RecipeLabel(recipe=saved_recipe_to_add_to_db, diet_label=saved_recipe_label)
-	# 			db.session.add(saved_label_to_add)
-
-	# 	db.session.commit()	 
-
-
-	# recipe_ingredients_list = saved_recipe['recipe_ingredients_list']
-	
-	# for ingredient in recipe_ingredients_list:
-
-	# 	ingredient_to_be_added = Ingredient(ingredient_name=ingredient)
-	# 	db.session.add(ingredient_to_be_added)
-	# 	db.session.commit()	 
-
-	# 	ingredient_for_recipe_to_be_added = RecipeToIngredient(recipe=saved_recipe_to_add_to_db, ingredient=ingredient_to_be_added)
-	# 	db.session.add(ingredient_for_recipe_to_be_added)
-	# 	db.session.commit()
 
 
 	# use ajax AFTER THIS is working 
