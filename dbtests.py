@@ -117,6 +117,24 @@ class FlaskTestsLoggedInForm(TestCase):
         self.assertIn('You have not signed up yet. Please sign up!', result.data)
 
 
+    def test_user_session_logged_out(self):
+        """ makes sure session is removed when user logs out, and user is flashed message """ 
+
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['name'] = 1
+                sess['id'] = 1
+
+        result = self.client.get('/log-out', follow_redirects=True)
+
+        self.assertNotIn('name', session)
+        self.assertNotIn('id', session)
+        self.assertIn('You are now logged out', result.data)
+
+
+
+
 
 ############################################################################################################################
 
@@ -192,15 +210,6 @@ class FlaskTestsLoggedIn(TestCase):
 
 
 
-    def test_user_session_logged_out(self):
-        """ makes sure session is removed when user logs out """ 
-
-
-        result = self.client.get('/logout', follow_redirects=True)
-
-        self.assertNotIn('name', session)
-        self.assertNotIn('id', session)
-        self.assertIn('You are now logged out', result.data)
 
 
 
