@@ -1,16 +1,15 @@
-{% extends 'base.html' %}
 
-
-{% block title %}Homepage{% endblock %}
-
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Homepage </title>
+</head>
+<body>
 <ul> 
 	{% for message in get_flashed_messages() %}
 	<li>{{ message }}</li>
 	{% endfor %}
 </ul>
-
-
-{% block content %}
 
 <h1> Welcome to the Homepage! </h1>
 
@@ -25,8 +24,6 @@
 <form action="/login"> 
 	<button type="submit" name="login">Log In</button>
 </form>
+</body>
 
-
-
-
-{% endblock %}
+</html>

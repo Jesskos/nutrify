@@ -59,7 +59,7 @@ class FlaskTestsRegistration(TestCase):
 
 # ############################################################################################################################
 
-# LOGGED IN CORRECTLY 
+# LOGGING IN
 
 class FlaskTestsLoggedInForm(TestCase):
     """Flask tests to check Log In before user is logged in"""
@@ -120,7 +120,7 @@ class FlaskTestsLoggedInForm(TestCase):
 
 ############################################################################################################################
 
-#LOGGED IN TESTS 
+#FINDING RECIPES, VIEWING RECIPES, AND LOGGING OUT
 
 
 class FlaskTestsLoggedIn(TestCase):
@@ -145,6 +145,7 @@ class FlaskTestsLoggedIn(TestCase):
         with self.client as c:
 
             with c.session_transaction() as sess:
+                
                 sess['name'] = 1 
                 sess['id'] = 1
        
@@ -191,19 +192,15 @@ class FlaskTestsLoggedIn(TestCase):
 
 
 
-    # def test_user_session_logged_out(self):
-    #     """ makes sure session is removed when user logs out """ 
+    def test_user_session_logged_out(self):
+        """ makes sure session is removed when user logs out """ 
 
 
+        result = self.client.get('/logout', follow_redirects=True)
 
-    #     with self.client as c:
-    #         with c.session_transaction() as sess:
-    #             sess['user_id'] = '42'
-
-    #         result = self.client.get('/logout', follow_redirects=True)
-
-    #         self.assertNotIn('user_id', session)
-    #         self.assertIn('Logged Out', result.data)
+        self.assertNotIn('name', session)
+        self.assertNotIn('id', session)
+        self.assertIn('You are now logged out', result.data)
 
 
 

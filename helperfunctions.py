@@ -21,7 +21,7 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 	nutrients_string = ""
 
 	nutrient_choice_to_search_parameter= {'lowpotassium':'&nutrients[K]=200', 'lowphosphorus':'&nutrients[P]=50', 
-	'carbohydratecontrolled34':'&nutrients[CHOCDH]=45-60&nutrients[SUGAR]=7',
+	'carbohydratecontrolled34':'&nutrients[CHOCDF]=45-60&nutrients[SUGAR]=7',
 	'carbohydratecontrolled45':'&nutrients[CHOCDF]=60-75&nutrients[SUGAR]=7',
 	'highfiber':'&nutrients[FIBTG]=5-20', 'lowfat':'&nutrients[FAT]=3', 'lowprotein':'&nutrients[PROCNT]=4',
 	'highprotein':'&nutrients[PROCNT]=7-30', 'lowcalories': '&nutrients[ENERC_KCAL]=200', 'lowsodium':'&nutrients[NA]=140',
