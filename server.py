@@ -337,20 +337,9 @@ def save_recipe():
 			flash("recipe saved!")
 			return redirect("/view-saved-recipe")
 
-
-
-	# use ajax AFTER THIS is working 
-
-
-	flash("Your recipe has been saved!")
 	return redirect("/view-saved-recipe")
 
-
- 
-
-
-	
-
+	# use ajax AFTER THIS is working 
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
