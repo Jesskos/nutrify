@@ -2,6 +2,20 @@
 def get_nutrient_search_parameters(unicode_nutrients_list):
 	""" helper function to iterate through nutrients selected by user and translate to string 
 
+	Nutrient Search Criteria:
+	low Potassium Diet: 200 mg maximim
+	low Phosphorus Diet: 50 mg maximim
+	carbohydrate controlled 3-4 choices: 45-60 grams range
+	carbohydrate controlled 4-5 choices: 60-75 grams range
+	high fiber: 5-20 gram range
+	lowfat diet: 3 gram maximim
+	low protein: 4 grams maximim
+	high protein: 7-30 gram range
+	low calories: 200 calorie maximim 
+	low sodium: 140 mg maximim
+	low saturated fat: 2 gram maximim 
+	low fiber: 2 gram maximim 
+
 	Examples: 
 
 	>>> check_nutrient([u'lowphosphorus', u'carbohydratecontrolled34']) 
@@ -20,6 +34,7 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 
 	nutrients_string = ""
 
+	# makes dictionary of nutrition search criteria 
 	nutrient_choice_to_search_parameter= {'lowpotassium':'&nutrients[K]=200', 'lowphosphorus':'&nutrients[P]=50', 
 	'carbohydratecontrolled34':'&nutrients[CHOCDF]=45-60&nutrients[SUGAR]=7',
 	'carbohydratecontrolled45':'&nutrients[CHOCDF]=60-75&nutrients[SUGAR]=7',

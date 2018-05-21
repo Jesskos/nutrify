@@ -2,28 +2,105 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Homepage </title>
+	<style>
+
+	h1 {
+		color: white;
+		font: Verdana;
+	}
+
+	.top{width:;}
+	.loginbutton {
+    background-color:  #D57500; 
+    font-family: Verdana;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    font-size: 16px;
+    margin: 6px 2px;
+    text-align: center;
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    cursor: pointer;
+	}
+
+	.registerbutton {
+    background-color:  #853B1B; 
+    font-family: Verdana
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    font-size: 16px;
+    margin: 6px 2px;
+    text-align: center;
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    cursor: pointer;
+	}
+	.loginbutton {border-radius: 12px;}
+	.registerbutton{border-radius: 12px;}
+	.loginbutton:hover {opacity: 1}
+	.registerbutton:hover {opacity: 1}
+
+
+	 * { margin:0; padding:0 } /*stack overflow*/
+	 .top-section {
+     height: 100px;
+     width: 100%;
+     padding-bottom: 0px;
+     margin: 0px;
+     margin-bottom: 10px;
+     float: left;
+     display: block;
+     background-color: #6B5B95;
+     font-family: Verdana;
+     position:relative;* makes div flush on top */
+ 	}
+
+ 	.bottom-section{
+ 	height: 200px;
+ 	width: 100%;
+ 	display: inline-block;
+ 	position: relative;
+ 	background-color: "#F0EDE5";
+
+ 	 }
+
+    .div{
+       padding-top:10px;
+       }
+
+	</style>
+
+
 </head>
-<body>
+      <body bgcolor="#F0EDE5">
+      <div class="top-section"><h1> NutriFi</h1></div>
+      </div>
+
 <ul> 
 	{% for message in get_flashed_messages() %}
 	<li>{{ message }}</li>
 	{% endfor %}
 </ul>
 
-<h1> Welcome to the Homepage! </h1>
+    <div><center><img src= "http://tarathornenutrition.com/wp-content/uploads/2017/06/shutterstock_335916848.jpg"></img></center></div>
 
-<h3> Find recipes based on your dietary needs! </h3>
+	<article>
+      <section class="bottom-section"><form action="/register"> 
+	      <center><button type="submit" class = "loginbutton" name="register">Register</button></center>
+        </form>
 
-<h2> Pleae login or register for an account to get started </h2>
+        <form action="/login"> 
+	      <center><button type="submit" class = "registerbutton" name="login">Log In</button></center>
+        </form> 
+      </section>
+    </article>
 
-<form action="/register"> 
-	<button type="submit" name="register">Register</button>
-</form>
-
-<form action="/login"> 
-	<button type="submit" name="login">Log In</button>
-</form>
 </body>
 
 </html>

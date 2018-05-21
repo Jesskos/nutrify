@@ -170,6 +170,8 @@ def example_data():
 
 	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', blog_url='pizza.blog.com', recipe_yield=12, 
 		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000, labels=['low-fat'])
+	fruit_salad = Recipe(recipe_name='fruit salad', recipe_image='fruit.jpg', recipe_url='fruit.com', blog_url='fruit.blog.com', recipe_yield=12, 
+		ingredients_list="[]", calories= 100, carbohydrates=15, protein=2, fiber=3, fat=10, potassium=190, phosphorus=200, sodium=50, labels=['low-protein'])
 	olive = Ingredient(ingredient_name='olive')
 	onecan = Amount(ingredient_amount='1 can')
 	harry = User(fname='Harry', lname='Potter', user_email='hpotter@hogwarts.edu', user_password='hufflepuff')

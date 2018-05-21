@@ -13,9 +13,14 @@ app.jinja_env.undefined = StrictUndefined
 
 app.secret_key="Apple"
 
+
+
+##################################################################################################################
+# LOGGING IN, LOGGING OUT, AND REGISTERING
+
 @app.route("/")
 def index():
-	""" Presents homepage if user is not logged in. 
+	""" Presents homepage if user has not logged in. 
 		If user is logged in, renders template for user's portal """
 
 	if "name" in session:
@@ -48,8 +53,8 @@ def login():
 
 @app.route("/add-registration-info", methods=["POST"])
 def add_registration_info():
-	""" adds registration information to database if account does not already 
-	exist. If user is already registered, redirects to login page """
+	""" Adds user's registration information to database if user has not yet registered. 
+	If user is already registered, redirects to login page for user to log in """ 
 
 	first_name = request.form.get("firstname")
 	last_name = request.form.get("lastname")
@@ -72,17 +77,14 @@ def add_registration_info():
 
 @app.route("/get-login-info", methods=["GET"])
 def get_login_info():
-	""" Gets user's login info from browser. If user's email not in database, 
-	redirects to register. If user's email exists, but password entered does 
-	not match password in database, redirects back to login """
+	""" Gets user's login info from browser. If user has not yet registered, redirects to registration page, 
+	and sends flash message to let user know he/she has not yet registered. If user enters wrong password,  
+	redirects back to login page, and sends flash message to let user know """
 
 	email = request.args.get('email')
 	password = request.args.get('password')
-	print email 
-	print password 
 
 	user = User.query.filter_by(user_email=email).first()
-	print user 
 
 	if user:
 		if user.user_password != password:
@@ -100,7 +102,7 @@ def get_login_info():
 
 @app.route("/log-out")
 def log_out():
-	""" logs user out when user logged in"""
+	""" logs user out when user logged in, and redirects back to homepage """
 
 	if "name" in session: 
 		del session['name']
@@ -122,10 +124,21 @@ def open_user_portal():
  		return redirect("/")
 
 
+
+##################################################################################################################
+# FINDS AND GETS RECIPES FROM API
+
+@app.route("/find-recipe")
+def find_recipe():
+	""" renders template for finding recipes """
+
+	return render_template('findrecipes.html')
+
+
 @app.route("/get-recipe.json")
 def get_recipe():
-	""" Gets users food choice(s) for search from the browser, and calls API to search 
-	for this food item, and renders template with recipes found """
+	""" Gets users food choice(s) and nutrient choice(s) from browser, and calls Edamam API to search for a food choice 
+	meeting nutrition criteria specified by the user """
 
 	food_choice = request.args.get("food")
 
@@ -143,13 +156,20 @@ def get_recipe():
 
 	list_of_recipes=[]
 
+	# all recipes in response are contained within 'hits'. All other information is not needed.
 	parsed_recipes = recipes_json['hits'] 
 
+	# Iterates through API, which is a list of dictionaries.
 	for parsed_recipe in parsed_recipes:
 
+		# "recipe" is a key which has a corresponding value of a dictionary holding recipe_name, recipe_image, 
+		# recipe_blog_url, recipe_yield, recipe_ingredient_list, and recipe_labels. "totalNutrients" is a key  
+		# within that dictionary which has a corresponding value of a dictionary holding nutrients. 
+		# However, since some nutrient keys are mssing, .get is used. 
 		recipe = parsed_recipe["recipe"]
 		recipe_nutrient = recipe["totalNutrients"]
 
+		
 		recipe_name = recipe.get("label", "no name available") 
 		recipe_image = recipe.get("image", "no image available")
 		recipe_url = recipe.get("url", "no url available")
@@ -157,12 +177,23 @@ def get_recipe():
 		recipe_yield = recipe.get("yield", 0)
 		recipe_ingredients_list = recipe.get("ingredientLines", "No Ingredients Available")
 	
-		# This should not need get method since empty diet labels have empty list
+		
 		recipe_diet_labels = recipe["dietLabels"]
 		recipe_health_labels = recipe["healthLabels"]
 		recipe_caution_labels = recipe["cautions"]
 
 
+		# Lines 181-197:
+		# In API response, nutrient is a key, and value is a dictionary which contains string "quantity"
+		# as a key, and value is an integer of quantity of nutrient. See below:
+		#  "K" : {
+        #   "label" : "Potassium",
+        #   "quantity" : 7402.711141533334,
+        #   "unit" : "mg"
+        # },
+		# in case a nutrient key is missing, will assume value of nutrient is 0. 
+		# If nutrinet is missing, will set default value to an empty dictionary. 
+		# By defaily, string "quantity" will not found in empty dictionary and 0 is returned. 
 		recipe_nutrient_calories = recipe_nutrient.get("ENERC_KCAL", {})
 		recipe_nutrient_carbohydrates = recipe_nutrient.get("CHOCDF", {})
 		recipe_nutrient_protein = recipe_nutrient.get("PROCNT", {})
@@ -182,17 +213,10 @@ def get_recipe():
 		recipe_sodium = recipe_nutrient_sodium.get("quantity", 0)
 
 
-
+		# API separates three different types of labels, but this app will combine them together
 		labels = recipe_diet_labels + recipe_health_labels + recipe_caution_labels
 
-		# instantiate a row for the 
-		# check in database each times it runs 
-		# can see previous recipe search. Need to check if a specific query has been done
-		# if the ingredient in the recipe, then don't add to database 
-		# Check if it's already in database after we call API
-		#
-
-
+		# making a dictionary of necessary pieces of recipe
 		recipe_components = {'recipe_name': recipe_name, 'recipe_image':recipe_image, 'recipe_url':recipe_url, 
 							'recipe_blog_url': recipe_blog_url, 'recipe_ingredients_list':recipe_ingredients_list, 
 							'recipe_yield':recipe_yield, 
@@ -203,19 +227,13 @@ def get_recipe():
 							'recipe_sodium':(recipe_sodium/recipe_yield), 'labels': labels}
 
 		
+		# adds each recipe to a list, which will be sent to browser
 		list_of_recipes.append(recipe_components)
 
-
-	# How do I prevent recipes from repeating? Does SQLalchemy do this when filtering?
 	return render_template("recipesearchresults.html", recipes=list_of_recipes)
 
-
-@app.route("/find-recipe")
-def find_recipe():
-	""" renders template for view recipe """
-
-	return render_template('findrecipes.html')
-
+##################################################################################################################
+# VIEWING AND SAVING RECIPES
 
 @app.route("/view-saved-recipe")
 def view_save_recipe():
@@ -224,27 +242,22 @@ def view_save_recipe():
 	if "name" not in session:
 		return redirect("/")
 
+	# gets user info from browser from session id 
 	session_user_id = session['id']
 
 	recipes_to_display = []
 
+	# filters "users_to_recipes" table for all recipes belonging to that user
 	logged_in_user_recipes = UserToRecipe.query.filter_by(user_id=session_user_id).all()
 
+	# adds recipes to the list, which will be sent to the browser for display to the user
 	# recipes_to_display = [logged_in_user_recipe.recipe for logged_in_user_recipe in logged_in_user_recipes]
 	for logged_in_user_recipe in logged_in_user_recipes:
 
 		recipe = logged_in_user_recipe.recipe
-
 		recipes_to_display.append(recipe)
 
-
-	# print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 
-	# print list_of_users_recipes
-	# print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" 
-
-
 	return render_template('viewsavedrecipes.html', recipes=recipes_to_display) 
-	#CSS 
 
 
 @app.route("/save-recipe", methods=['POST'])
@@ -254,25 +267,22 @@ def save_recipe():
 	if "name" not in session:
 		return redirect("/")
 
-	# find out logged in user from id stored in session, and queries for that user
+	# gets user info from browser, and queries "user" table based on user_id
 	session_user_id = session['id']
 	logged_in_user = User.query.get(session_user_id)
 
+	# gets information on which recipe user selected from browser. Converts back to dictionary.
 	saved_recipe= request.form.get('recipe')
-	
-
 	saved_recipe = ast.literal_eval(saved_recipe)
 
-
-	# checks if recipe saved by user already in database by checking recipes table
+	# checks if recipe saved by user already in database by checking "recipes" table
 	check_if_recipe_in_database = Recipe.query.filter_by(recipe_url=saved_recipe['recipe_url']).first() 
 
-
-
-	# if recipe is not already in database, will add it to the recipes table in the database. 
+	# if recipe is not already in database, will add it to the "recipes" table in the database. 
 	if not check_if_recipe_in_database:
 
-		# adds recipe to database based by indexing into response (havign been coverted to dictionary)
+		# adds recipe to "recipes table" based by checking keys in response, which has been converted back to a dictinary.
+		# See dictionary in route "/get-recipe.json"
 		saved_recipe_to_add_to_db = Recipe(recipe_name=saved_recipe['recipe_name'], recipe_image=saved_recipe['recipe_image'], 
 									recipe_url=saved_recipe['recipe_url'], blog_url=saved_recipe['recipe_blog_url'],
 									ingredients_list=saved_recipe['recipe_ingredients_list'], recipe_yield=saved_recipe['recipe_yield'], 
@@ -280,15 +290,16 @@ def save_recipe():
 									protein=saved_recipe['recipe_protein'], fiber=saved_recipe['recipe_fiber'], fat=saved_recipe['recipe_fat'],
 									potassium=saved_recipe['recipe_potassium'], phosphorus=saved_recipe['recipe_phosphorus'], 
 									sodium=saved_recipe['recipe_sodium'], labels=saved_recipe['labels'])  
-		# adds and comits to recipe
 		db.session.add(saved_recipe_to_add_to_db)
 		db.session.commit()	 
 
-		# # will also add recipe to user 
+		#  will also add recipe to users_to_recipes table
 		recipe_saved_by_user = UserToRecipe(recipe=saved_recipe_to_add_to_db, user=logged_in_user)
 		db.session.add(recipe_saved_by_user)
 		db.session.commit()	
 
+		# after recipe is saved to database, will save labels in recipe_to_labels table, whcih contains recipe id as foreign key
+		# This is to show association between a recipe and its label
 		if saved_recipe['labels']:
 
 			for label in saved_recipe['labels']:
@@ -297,7 +308,8 @@ def save_recipe():
 				db.session.add(saved_label_to_add)
 			db.session.commit()	
 
-
+		# after recipe is saved to database, will save ingredient in recipe_to_ingredients table, which contains recipe id as foreign key
+		# this is to show an association between a recipe and its ingredient
 		for ingredient in saved_recipe['recipe_ingredients_list']:
 
 			saved_ingredient_to_add = Ingredient(ingredient_name=ingredient)
@@ -308,28 +320,19 @@ def save_recipe():
 
 		db.session.commit()	
 
-
-
-
-	# However, while recipe may already be in the database, it may have been saved by that user
-	#  need to check to see if the user logged in has that recipe by looking at the user to recipes table
+	# if a recipe has already been added to the database, want to check if user already has it before saving it to the user's account.
 	else:
-
-		# checks if user to recipes table has the recipe the user saved. If it does, returns that recipe. If doesn't, returns none. 
-		# check if logged in users. Check if there is a row with current recipe id and user recipe id. 
 	
+		# queries the user_to_recipes table to see if the user already has the recipe selected to be saved
 		check_if_user_has_recipe = UserToRecipe.query.filter(UserToRecipe.user_id==session_user_id, UserToRecipe.recipe_id==check_if_recipe_in_database.recipe_id).first()
-
-		#check if the id of recipe exists within that table 
-
 	
+		# if user already has the recipe, will redirect back to view-saved-recipes.
 		if check_if_user_has_recipe:
 
-			#redirects back to saved recipes
 			flash("recipe already exist")
 			return redirect("/view-saved-recipe")
 
-		# if it does doesn't, will add recipe to users to recipe table. 
+		# if user does not have recipe, will add it to users_to_recipes
 		else:
 			recipe_saved_by_user = UserToRecipe(user=logged_in_user, recipe=check_if_recipe_in_database)
 			db.session.add(recipe_saved_by_user)
