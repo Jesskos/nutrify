@@ -54,7 +54,6 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 
 
 
-
 if __name__ == "__main__":
     import doctest
 

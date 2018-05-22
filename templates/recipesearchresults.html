@@ -6,21 +6,26 @@
 
 
 	{% if recipes != [] %}
-		<h2> Hello, {{ session["name"] }} . Here are your recipes </h2>
+		<h2> Hello, {{ session["name"] }}. We found the following recipes for you. </h2>
 	
-		  {% for recipe in recipes %}
-		 
-		   <p><img src= {{ recipe['recipe_image'] }} ></p>
-		   <p><h3>{{ recipe['recipe_name'] }} </h3></p>
-		   <p><a href="{{ recipe['recipe_blog_url'] }}"> Link to Nutrition Facts </a></p>
-		   <p><a href="{{ recipe['recipe_url'] }}"> Find Instructions Here </a></p>
-		   		<b><h4> Health Labels:</b>  
-		        {% for label in recipe['labels'] %}
-		   		 {{ label }} 
-		     	{% endfor %} </h4> 
-		    <form action="/save-recipe" method="POST">
-		   	<button type="submit" name='recipeurl' value='{{recipe['recipe_url']}}'>Save Recipe</button>
-		   </form>
+		   {% for recipe in recipes %}
+		   <div class="container"> 
+		       <p><img src= {{ recipe['recipe_image'] }}></p>
+		       <p><h3>{{ recipe['recipe_name'] }} </h3></p>
+		       <form action="{{ recipe['recipe_blog_url'] }}">
+    			<input type="submit" class="nutritionbutton" value="Nutrition Information" />
+				</form>
+				 <form action="{{ recipe['recipe_url'] }}">
+    			<input type="submit" class="instructionbutton" value="Nutrition Information" />
+				</form>
+		   	   <b><h6> Health Labels:</b>  
+		            {% for label in recipe['labels'] %}
+		   		      {{ label }} 
+		     	    {% endfor %} </h6> 
+		        <form action="/save-recipe" method="POST">
+		   	    <button type="submit" class="submitbutton" name='recipeurl' value='{{recipe['recipe_url']}}'>Save Recipe</button>
+		       </form> <hr> 	
+		   </div>
 		{% endfor %}
 	{% else %}
 	    <h2> Sorry, {{ session["name"] }}. No recipes found with those criteria. Try to narrow your search. </h2>

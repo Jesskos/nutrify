@@ -2,8 +2,80 @@
 <html>
 <head>
 	<title>{% block title %} Base {% endblock %}</title>
-	  <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <title>Bootstrap Exercise</title>
+<!-- 	  <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+	  <style> 
+    .hr {
+    display: block;
+    color: black;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: red;
+    border-style: inset;
+    }
+
+    .container {
+    margin-left: 4px;
+    display: block;
+    border: 1px red;
+    }
+
+     .container2 {
+    margin-left: 10px;
+    display: block;
+    border: 1px red;
+    }
+
+    h2 {
+    margin-left: 20px;
+    color: #944743;
+    font-family: Verdana;
+    padding-bottom:40px;
+    }
+
+    .submitbutton {
+    background-color:  #944743; 
+    font-family: Verdana;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 6px 2px;
+    text-align: center;
+    display: inline-block;
+    border: 4px solid #6B5B95;
+  }
+
+     .nutritionbutton {
+    background-color:  #AF9483;
+    font-family: Verdana;
+    border: none;
+    color: black;
+    padding: 3px 10px;
+    font-size: 16px;
+    margin: 6px 2px;
+    text-align: center;
+    display: inline-block;
+  }
+
+    .instructionbutton {
+    background-color:  #B4B7BA;
+    font-family: Verdana;
+    border: none;
+    color: black;
+    padding: 3px 10px;
+    font-size: 16px;
+    margin: 6px 2px;
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 12px
+  }
+
+
+
+
+  </style>
 
 	  <!-- Load Bootstrap 4 -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
@@ -14,11 +86,6 @@
 
 </head>
 
-<ul> 
-	{% for message in get_flashed_messages() %}
-	<li>{{ message }}</li>
-	{% endfor %}
-</ul>
 
 
 <!-- Code goes here. -->
@@ -54,7 +121,12 @@
 <style>
 
 </style>
-
+<ul> 
+  {% for message in get_flashed_messages() %}
+  <li>{{ message }}</li>
+  {% endfor %}
+</ul>
+<body>
 
 {% block content %} Base {% endblock %}
 

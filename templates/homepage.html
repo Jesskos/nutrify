@@ -29,7 +29,7 @@
 
 	.registerbutton {
     background-color:  #853B1B; 
-    font-family: Verdana
+    font-family: Verdana;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -79,14 +79,15 @@
 
 </head>
       <body bgcolor="#F0EDE5">
+    <ul> 
+    {% for message in get_flashed_messages() %}
+    <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+
       <div class="top-section"><h1> NutriFi</h1></div>
       </div>
 
-<ul> 
-	{% for message in get_flashed_messages() %}
-	<li>{{ message }}</li>
-	{% endfor %}
-</ul>
 
     <div><center><img src= "http://tarathornenutrition.com/wp-content/uploads/2017/06/shutterstock_335916848.jpg"></img></center></div>
 

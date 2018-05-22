@@ -19,7 +19,7 @@ class Recipe(db.Model):
 	recipe_image = db.Column(db.String(200), nullable=True)
 	recipe_url = db.Column(db.String(200), nullable=False)
 	blog_url = db.Column(db.String(200), nullable=True)
-	ingredients_list = db.Column(db.String(1000), nullable=False)
+	ingredients_list = db.Column(db.String(2000), nullable=False)
 
 	# can covert to 'blob'
 	recipe_yield = db.Column(db.Integer, nullable=True)

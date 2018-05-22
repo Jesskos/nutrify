@@ -5,6 +5,7 @@
 {% block content %}
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"> </script>
 
+<div class="container2"> 
 <ul> 
 	{% for message in get_flashed_messages() %}
 	<li>{{ message }}</li>
@@ -36,6 +37,7 @@
     <p> <input type="submit">
 
 </form>
+</div>
 
 
 

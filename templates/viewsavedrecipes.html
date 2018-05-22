@@ -16,10 +16,11 @@
 		   <p><h3>{{ recipe.recipe_name }} </h3></p>
 		   <p><a href="{{ recipe.blog_url }}"> Link to Nutrition Facts </a></p>
 		   <p><a href="{{ recipe.recipe_url }}"> Find Instructions Here </a></p>
-		   		<b><h4> Health Labels:</b>  
+		   		<b><h5> Health Labels:</b>  
+		   			{{ recipe.labels }}
 		   			{% for label in recipe.labels %}
 		   		 		{{ label }} 
-		     		{% endfor %} </h4> 
+		     		{% endfor %} </h5> 
 
 		{% endfor %}
 	{% else %}

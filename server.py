@@ -159,7 +159,7 @@ def get_recipe():
 	# all recipes in response are contained within 'hits'. All other information is not needed.
 	parsed_recipes = recipes_json['hits'] 
 
-	# Iterates through API, which is a list of dictionaries.
+	# Iterates through API, which is a list of dictionaries. Parses recipes
 	for parsed_recipe in parsed_recipes:
 
 		# "recipe" is a key which has a corresponding value of a dictionary holding recipe_name, recipe_image, 
@@ -318,7 +318,7 @@ def save_recipe():
 	""" adds a recipes to the datebase, and renders template with all saved recipes""" 
 
 	if "name" not in session:
-		return redirect("/")
+		return redirect('/')
 
 	# gets user info from browser, and queries "user" table based on user_id
 	session_user_id = session['id']
