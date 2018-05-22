@@ -1,18 +1,14 @@
- {% extends 'base.html' %}
+ {% extends 'base2.html' %}
 
 {% block title %} View Saved Recipes  {% endblock %}
 
 {% block content %}
 
-<ul> 
-	{% for message in get_flashed_messages() %}
-	<li>{{ message }}</li>
-	{% endfor %}
-</ul>
+
 
 <ul>
 	{% if recipes != [] %}
-		<h2> Hello, {{ session["name"] }} . Here are your saved recipes! </h2>
+		<h2> Hello, {{ session["name"] }}. Here are your saved recipes! </h2>
 	
 		  {% for recipe in recipes %}
 		 

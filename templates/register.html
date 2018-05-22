@@ -1,23 +1,27 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
 {% block title %}Registration Page {% endblock %}
 
 
 {% block content %}
-<ul> 
-	{% for message in get_flashed_messages() %}
-	<li>{{ message }}</li>
-	{% endfor %}
-</ul>
 
-<h3> Welcome! Please fill out the following form to register</h3>
+<div class="top-section"><h1> NutriFi</h1></div>
+      </div>
 
-<form action="/add-registration-info" method="POST">
-	First Name: <input type="text" name="firstname" required> <p>
-	Last Name: <input type="text" name="lastname" required> <p>
-	Email Address: <input type="text" name="email" required> <p>
-	Enter a Password: <input type="text" name="password" required> <p>
-	<input type="submit">
-</form>
+
+
+<div class='center'><form action="/add-registration-info" method="POST" >
+
+	<h2> Please register here:</h2>
+	<label for='firstname'> First Name: </label>
+	<input type="text" class='textinput' name="firstname" required> <p>
+	<label for='lastname'> Last Name: </label>
+	<input type="text" name="lastname" class='textinput' required> <p>
+	<label for='email'> Email Address: </label>
+	<input type="text" name="email" class='textinput' required> <p>
+	<label for='password'> Enter a Password: </label>
+	<input type="password" name="password" class='textinput' required> <p>
+	<input type="submit" class="submitbutton">
+</form> <div>
 
 <!-- <form action="/update-registration-info" method="POST"> -->
 <!-- 	<h4> Types of Diet you would like to follow: (optional) </h4>  -->

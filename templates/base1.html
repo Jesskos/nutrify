@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %} Base {% endblock %}</title>
+	<style> 
+
+	.submitbutton {
+    background-color:  #e94b3c; 
+    font-family: Verdana
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 6px 2px;
+    text-align: center;
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    cursor: pointer;
+	}
+
+	* { margin:0; padding:0 } /*stack overflow*/
+	 .top-section {
+     height: 100px;
+     width: 100%;
+     padding-bottom: 0px;
+     margin: 0px;
+     margin-bottom: 10px;
+     float: left;
+     color: white;
+     display: block;
+     background-color: #6B5B95;
+     font-family: Verdana;
+     position:relative;/** makes div flush on top */*/
+ 	}
+
+ 	.form-section{
+ 	position: relative;
+ 	width: 300px;
+ 	height: 200px;
+ 	color: #944743;
+ 	border: black;
+
+ 	}
+
+ 	.container{
+ 	position: relative;
+ 	width: 800px;
+ 	height: 200px;
+ 	color: #944743;
+ 	border: black;
+ 	justify-content: center;
+
+ 	}
+
+ 	.textinput {
+ 		width: 200px;
+ 		padding:0px;
+ 		margin: 10px;
+ 		box-sizing: border-box;
+ 	}
+
+ 	h2 {
+ 		color: #944743 ;
+ 	}
+
+ 	label {
+ 		color: #944743;
+ 		font: Verdana;
+ 	}
+
+ 	.center {
+ 		margin: auto;
+ 		width: 400px;
+ 		border: 3px black;
+ 		padding: 10px;
+ 	}
+
+</style>
+</head>
+<body bgcolor="#FOEDEF" >
+
+	<ul> 
+	{% for message in get_flashed_messages() %}
+	<li>{{ message }}</li>
+	{% endfor %}
+	</ul>
+
+{% block content %} Base {% endblock %}
+</body>
+</html>

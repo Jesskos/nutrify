@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
 {% block title %} View Recipes {% endblock %}
 
 {% block content %}
 
-<ul>
+
 	{% if recipes != [] %}
 		<h2> Hello, {{ session["name"] }} . Here are your recipes </h2>
 	
@@ -19,7 +19,7 @@
 		   		 {{ label }} 
 		     	{% endfor %} </h4> 
 		    <form action="/save-recipe" method="POST">
-		   	<button type="submit" name='recipe' value='{{recipe}}'>Save Recipe</button>
+		   	<button type="submit" name='recipeurl' value='{{recipe['recipe_url']}}'>Save Recipe</button>
 		   </form>
 		{% endfor %}
 	{% else %}
@@ -27,6 +27,8 @@
  	{% endif %}
 	</ul>
 
+	<!-- use JS to prevent selecting high protein and low protein 
+ -->
 
 
 {% endblock %}
