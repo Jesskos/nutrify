@@ -27,27 +27,27 @@
 		   	   <span id='#{{recipe['recipe_url']}}-message'></span>
 		       </form> <hr> 	
 		     //   <script>
-    			// "use strict";
+    			"use strict";
 
-    			// function confirmation(result) {
-    			// 	alert(result);
-    			// }
+    			function confirmation(result) {
+    				alert(result);
+    			}
 
-    			// function saveRecipe(evt) {
-    			// 	evt.preventDefault();
+    			function saveRecipe(evt) {
+    				evt.preventDefault();
 
-    			// 	let savedRecipeUrl = {
-    			// 		"url": $("#{{recipe['recipe_url']}}").val(),
-    			// 	};
+    				let savedRecipeUrl = {
+    					"url": $("#{{recipe['recipe_url']}}").val(),
+    				};
 
-    			// 	$.post("/save-recipe", 
-    			// 		savedRecipeUrl,
-    			// 		confirmation);
-    			// }
+    				$.post("/save-recipe", 
+    					savedRecipeUrl,
+    					confirmation);
+    			}
 
-   			 //   $('#{{recipe['recipe_url']}}').on('click', saveRecipe);
+   			   $('#{{recipe['recipe_url']}}').on('click', saveRecipe);
 
-   			 //   </script>
+   			   </script>
 
 		   </div>
 		{% endfor %}
