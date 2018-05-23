@@ -324,7 +324,7 @@ def save_recipe():
 	logged_in_user = User.query.get(session_user_id)
 
 	# gets saved recipe url from browser, which is a unique identifier
-	saved_recipe_url= request.form.get('recipeurl')
+	saved_recipe_url= request.form.get('url')
 	print request.form
 
 	print Recipe.query.all()
@@ -341,8 +341,9 @@ def save_recipe():
 		# if user already has the recipe, will redirect back to view-saved-recipes.
 		if check_if_user_has_recipe:
 
-			flash("recipe already exist")
+			flash("recipe already exists")
 			return redirect("/view-saved-recipe")
+			# print "\n\nRECIPE ALREADY EXISTS"
 
 		# if user does not have recipe, will add it to users_to_recipes
 		else:
@@ -351,6 +352,8 @@ def save_recipe():
 			db.session.commit()
 			flash("recipe saved!")
 			return redirect("/view-saved-recipe")
+			# print "\n\nSAVED RECIPE"
+			# return "Recipe Saved"
 
 			
 

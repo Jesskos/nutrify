@@ -23,8 +23,32 @@
 		   		      {{ label }} 
 		     	    {% endfor %} </h6> 
 		        <form action="/save-recipe" method="POST">
-		   	    <button type="submit" class="submitbutton" name='recipeurl' value='{{recipe['recipe_url']}}'>Save Recipe</button>
+		   	    <button type="submit" class="submitbutton" id="#{{recipe['recipe_url']}}" name='recipeurl' value='{{recipe['recipe_url']}}'>Save Recipe</button>
+		   	   <span id='#{{recipe['recipe_url']}}-message'></span>
 		       </form> <hr> 	
+		     //   <script>
+    			// "use strict";
+
+    			// function confirmation(result) {
+    			// 	alert(result);
+    			// }
+
+    			// function saveRecipe(evt) {
+    			// 	evt.preventDefault();
+
+    			// 	let savedRecipeUrl = {
+    			// 		"url": $("#{{recipe['recipe_url']}}").val(),
+    			// 	};
+
+    			// 	$.post("/save-recipe", 
+    			// 		savedRecipeUrl,
+    			// 		confirmation);
+    			// }
+
+   			 //   $('#{{recipe['recipe_url']}}').on('click', saveRecipe);
+
+   			 //   </script>
+
 		   </div>
 		{% endfor %}
 	{% else %}
