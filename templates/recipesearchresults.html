@@ -22,6 +22,7 @@
 		            {% for label in recipe['labels'] %}
 		   		      {{ label }} 
 		     	    {% endfor %} </h6> 
+<<<<<<< HEAD
 		        <form action="/save-recipe" method="POST">
 		   	    <button type="submit" class="submitbutton" id="#{{recipe['recipe_url']}}" name='recipeurl' value='{{recipe['recipe_url']}}'>Save Recipe</button>
 		   	   <span id='#{{recipe['recipe_url']}}-message'></span>
@@ -48,6 +49,12 @@
    			   $('#{{recipe['recipe_url']}}').on('click', saveRecipe);
 
    			   </script>
+=======
+		        <form action="/save-recipe" method="POST" class='saveform'>
+		        <h6 id='content'>info</h6>
+		   	    <button type="submit" class="submitbutton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}'>Save Recipe</button>
+		       </form> <hr> 	
+>>>>>>> e7ce1e56d8c1e5e6f4ad90c7a1403c2600a63c7e
 
 		   </div>
 		{% endfor %}
@@ -58,6 +65,37 @@
 
 	<!-- use JS to prevent selecting high protein and low protein 
  -->
+ <script src="https://code.jquery.com/jquery.js"></script> 
+   		<script>
+		"use strict";
+
+		function confirmation(result) {
+			// $('#content').load('/save-recipe')
+		}
+
+		function saveRecipe(evt) {
+			console.log('got inside saveRecipe')
+			console.log(evt)
+			evt.preventDefault();
+			let id = evt.currentTarget["0"].id
+			console.log(id)
+
+
+			let savedRecipeUrl = {
+				"url": $(`#${id}`).val(),
+				console.log(id);
+
+			};
+			// make sure this is getting id
+
+			$.post("/save-recipe", 
+				savedRecipeUrl,
+				confirmation);
+		}
+
+		   $(".saveform").on("submit", saveRecipe);
+
+		   </script>
 
 
 {% endblock %}
