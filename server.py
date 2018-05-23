@@ -256,6 +256,11 @@ def get_recipe():
 			db.session.add(saved_recipe_to_add_to_db)
 			db.session.commit()	 
 
+			recipeid = saved_recipe_to_add_to_db.recipe_id
+
+			recipe_components['recipeid'] = recipeid
+
+
 			if recipe_components['labels']:
 
 				for label in recipe_components['labels']:
@@ -277,7 +282,11 @@ def get_recipe():
 
 			db.session.commit()	
 
-		
+		else:
+			recipeid = check_if_recipe_in_database.recipe_id
+
+			recipe_components['recipeid'] = recipeid
+
 		# adds each recipe to a list, which will be sent to browser
 		list_of_recipes.append(recipe_components)
 
@@ -324,14 +333,12 @@ def save_recipe():
 	logged_in_user = User.query.get(session_user_id)
 
 	# gets saved recipe url from browser, which is a unique identifier
-	saved_recipe_url= request.form.get('recipeurl')
-	print request.form
+	saved_recipe_url= request.form.get('url')
 
-	print Recipe.query.all()
+	print saved_recipe_url
 	# checks databse to find recipe that matches recipe_url. There has to be one, since it was saved above. 
 	saved_recipe = Recipe.query.filter(Recipe.recipe_url==saved_recipe_url).first()
-	print 'saved recipe', saved_recipe
-
+	
 	# queries the user_to_recipes table to see if the user already has the recipe selected to be saved
 	check_if_user_has_recipe = UserToRecipe.query.filter(UserToRecipe.user_id==session_user_id, UserToRecipe.recipe_id==saved_recipe.recipe_id).first()
 		
@@ -341,16 +348,21 @@ def save_recipe():
 		# if user already has the recipe, will redirect back to view-saved-recipes.
 		if check_if_user_has_recipe:
 
-			flash("recipe already exist")
-			return redirect("/view-saved-recipe")
+			print "\n\nRECIPE ALREADY EXISTS"
+			return "Recipe already EXISTS"
+
+			# flash("recipe already exist")
+			# return redirect("/view-saved-recipe")
 
 		# if user does not have recipe, will add it to users_to_recipes
 		else:
 			recipe_saved_by_user = UserToRecipe(user=logged_in_user, recipe=saved_recipe)
 			db.session.add(recipe_saved_by_user)
 			db.session.commit()
-			flash("recipe saved!")
-			return redirect("/view-saved-recipe")
+			# flash("recipe saved!")
+			# return redirect("/view-saved-recipe")
+			print "\n\nRECIPE SAVED"
+			return "Recipe saved"
 
 			
 
