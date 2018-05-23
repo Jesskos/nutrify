@@ -1,3 +1,5 @@
+from nose import with_setup
+
 # Nutrient Helper Functions 
 def get_nutrient_search_parameters(unicode_nutrients_list):
 	""" helper function to iterate through nutrients selected by user and translate to string 
@@ -18,17 +20,20 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 
 	Examples: 
 
-	>>> check_nutrient([u'lowphosphorus', u'carbohydratecontrolled34']) 
+	>>> get_nutrient_search_parameters([u'lowphosphorus', u'carbohydratecontrolled34']) 
 	'&nutrients[P]=50&nutrients[CHOCDH]=45-60&nutrients[SUGAR]=7'
 
-	>>> check_nutrient([u'lowpotassium', u'highfiber', u'lowsodium'])
+	>>> get_nutrient_search_parameters([u'lowpotassium', u'highfiber', u'lowsodium'])
 	'&nutrients[K]=200&nutrients[FIBTG]=5+&nutrients[NA]=140'
 
-	>>> check_nutrient([u'carbohydratecontrolled45', u'lowfat', u'highprotein', u'lowsaturatedfat', u'lowcalories'])
+	>>> get_nutrient_search_parameters([u'carbohydratecontrolled45', u'lowfat', u'highprotein', u'lowsaturatedfat', u'lowcalories'])
 	'&nutrients[CHOCDF]=60-75&nutrients[SUGAR]=7&nutrients[FAT]=3&nutrients[PROCNT]=7+&nutrients[FASAT]=2&nutrients[ENERC_KCAL]=200'
 
-	>>> check_nutrient([u'lowprotein'])
-	'&nutrients[PROCNT]=4'
+	>>> get_nutrient_search_parameters([u'lowprotein'])
+	'&nutrients[PROCNT]=4' 
+	
+	>>> get_nutrient_search_parameters([])
+	''
 
 	"""
 
@@ -54,14 +59,14 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 
 
 
-if __name__ == "__main__":
-    import doctest
+if __name__ == "__main__": # pragma: no cover
+    import doctest # pragma: no cover
 
     print
-    result = doctest.testmod()
-    if not result.failed:
-        print "ALL TESTS PASSED."
-    print
+    result = doctest.testmod() # pragma: no cover
+    if not result.failed: # pragma: no cover
+        print "ALL TESTS PASSED." # pragma: no cover
+    print # pragma: no cover
 
 
 

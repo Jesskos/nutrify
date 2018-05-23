@@ -112,7 +112,6 @@ def log_out():
 	return redirect("/")
 
 
-
 @app.route("/user-portal")
 def open_user_portal():
 	"""renders template for user portal where user can either search or view recipes """
@@ -326,10 +325,12 @@ def save_recipe():
 
 	# gets saved recipe url from browser, which is a unique identifier
 	saved_recipe_url= request.form.get('recipeurl')
+	print request.form
 
-
+	print Recipe.query.all()
 	# checks databse to find recipe that matches recipe_url. There has to be one, since it was saved above. 
 	saved_recipe = Recipe.query.filter(Recipe.recipe_url==saved_recipe_url).first()
+	print 'saved recipe', saved_recipe
 
 	# queries the user_to_recipes table to see if the user already has the recipe selected to be saved
 	check_if_user_has_recipe = UserToRecipe.query.filter(UserToRecipe.user_id==session_user_id, UserToRecipe.recipe_id==saved_recipe.recipe_id).first()
@@ -355,17 +356,17 @@ def save_recipe():
 
 	# use ajax AFTER THIS is working 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
-    app.debug = True
+    app.debug = True # pragma: no cover
     # make sure templates, etc. are not cached in debug mode
-    app.jinja_env.auto_reload = app.debug
+    app.jinja_env.auto_reload = app.debug # pragma: no cover
 
-    connect_to_db(app)
+    connect_to_db(app) # pragma: no cover
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    DebugToolbarExtension(app) # pragma: no cover
 
     app.run(port=5000, host='0.0.0.0')
 

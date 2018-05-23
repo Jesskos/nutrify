@@ -39,7 +39,7 @@ class Recipe(db.Model):
 		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} blog_url ={} ingredients_list={} recipe_yield ={} calories={} \
 		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}, labels = {}>".format(self.recipe_id, 
 			self.recipe_name, self.recipe_image, self.recipe_url, self.blog_url, self.ingredients_list.encode('ascii', 'ignore'), self.recipe_yield, self.calories, 
-			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium, self.labels)
+			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium, self.labels) # pragma: no cover
 
 class RecipeLabel(db.Model):
 	""" Nutrition and Diet Labels on Recipes """
@@ -56,7 +56,7 @@ class RecipeLabel(db.Model):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<RecipeLabel recipes_nutrition_label_id={} recipe_id={} diet_label ={} nutrition_label={}>".format(
-			self.recipes_nutrition_label_id, self.recipe_id, self.diet_label)
+			self.recipes_nutrition_label_id, self.recipe_id, self.diet_label) # pragma: no cover
 
 
 class Ingredient(db.Model):
@@ -70,7 +70,7 @@ class Ingredient(db.Model):
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
-		return "<Ingredient ingredient_id={} ingredient_name={}>".format(self.ingredient_id, self.ingredient_name) 
+		return "<Ingredient ingredient_id={} ingredient_name={}>".format(self.ingredient_id, self.ingredient_name) # pragma: no cover
 
 
 class RecipeToIngredient(db.Model):
@@ -89,7 +89,7 @@ class RecipeToIngredient(db.Model):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<RecipeToIngredient recipe_to_ingredient_id={} recipe_id={} ingredient_id={}>".format(
-			self.recipe_to_ingredient_id, self.recipe_id, self.ingredient_id)
+			self.recipe_to_ingredient_id, self.recipe_id, self.ingredient_id) # pragma: no cover
 
 
 class Amount(db.Model):
@@ -103,7 +103,7 @@ class Amount(db.Model):
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
-		return "<Amount amount_id={} ingredient_amount={}>".format(self.amount_id, self.ingredient_amount)
+		return "<Amount amount_id={} ingredient_amount={}>".format(self.amount_id, self.ingredient_amount) # pragma: no cover
 
 
 class AmountToIngredient(db.Model):
@@ -122,7 +122,7 @@ class AmountToIngredient(db.Model):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<AmountToIngredient amount_to_ingredients_id={} amount={} ingredient_id={}>".format(
-			self.amount_to_ingredients_id, self.amount, self.ingredient_id)
+			self.amount_to_ingredients_id, self.amount, self.ingredient_id) # pragma: no cover
 
 
 class User(db.Model):
@@ -140,7 +140,7 @@ class User(db.Model):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<User user_id={} fname={} lname ={} user_name={} user_password={}>".format(self.user_id, 
-			self.fname, self.lname, self.user_email, self.user_password)
+			self.fname, self.lname, self.user_email, self.user_password) # pragma: no cover
 
 
 class UserToRecipe(db.Model):
@@ -160,7 +160,7 @@ class UserToRecipe(db.Model):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<UserToRecipe user_recipe_id={} recipe_id={} user_id={}>".format(
-			self.user_recipe_id, self.recipe_id, self.user_id)
+			self.user_recipe_id, self.recipe_id, self.user_id) # pragma: no cover
 
 ###########################################################################################################
 # Testing   
@@ -179,20 +179,20 @@ def example_data():
 	halfcup_to_milk = AmountToIngredient(amount=onecan, ingredient=olive)
 	pizza_to_olive = RecipeToIngredient(recipe=pizza, ingredient=olive)
 	low_fat = RecipeLabel(recipe=pizza, diet_label="low-fat") 
+	sushi = Recipe(recipe_name='sushi', recipe_image='sushi.jpg', recipe_url='sushi.com', blog_url='sushi.blog.com', recipe_yield=9, 
+		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000, labels=['low-fat'])
 	
 
-	db.session.add_all([pizza, olive, onecan, harry, user_to_pizza, halfcup_to_milk, pizza_to_olive, low_fat])
+	db.session.add_all([pizza, olive, onecan, harry, user_to_pizza, halfcup_to_milk, pizza_to_olive, low_fat, sushi])
 	db.session.commit()
 
-
-
 ###########################################################################################################
-def connect_to_db(app, uri='postgresql:///recipesdb'):
+def connect_to_db(app, uri='postgresql:///recipesdb'): # pragma: no cover
 	""" Connect the database to our Flask App"""
 
 	# Configure to use our PstgreSQL database
-	app.config['SQLALCHEMY_DATABASE_URI'] = uri 
-	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+	app.config['SQLALCHEMY_DATABASE_URI'] = uri  
+	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # pragma: no cover
 	app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 	db.app = app
 	db.init_app(app)
@@ -200,9 +200,9 @@ def connect_to_db(app, uri='postgresql:///recipesdb'):
 
 if __name__ == "__main__":
 
-	from server import app
-	connect_to_db(app)
-	print "Connected to DB."
+	from server import app  # pragma: no cover
+	connect_to_db(app)  # pragma: no cover
+	print "Connected to DB."  # pragma: no cover
 
 
 

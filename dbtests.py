@@ -5,9 +5,11 @@ from model import connect_to_db, db, example_data, Recipe, Ingredient, Amount, R
 from flask import session 
 from helperfunctions import *
 
+from nose import with_setup
+
 ############################################################################################################################
 
-# REGISTRATION
+# HOMEPAGE AND REGISTRATION
 
 class FlaskTestsRegistration(TestCase):
     """Flask tests to test registration is happenign correctly """
@@ -46,9 +48,8 @@ class FlaskTestsRegistration(TestCase):
                                                                 'password':'magicalpassword'}, follow_redirects=True)
         self.assertIn('You have now been registered!', result.data)
 
-
     def test_for_existing_user_registering(self):
-        """ checks for existing user """
+        """ checks for existing user registering """
         
         result = self.client.post("/add-registration-info", data= {'firstname':'Harry',
                                                                 'lastname':'Potter',
@@ -56,10 +57,47 @@ class FlaskTestsRegistration(TestCase):
                                                                 'password':'doby'}, follow_redirects=True)
 
         self.assertIn('You already have an account.', result.data)
+    
+    def test_user_forwarded_away_from_homepage_when_logged_in(self):
+        """ makes sure user is forwarded away from homepage and directed to userportal when logged in
+            and session is stored""" 
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['name'] = 'Harry'
+                sess['id'] = 1
+
+            result = self.client.get('/', follow_redirects=True)
+
+            self.assertIn('name', session)
+            self.assertIn('id', session)
+            self.assertIn('Welcome', result.data)
+
+    def test_user_forwarded_away_from_register_when_logged_in(self):
+        """ makes sure user is forwarded away from register page and directed to userportal when logged in
+            and session is stored""" 
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['name'] = 'Harry'
+                sess['id'] = 1
+
+            result = self.client.get('/register', follow_redirects=True)
+
+            self.assertIn('name', session)
+            self.assertIn('id', session)
+            self.assertIn('Welcome', result.data)
+
+    def test_homepage(self):
+        """ makes sure a user is directed to homepage if not logged in""" 
+
+        result = self.client.get("/")
+        self.assertIn("Register", result.data)
+
 
 # ############################################################################################################################
 
-# LOGGING IN AND LOGGING OUT, SESSION AT ROUTES
+# LOGGING IN AND LOGGING OUT, INCLUDING WHEN SESSION IS IN ONE OF THESE ROUTES
 
 class FlaskTestsLoggedInOut(TestCase):
     """Flask tests to check Log In before user is logged in"""
@@ -76,14 +114,11 @@ class FlaskTestsLoggedInOut(TestCase):
         db.create_all()
         example_data()
 
-
     def tearDown(self):
         """Do at end of every test."""
 
         db.session.close()
         db.drop_all()
-
-
 
     def test_logged_in_with_wrong_password(self):
         """ makes sure user is not logged in when password incorrect """
@@ -94,9 +129,7 @@ class FlaskTestsLoggedInOut(TestCase):
 
         self.assertIn('Your password is incorrect! Please try again', result.data)
 
-
-
-    def test_login_in(self):
+    def test_login_in_session(self):
         """ makes sure session is added with log in """
 
         with self.client as c:
@@ -108,7 +141,6 @@ class FlaskTestsLoggedInOut(TestCase):
             self.assertEqual(session['id'], 1)
 
             self.assertIn("Welcome", result.data)
-         
 
     def test_login_new_user(self):
         """ makes sure a new user does not log in and is redirected to registration """ 
@@ -119,28 +151,74 @@ class FlaskTestsLoggedInOut(TestCase):
 
         self.assertIn('You have not signed up yet. Please sign up!', result.data)
 
-
-
-    def test_user_logged_out(self):
-        """ makes sure user is logged out and message is flashed """ 
+    def test_user_forwarded_away_from_homepage_when_logged_in(self):
+        """ makes sure user is forwarded away from homepage and directed to userportal when logged n""" 
 
         with self.client as c:
             with c.session_transaction() as sess:
                 sess['name'] = 'Harry'
                 sess['id'] = 1
 
-            result = self.client.get('/log-out', follow_redirects=True)
+            result = self.client.get('/', follow_redirects=True)
+
+            self.assertIn('name', session)
+            self.assertIn('id', session)
+            self.assertIn('Welcome', result.data)
+
+    def test_user_forwarded_away_from_login_when_logged_in(self):
+        """ makes sure user is forwarded away from login page and directed to userportal when logged in
+            and session is stored """ 
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['name'] = 'Harry'
+                sess['id'] = 1
+
+            result = self.client.get('/login', follow_redirects=True)
+
+            self.assertIn('name', session)
+            self.assertIn('id', session)
+            self.assertIn('Welcome', result.data)
+
+
+    def test_user_log_out(self):
+        """ makes sure user is logged out and session is removed when at route log out """ 
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['name'] = 'Harry'
+                sess['id'] = 1
+
+            result = self.client.get("/log-out", follow_redirects=True)
 
             self.assertNotIn('name', session)
             self.assertNotIn('id', session)
-            self.assertIn('logged out', result.data)
+            self.assertIn('You are now logged out!', result.data)
 
+    def test_user_forwarded_away_from_view_when_not_logged_in(self):
+        """ makes sure user is forwarded away from login page and directed to userportal when logged in
+            and session is stored """ 
 
+        result = self.client.get(('view-saved-recipe'), follow_redirects=True)
+
+        self.assertIn('Register', result.data) 
+
+    def test_route_user_portal_if_not_logged_in(self):
+        """ Forwards user away from userportal if not logged in  """
+
+        result = self.client.get(("/user-portal"), follow_redirects=True)
+        self.assertIn("Register", result.data)
+
+    def test_route_save_recipe_if_not_logged_in(self):
+        """ Forwards user away from save recipe and to homepage if not logged in  """
+
+        result = self.client.post(("/save-recipe"), follow_redirects=True)
+        self.assertIn("Register", result.data)
 
 
 ############################################################################################################################
 
-#FINDING RECIPES, VIEWING RECIPES, SAVING RECIPES
+#FINDING RECIPES, VIEWING RECIPES, SAVING RECIPES, AND USER PORTAL
 
 class FlaskTestsLoggedIn(TestCase):
     """Flask Tests that require login status"""
@@ -153,27 +231,25 @@ class FlaskTestsLoggedIn(TestCase):
         app.config['TESTING'] = True
         app.config['SECRET_KEY'] = 'supersecret'
         
-
         # connects to database
         connect_to_db(app, "postgresql:///testdb")
 
         db.create_all()
         example_data()
+        # import pdb; pdb.set_trace()
 
 
         with self.client as c:
             with c.session_transaction() as sess:
                 
-                sess['name'] = True 
-                sess['id'] = True
-       
+                sess['name'] = 'Harry'
+                sess['id'] = 1
 
     def tearDown(self):
         """Do at end of every test."""
 
         db.session.close()
         db.drop_all()
-        
 
     def test_route_find_recipe(self):
         """ tests response from find recipe """
@@ -184,7 +260,7 @@ class FlaskTestsLoggedIn(TestCase):
 
 
     def test_route_view_saved_recipe(self):
-        """ tests response from view recipe when clicked from user's portal """
+        """ tests response from view recipes route """
 
         result = self.client.get("/view-saved-recipe")
         self.assertEqual(result.status_code, 200)
@@ -198,69 +274,31 @@ class FlaskTestsLoggedIn(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn('chocolate', result.data)
 
+    def test_route_save_recipe_if_user_does_not_have_recipe(self):
+        """ tests response when user saves a recipe that he/she has not yet saved """
 
-    # def test_route_save_recipe_not_in_db(self):
-    #     """ tests response when user saves a recipe that is not already in database """
+        # get key error
+        result =self.client.post("/save-recipe", data={'recipeurl': 'sushi.com'}, follow_redirects=True)
+        self.assertIn('sushi.com', result.data)
 
-    #     # get key error
-    #     result =self.client.post("/save-recipe", data={'recipe': {
-    #         'recipe_name': 'toast', 'recipe_image': 'toast.jpg', 'recipe_url': 'toast.com',
-    #         'recipe_blog_url': 'toast.blog.com', 'recipe_ingredients_list':'[whole wheat bread, olive oil]', 
-    #         'recipe_yield': 1, 'recipe_calories': 150, 
-    #         'recipe_carbohydrates': 18, 'recipe_protein': 5, 
-    #         'recipe_fiber': 3, 'recipe_fat': 1, 'recipe_potassium':80, 'recipe_phosphorus': 100, 
-    #         'recipe_sodium': 30, 'labels': 'heart-healthy'}}, follow_redirects=True)
-        
-    #     self.assertIn('toast', result.data)
+    def test_route_save_recipe_if_user_does__have_recipe(self):
+        """ tests response when user saves a recipe that he/she has not yet saved """
 
+        # get key error
+        result =self.client.post("/save-recipe", data={'recipeurl': 'pizza.com'}, follow_redirects=True)
+        self.assertIn("recipe already exist", result.data)
 
-    # def test_route_save_recipe_when_user_does_not_have_recipe_but_in_db(self):
-    #     """ tests response when user saves a recipe that is in recipes table, but not in users_to_recipes table 
-    #     should add recipe to users_to_recipes table, but not make duplicate entry in recipes table """
+    def test_route_user_portal_if_logged_in(self):
+        """ tests response from find recipe """
 
-    #     # get key error
-    #     result =self.client.post("/save-recipe", data={'recipe': {
-    #         'recipe_name': 'fruit salad', 'recipe_image': 'fruit.jpg', 'recipe_url': 'fruit.com',
-    #         'recipe_blog_url': 'fruit.blog.com', 'recipe_ingredients_list':'[]', 
-    #         'recipe_yield': 1, 'recipe_calories': 150, 
-    #         'recipe_carbohydrates': 18, 'recipe_protein': 5, 
-    #         'recipe_fiber': 3, 'recipe_fat': 1, 'recipe_potassium':80, 'recipe_phosphorus': 100, 
-    #         'recipe_sodium': 30, 'labels': 'heart-healthy'}}, follow_redirects=True)
-        
-    #     self.assertIn('toast', result.data)
-
-
-    # def test_route_save_recipe_when_user_already_saved_same_recipe(self):
-    #     """ tests response when user saves a recipe that he or she already saved 
-    #     prevents duplicate entry in users_to_recipes_table """
-
-    #     # get key error
-    #     result =self.client.post("/save-recipe", data={'recipe': {
-    #         'recipe_name': 'pizza', 'recipe_image': 'pizza.jpg', 'recipe_url': 'pizza.com',
-    #         'recipe_blog_url': 'pizza.blog.com', 'recipe_ingredients_list':'[]', 
-    #         'recipe_yield': 1, 'recipe_calories': 150, 
-    #         'recipe_carbohydrates': 18, 'recipe_protein': 5, 
-    #         'recipe_fiber': 3, 'recipe_fat': 1, 'recipe_potassium':80, 'recipe_phosphorus': 100, 
-    #         'recipe_sodium': 30, 'labels': 'heart-healthy'}}, follow_redirects=True)
-
-    #     self.assertIn('toast', result.data)
+        result = self.client.get("/user-portal")
+        self.assertEqual(result.status_code, 200)
+        self.assertIn("Welcome", result.data)
 
 
 
 
-
-        result = self.client.get("/")
-     # need functions to query to database for saved recipe
-     # need function to save a recipe 
-     # need to check parts ot save recipe function 
-
-
-
-
-
-
-
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
 
     import unittest
     unittest.main()
