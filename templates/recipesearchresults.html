@@ -23,7 +23,7 @@
 		   		      {{ label }} 
 		     	    {% endfor %} </h6> 
 		        <form action="/save-recipe" method="POST" class='saveform'>
-		        <h6 id='content'>info</h6>
+		        <h6>info</h6>
 		   	    <button type="submit" class="submitbutton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}'>Save Recipe</button>
 		       </form> <hr> 	
 
@@ -41,7 +41,9 @@
 		"use strict";
 
 		function confirmation(result) {
-			// $('#content').load('/save-recipe')
+			alert(result);
+			$("h6")
+			
 		}
 
 		function saveRecipe(evt) {
@@ -53,10 +55,10 @@
 
 
 			let savedRecipeUrl = {
-				"url": $(`#${id}`).val(),
-				console.log(id);
+				"url": $(`#${id}`).val()
 
 			};
+			console.log($(`#${id}`).val())
 			// make sure this is getting id
 
 			$.post("/save-recipe", 
