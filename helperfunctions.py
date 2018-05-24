@@ -1,4 +1,4 @@
-from nose import with_setup
+# from nose import with_setup
 
 # Nutrient Helper Functions 
 def get_nutrient_search_parameters(unicode_nutrients_list):
