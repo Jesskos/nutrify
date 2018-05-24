@@ -24,7 +24,8 @@
 		     	    {% endfor %} </h6> 
 
 		        <form action="/save-recipe" method="POST" class="saveForm">
-		   	    <button type="submit" class="submitButton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}'>Save Recipe</button>
+		        	
+		   	    <button type="submit" class="submitButton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}' data-tooltip="saved">Save Recipe</button>
 		        </form> <hr> 	
 		   </div>
 		{% endfor %}
@@ -50,7 +51,6 @@
 			let id = evt.currentTarget["0"].id
 			console.log(id)
 
-
 			let savedRecipeUrl = {
 				"url": $(`#${id}`).val()
 			};
@@ -59,9 +59,21 @@
 			$.post("/save-recipe", 
 				savedRecipeUrl,
 				confirmation);
+
 		}
 
-		   $(".saveForm").on("submit", saveRecipe);
+		function changeColor(evt) {
+			$((`#${id}`.val()).addClass('colorChange')
+		}
+
+		  
+		 
+		$(".saveForm").on("submit", saveRecipe);
+
+
+
+
+
 
 		   </script>
 
