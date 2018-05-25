@@ -127,11 +127,23 @@ def open_user_portal():
 ##################################################################################################################
 # FINDS AND GETS RECIPES FROM API
 
-# @app.route("/profile")
-# def open_progile():
-# 	""" renders template for user profile """
+@app.route("/profile")
+def open_profile():
+	""" renders template for user profile """
 
-# 	render_template "userprofile.html"
+	if "name" in session:
+		session_user_id = session['id']
+		logged_in_user = User.query.get(session_user_id)
+		fname = logged_in_user.fname
+		lname = logged_in_user.lname
+		email = logged_in_user.user_email
+
+ 		return render_template('userprofile.html', fname=fname, lname=lname, email=email) 
+
+ 	else:
+ 		return redirect("/")
+
+
 
 @app.route("/find-recipe")
 def find_recipe():
