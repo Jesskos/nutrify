@@ -24,6 +24,7 @@
 		     	    {% endfor %} </h6> 
 
 		        <form action="/save-recipe" method="POST" class="saveForm">
+		 			<h6></h6>
 		        	
 		   	    <button type="submit" class="submitButton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}' data-tooltip="saved">Save Recipe</button>
 		        </form> <hr> 	
@@ -36,9 +37,27 @@
 
 
  	<script src="https://code.jquery.com/jquery.js"></script> 
+
    		<script>
 		"use strict";
+		function showText(evt) {
+			let text 
+		}
 
+
+		function changeColor(evt) {
+			console.log('got inside changeColor')
+			console.log(evt)
+			let id = evt.currentTarget.id
+		
+
+			$(`#${id}`).addClass('colorChange')
+		
+		} 
+
+		$(".submitButton").on("click", changeColor);
+
+		
 		function confirmation(result) {
 			alert(result);
 			
@@ -51,6 +70,7 @@
 			let id = evt.currentTarget["0"].id
 			console.log(id)
 
+
 			let savedRecipeUrl = {
 				"url": $(`#${id}`).val()
 			};
@@ -59,19 +79,13 @@
 			$.post("/save-recipe", 
 				savedRecipeUrl,
 				confirmation);
-
 		}
 
-		function changeColor(evt) {
-			$((`#${id}`.val()).addClass('colorChange')
-		}
+			
 
-		  
 		 
 		$(".saveForm").on("submit", saveRecipe);
-
-
-
+			this.addClass('red')
 
 
 

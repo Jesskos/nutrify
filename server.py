@@ -127,6 +127,12 @@ def open_user_portal():
 ##################################################################################################################
 # FINDS AND GETS RECIPES FROM API
 
+# @app.route("/profile")
+# def open_progile():
+# 	""" renders template for user profile """
+
+# 	render_template "userprofile.html"
+
 @app.route("/find-recipe")
 def find_recipe():
 	""" renders template for finding recipes """
