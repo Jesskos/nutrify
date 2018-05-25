@@ -55,7 +55,7 @@ class RecipeLabel(db.Model):
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
-		return "<RecipeLabel recipes_nutrition_label_id={} recipe_id={} diet_label ={} nutrition_label={}>".format(
+		return "<RecipeLabel recipes_nutrition_label_id={} recipe_id={} diet_label ={}>".format(
 			self.recipes_nutrition_label_id, self.recipe_id, self.diet_label) # pragma: no cover
 
 
