@@ -335,11 +335,8 @@ def view_save_recipe():
 
 		recipe = logged_in_user_recipe.recipe
 		labels = RecipeLabel.query.filter(RecipeLabel.recipe_id==recipe.recipe_id).all()
-		print recipe
-		print labels 
+		recipes_to_display.append([recipe, labels])
 
-
-		# print recipes_to_display
 
 	return render_template('viewsavedrecipes.html', recipes=recipes_to_display) 
 

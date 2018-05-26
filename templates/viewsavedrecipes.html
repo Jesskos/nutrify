@@ -12,27 +12,58 @@
 	
 		  {% for recipe in recipes %}
 		 
-		   <p><img src= {{ recipe.recipe_image}} ></p>
-		   <p><h5>{{ recipe.recipe_name }} </h5></p>
- 				<form action="{{ recipe.blog_url }}">
+		   <p><img src= {{ recipe[0].recipe_image}} ></p>
+		   <p><h5>{{ recipe[0].recipe_name }} </h5></p>
+ 				<form action="{{ recipe[0].blog_url }}">
     			<input type="submit" class="nutritionbutton" value="Nutrition Information" />
 				</form>
-				 <form action="{{ recipe.recipe_url }}">
+				 <form action="{{ recipe[0].recipe_url }}">
     			<input type="submit" class="instructionbutton" value="Directions" />
 				</form>
-		   		<b><h5> Health Labels:</b>  
-		   			{{ recipe.labels }}
-		   			{% for label in recipe.labels %}
-		   		 		{{ label }} 
-		     		{% endfor %} </h5> 
-		     		<hr>
+		   		<b><h6> Health Labels:</b> | 
+		   				{% for label in recipe[1] %}
+		   		 		{{ label.diet_label }} |
 
+		     		{% endfor %} </h6> 
+		<form action="/delete-recipe" method="POST" class="deleteForm">  		
+		<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'> Delete Recipe</button>
+		</form>
+		<hr>
 		{% endfor %}
-	{% else %}
 
+ 	{% else %}
+
+ 		<h6> No recipes Saved </h6>
  	{% endif %}
 	</ul>
 
+ 	<script src="https://code.jquery.com/jquery.js"></script> 
+
+   		<script>
+
+
+		function deleteRecipe(evt) {
+			console.log('got inside deleteRecipe')
+			console.log(evt)
+			evt.preventDefault();
+			let id = evt.currentTarget["0"].id
+			console.log(id)
+
+
+			let deletedRecipeUrl = {
+				"url": $(`#${id}`).val()
+			};
+	
+
+			$.post("/save-recipe", 
+				savedRecipeUrl,
+				confirmation);
+		}
+
+			
+
+		 
+		$(".deleteForm").on("submit", saveRecipe);
 
 
 {% endblock %}
