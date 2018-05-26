@@ -1,6 +1,6 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash, session)
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
 import json
 import requests 
@@ -149,7 +149,11 @@ def open_profile():
 def find_recipe():
 	""" renders template for finding recipes """
 
-	return render_template('findrecipes.html')
+	if "name" in session:
+ 		return render_template('findrecipes.html') 
+
+ 	else:
+ 		return redirect("/")
 
 
 @app.route("/get-recipe.json")
@@ -219,6 +223,8 @@ def get_recipe():
 		recipe_nutrient_potassium = recipe_nutrient.get("K", {})
 		recipe_nutrient_phosphorus = recipe_nutrient.get("P", {})
 		recipe_nutrient_sodium = recipe_nutrient.get("NA", {})
+		recipe_nutrient_saturated_fat = recipe_nutrient.get("FASAT", {})
+		recipe_nutrient_iron = recipe_nutrient.get("FE", {})
 
 		recipe_calories = recipe_nutrient_calories.get("quantity", 0)
 		recipe_carbohydrates = recipe_nutrient_carbohydrates.get("quantity", 0) 
@@ -228,6 +234,9 @@ def get_recipe():
 		recipe_potassium = recipe_nutrient_potassium.get("quantity", 0)
 		recipe_phosphorus = recipe_nutrient_phosphorus.get("quantity", 0)
 		recipe_sodium = recipe_nutrient_sodium.get("quantity", 0)
+		recipe_saturated_fat = recipe_nutrient_saturated_fat.get("quantity", 0)
+		recipe_iron = recipe_nutrient_iron.get("quantity", 0)
+
 
 
 		# API separates three different types of labels, but this app will combine them together
@@ -248,6 +257,8 @@ def get_recipe():
 							'recipe_potassium':(recipe_potassium/recipe_yield), 
 							'recipe_phosphorus':(recipe_phosphorus/recipe_yield), 
 							'recipe_sodium':(recipe_sodium/recipe_yield), 
+							'recipe_saturated_fat':(recipe_saturated_fat/recipe_yield),
+							'recipe_iron':(recipe_iron/recipe_yield),
 							'labels': labels}
 
 		
@@ -269,8 +280,10 @@ def get_recipe():
 				fat=recipe_components['recipe_fat'],
 				potassium=recipe_components['recipe_potassium'], 
 				phosphorus=recipe_components['recipe_phosphorus'], 
-				sodium=recipe_components['recipe_sodium'], 
-				labels=recipe_components['labels'])  
+				sodium=recipe_components['recipe_sodium'],
+				iron=recipe_components['recipe_iron'],
+				saturated_fat=recipe_components['recipe_saturated_fat'])
+
 			db.session.add(saved_recipe_to_add_to_db)
 			db.session.commit()	 
 
@@ -391,11 +404,27 @@ def save_recipe():
 			print "\n\nRECIPE SAVED"
 			return "Recipe saved"
 
-# @app.route("/delete-recipe", methods=["POST"])
+@app.route("/delete-recipe", methods=["POST"])
+def delete_recipe():
+	""" deletes a recipe from the database """
 
-			
+	url = request.form.get("url")
+	session_user_id = session['id']
 
-	# use ajax AFTER THIS is working 
+	# finds the recipe tagged for deletion in the recipes table
+	recipe_tagged_for_deletion = Recipe.query.filter(Recipe.recipe_url==url).first()
+
+	# finds that recipe again in the users to recipes table
+	recipe_tagged_for_deletion_by_user = UserToRecipe.query.filter(UserToRecipe.user_id==session_user_id, 
+		UserToRecipe.recipe_id==recipe_tagged_for_deletion.recipe_id).first()
+
+	db.session.delete(recipe_tagged_for_deletion_by_user)
+	db.session.commit()
+
+	print "\n\nRecipe deleted"
+	return "recipe deleted!"
+
+
 
 if __name__ == "__main__": # pragma: no cover
     # We have to set debug=True here, since it has to be True at the
@@ -407,7 +436,7 @@ if __name__ == "__main__": # pragma: no cover
     connect_to_db(app) # pragma: no cover
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app) # pragma: no cover
+    # DebugToolbarExtension(app) # pragma: no cover
 
     app.run(port=5000, host='0.0.0.0')
 

@@ -10,25 +10,26 @@
 	{% if recipes != [] %}
 		<h2> Hello, {{ session["name"] }}. Here are your saved recipes! </h2>
 	
-		  {% for recipe in recipes %}
-		 
+		{% for recipe in recipes %}
+		<li class="eachRecipe" id="{{ recipe[0].blog_url }}">
 		   <p><img src= {{ recipe[0].recipe_image}} ></p>
 		   <p><h5>{{ recipe[0].recipe_name }} </h5></p>
  				<form action="{{ recipe[0].blog_url }}">
-    			<input type="submit" class="nutritionbutton" value="Nutrition Information" />
+    			<input type="submit" class="nutritionbutton" value="Nutrition Information">
 				</form>
-				 <form action="{{ recipe[0].recipe_url }}">
-    			<input type="submit" class="instructionbutton" value="Directions" />
+				<form action="{{ recipe[0].recipe_url }}">
+    			<input type="submit" class="instructionbutton" value="Directions">
 				</form>
 		   		<b><h6> Health Labels:</b> | 
 		   				{% for label in recipe[1] %}
 		   		 		{{ label.diet_label }} |
 
 		     		{% endfor %} </h6> 
-		<form action="/delete-recipe" method="POST" class="deleteForm">  		
-		<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'> Delete Recipe</button>
-		</form>
-		<hr>
+				<form action="/delete-recipe" method="POST" class="deleteForm">  		
+				<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'> Delete Recipe</button>
+				</form>
+				<hr>
+		</li>
 		{% endfor %}
 
  	{% else %}
@@ -37,10 +38,21 @@
  	{% endif %}
 	</ul>
 
- 	<script src="https://code.jquery.com/jquery.js"></script> 
+ 		<script src="https://code.jquery.com/jquery.js"></script> 
+
 
    		<script>
+   		"use strict";
 
+
+
+
+   		function confirmDelete(result) {
+			alert(result);	
+			$(this).closest('li').remove();
+			console.log('got inside confirmDelete')
+
+		}
 
 		function deleteRecipe(evt) {
 			console.log('got inside deleteRecipe')
@@ -50,20 +62,24 @@
 			console.log(id)
 
 
-			let deletedRecipeUrl = {
+			let deleteRecipeUrl = {
 				"url": $(`#${id}`).val()
 			};
 	
 
-			$.post("/save-recipe", 
-				savedRecipeUrl,
-				confirmation);
+			$.post("/delete-recipe", 
+				deleteRecipeUrl,
+				confirmDelete);
+
+			console.log(this)
+			$(this).closest('li').remove();
 		}
 
-			
-
 		 
-		$(".deleteForm").on("submit", saveRecipe);
+		$(".deleteForm").on("submit", deleteRecipe);
+
+
+		</script>
 
 
 {% endblock %}

@@ -31,15 +31,16 @@ class Recipe(db.Model):
 	potassium = db.Column(db.Integer, nullable=True)
 	phosphorus = db.Column(db.Integer, nullable=True)
 	sodium = db.Column(db.Integer, nullable=True)
-	labels = db.Column(db.String(100), nullable=False)
+	iron = db.Column(db.Integer, nullable=False)
+	saturated_fat = db.Column(db.Integer, nullable=False)
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
 		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} blog_url ={} ingredients_list={} recipe_yield ={} calories={} \
-		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}, labels = {}>".format(self.recipe_id, 
+		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}, iron={}, saturated_fat={}>".format(self.recipe_id, 
 			self.recipe_name, self.recipe_image, self.recipe_url, self.blog_url, self.ingredients_list.encode('ascii', 'ignore'), self.recipe_yield, self.calories, 
-			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium, self.labels) # pragma: no cover
+			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium, self.iron, self.saturated_fat) # pragma: no cover
 
 class RecipeLabel(db.Model):
 	""" Nutrition and Diet Labels on Recipes """
