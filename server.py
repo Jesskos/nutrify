@@ -1,7 +1,7 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash, session)
 # from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe
+from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe, UserToAllergy
 import json
 import requests 
 from helperfunctions import *
@@ -60,6 +60,8 @@ def add_registration_info():
 	last_name = request.form.get("lastname")
 	email = request.form.get("email")
 	password = request.form.get("password")
+	allergies = request.form.getlist("allergy")
+	print allergies
 
 	user = User.query.filter_by(user_email=email).first()
 
@@ -70,6 +72,14 @@ def add_registration_info():
 		new_user = User(fname=first_name, lname=last_name, user_email=email, user_password=password)
 		db.session.add(new_user)
 		db.session.commit()
+
+		if allergies: 
+			for allergy in allergies: 
+				new_allergy = UserToAllergy(user=new_user, allergy_name=allergy)
+				db.session.add(new_allergy)
+			db.session.commit()
+
+
 		flash("You have now been registered! Please log in")
 	
 	return redirect("/login")
@@ -137,8 +147,11 @@ def open_profile():
 		fname = logged_in_user.fname
 		lname = logged_in_user.lname
 		email = logged_in_user.user_email
+		allergies = UserToAllergy.query.filter(UserToAllergy.user_id==session_user_id)
+		if allergies: 
+			users_allergies = allergies 
 
- 		return render_template('userprofile.html', fname=fname, lname=lname, email=email) 
+ 		return render_template('userprofile.html', fname=fname, lname=lname, email=email, allergies=users_allergies) 
 
  	else:
  		return redirect("/")

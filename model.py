@@ -143,6 +143,42 @@ class User(db.Model):
 		return "<User user_id={} fname={} lname ={} user_name={} user_password={}>".format(self.user_id, 
 			self.fname, self.lname, self.user_email, self.user_password) # pragma: no cover
 
+class UserToAllergy(db.Model):
+	""" class of users and allergies """
+
+	__tablename__ = "user_to_allergies"
+	
+	user_allergy_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+	allergy_name = db.Column(db.String(20), nullable=False)
+
+	user = db.relationship("User", backref="user_to_allergies")
+
+	def __repr__(self):
+		""" Provide helpful representation of recipe object when printed"""
+
+		return "<UserToAllergy user_allergy_id={} user_id={} allergy_name ={}".format(self.user_allergy_id, 
+			self.user_id, self.allergy_name) # pragma: no cover
+
+
+class UserToDiet(db.Model):
+	""" class of users and allergies """
+
+	__tablename__ = "user_to_diets"
+	
+	user_diet_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+	diet_name = db.Column(db.String(20), nullable=False)
+
+	user = db.relationship("User", backref="users_to_diets")
+
+	def __repr__(self):
+		""" Provide helpful representation of recipe object when printed"""
+
+		return "<UserToDiet user_diet_id={} user_id={} diet_name ={}".format(self.user_diet_id, 
+			self.user_id, self.diet_name) # pragma: no cover
+
+
 
 class UserToRecipe(db.Model):
 	""" Middle table connecting users and recipes """
@@ -169,10 +205,12 @@ class UserToRecipe(db.Model):
 def example_data():
 	"""Create some sample data, and test models"""
 
-	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', blog_url='pizza.blog.com', recipe_yield=12, 
-		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000, labels=['low-fat'])
-	fruit_salad = Recipe(recipe_name='fruit salad', recipe_image='fruit.jpg', recipe_url='fruit.com', blog_url='fruit.blog.com', recipe_yield=12, 
-		ingredients_list="[]", calories= 100, carbohydrates=15, protein=2, fiber=3, fat=10, potassium=190, phosphorus=200, sodium=50, labels=['low-protein'])
+	pizza = Recipe(recipe_name='pizza', recipe_image='pizza.jpg', recipe_url='pizza.com', blog_url='pizza.blog.com',  
+		ingredients_list="[]", recipe_yield=12, calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000,
+		iron=4, saturated_fat=3)
+	fruit_salad = Recipe(recipe_name='fruit salad', recipe_image='fruit.jpg', recipe_url='fruit.com', blog_url='fruit.blog.com', 
+		ingredients_list="[]", recipe_yield=12, calories= 100, carbohydrates=15, protein=2, fiber=3, fat=10, potassium=190, phosphorus=200, sodium=50, 
+		iron=1, saturated_fat=0)
 	olive = Ingredient(ingredient_name='olive')
 	onecan = Amount(ingredient_amount='1 can')
 	harry = User(fname='Harry', lname='Potter', user_email='hpotter@hogwarts.edu', user_password='hufflepuff')
@@ -182,9 +220,10 @@ def example_data():
 	low_fat = RecipeLabel(recipe=pizza, diet_label="low-fat") 
 	sushi = Recipe(recipe_name='sushi', recipe_image='sushi.jpg', recipe_url='sushi.com', blog_url='sushi.blog.com', recipe_yield=9, 
 		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000, labels=['low-fat'])
-	
+	user_to_lowcarb = UserToDiet(user=harry, diet="lowcarb")
+	user_to_egg = UserToAllergy(user=harry, allergy="egg")
 
-	db.session.add_all([pizza, olive, onecan, harry, user_to_pizza, halfcup_to_milk, pizza_to_olive, low_fat, sushi])
+	db.session.add_all([pizza, olive, onecan, harry, user_to_pizza, halfcup_to_milk, pizza_to_olive, low_fat, sushi, user_to_egg, user_to_lowcarb])
 	db.session.commit()
 
 ###########################################################################################################

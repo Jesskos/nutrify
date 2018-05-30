@@ -5,12 +5,50 @@
 {% block content %}
 
 
-<h3> First Name: {{ fname }} </h3>
+<h3> First Name: {{ fname }} </h3>  
+
 <h3> Last Name: {{ lname }} </h3>
 <h3> Email: {{ email }} </h3>
+<h3> Allergies/Intolerances: {% for allergy in allergies %}
+	{{ allergy.allergy_name}}
+	{% endfor %}
+	<form action="/add-allergy" method="POST" class="">
+	<button type="submit" class="" id="" name="" value="">Add allergy</button>
+	</form>
+	<form action="/remove-allergy" method="POST" class="">
+	<button type="submit" class="" id="" name="" value="">Add allergy</button>
+	</form>
 <p>
-<h3> Medical Conditions (optional): </h3>
-<h3> Diet Choices (optional): </h3>
+<h3> Diet Choices: </h3>
+	<form action="/add-diet" method="POST" class="">
+	<button type="submit" class="" id="" name="" value="">Add Diet</button>
+	</form>
+	<form action="/remove-diet" method="POST" class="">
+	<button type="submit" class="" id="" name="" value="">Add Diet</button>
+	</form>
 
 
+
+
+
+<script src="https://code.jquery.com/jquery.js"></script> 
+	<script>
+	"use strict";
+
+		function hideAllergyOptions(evt) {
+			$('.show').toggleClass('hidden');
+		}
+
+
+		function showAllergyOptions(evt) {
+			$('.hidden').toggleClass('show');
+		}
+
+		$("#showallergyoptions").on("click", showAllergyOptions);
+
+			$("#hideallergyoptions").on("unclick", hideAllergyOptions);
+			$("#showallergyoptions").on("click", hideAllergyOptions);
+
+
+	</script>
 {% endblock %}

@@ -20,9 +20,51 @@
 	<input type="text" name="email" class='textinput' required> <p>
 	<label for='password' class="labelinput"> Enter a Password: </label>
 	<input type="password" name="password" class='textinput' required> <p>
-	<input type="submit" class="submitbutton">
-</form> <div>
+	<label for='yesno' class="labelinput"> Do you have any food allergies or intolerances? </label> <p>
+	<input type="radio" name = "yesno" value="yes" class="yesno" id="showallergyoptions"> YES
+	<input type="radio" name = "yesno" value="no" id="hideallergyoptions"> NO  <p>
+	<div class="hidden" id='hidden-checkbox'>
+	<input type="checkbox" name="allergy" value="wheat"> Wheat <p>
+	<input type="checkbox" name="allergy" value="milk"> Milk  <p>
+	<input type="checkbox" name="allergy" value="dairy"> Dairy <p>
+	<input type="checkbox" name="allergy" value="eggs"> Eggs  <p>
+	<input type="checkbox" name="allergy" value="soy"> Soy  <p>
+	<input type="checkbox" name="allergy" value="fish"> Fish <p>
+	<input type="checkbox" name="allergy" value="peanuts"> Peanuts <p>
+	<input type="checkbox" name="allergy" value="treenuts"> Treenuts  <p>
+	<input type="checkbox" name="allergy" value="shellfish"> Shellfish <p>
+	<label for='email' class="labelinput"> Other: </label> 
+	<input type="text" name="allergy" class='textinput'> <p>
+	</div>
+	<input type="submit" class="submitbutton"> </div>
 
+</form>
+	<script src="https://code.jquery.com/jquery.js"></script> 
+	<script>
+	"use strict";
+
+		function hideAllergyOptions(evt) {
+			console.log(evt)
+			 // resets to what it already was, which was hidden
+			$('#hidden-checkbox').attr('class','hidden');
+		}
+
+
+		function showAllergyOptions(evt) {
+			$('#hidden-checkbox').attr('class', 'show');
+		}
+
+		$("#showallergyoptions").on("click", showAllergyOptions);
+
+		$("#hideallergyoptions").on("click", hideAllergyOptions);
+		$("#showallergyoptions").on("unclick", hideAllergyOptions);
+
+
+
+
+
+
+	</script>
 <!-- <form action="/update-registration-info" method="POST"> -->
 <!-- 	<h4> Types of Diet you would like to follow: (optional) </h4>  -->
 <!-- 	will not receive information nor from this yet, but will at the end if time permits -->
@@ -36,4 +78,6 @@
  -->	<!-- <input type="submit"> -->
 <!-- </form>
  -->
+
+
 {% endblock %}

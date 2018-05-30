@@ -9,6 +9,16 @@
 <ul>
 	{% if recipes != [] %}
 		<h2> Hello, {{ session["name"] }}. Here are your saved recipes! </h2>
+
+		<p>
+<button type="submit" class="labelButton" id="balanced" name="" value=""> Balanced </button>
+<button type="submit" class="labelButton" id="highfiber" name="" value=""> High-Fiber </button>
+<button type="submit" class="labelButton" id="highprotein" name="" value=""> High-Protein </button>
+<button type="submit" class="labelButton" id="lowcarb" name="" value=""> Low-Carb </button>
+<button type="submit" class="labelButton" id="lowfat" name="" value=""> Low-Fat </button>
+<button type="submit" class="labelButton" id="lowsodium" name="" value=""> Low-Sodium </button>
+<button type="submit" class="labelButton" id="sugarconciious" name="" value=""> Sugar-Concious </button>
+</p>
 	
 		{% for recipe in recipes %}
 		<li class="eachRecipe" id="{{ recipe[0].blog_url }}">
@@ -76,6 +86,7 @@
 		 
 		$(".deleteForm").on("submit", deleteRecipe);
 
+		# loop over using jquery
 
 		</script>
 
