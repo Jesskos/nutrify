@@ -9,46 +9,126 @@
 
 <h3> Last Name: {{ lname }} </h3>
 <h3> Email: {{ email }} </h3>
-<h3> Allergies/Intolerances: {% for allergy in allergies %}
-	{{ allergy.allergy_name}}
-	{% endfor %}
-	<form action="/add-allergy" method="POST" class="">
-	<button type="submit" class="" id="" name="" value="">Add allergy</button>
-	</form>
-	<form action="/remove-allergy" method="POST" class="">
-	<button type="submit" class="" id="" name="" value="">Add allergy</button>
-	</form>
-<p>
+<h3> Allergies/Intolerances: </h3>
+
+	{% if allergies != [] %}
+		<div id="allergies">
+		{% for allergy in allergies %}
+		{{ allergy.allergy_name }} <br>	
+		{% endfor %} 
+
+	{% else %}
+
+		<h6> No allergies!</h6>
+
+	{% endif %}
+	</div> 
+
 <h3> Diet Choices: </h3>
-	<form action="/add-diet" method="POST" class="">
-	<button type="submit" class="" id="" name="" value="">Add Diet</button>
+
+
+	<div id="dietgoals">
+	{% if users_nutrient_goals != [] %}
+		{% for nutrient_goal in users_nutrient_goals %}
+		{{ nutrient_goal.high_or_low }} 
+		{{ nutrient_goal.nutrient_name }} |	
+		Goal: {{ nutrient_goal.nutrient_goal}} 
+		<button type="submit" name="nutrient" value="sodium"> remove </button><br> 
+		{% endfor %} 
+	{% else %}
+
+	
+		<h6> No nutrient Goals. Please Add! </h6>
+	{% endif %}</div>
+
+	<p><form action="/add-diet" method="POST" class="adddiet">
+	<button type="button" class="" id="" name="" value="">Add Diet</button>
 	</form>
-	<form action="/remove-diet" method="POST" class="">
-	<button type="submit" class="" id="" name="" value="">Add Diet</button>
+	<form action="/remove-diet" method="POST" class="" display: inline>
+	<button type="submit" class="" id="" name="" value="">Remove Diet</button>
+	</form></p>
+
+	<div class="hidden" id="hiddenadd">
+	<form action="/add-diet" method="POST" >
+		<button type="submit" name="nutrient" value="sodium" class="nutrient"> Sodium </button>
+		<button type="submit" name="nutrient" value="protein" class="nutrient"> Protein </button>
+		<button type="submit" name="nutrient" value="fiber" class="nutrient"> Fiber </button>
+		<button type="submit" name="nutrient" value="fat" class="nutrient"> Fat </button>  
+		<button type="submit" name="nutrient" value="saturated fat" class="nutrient"> Saturated Fat </button>
+		<button type="submit" name="nutrient" value="potassium" class="nutrient">  Potassium </button>
+		<button type="submit" name="nutrient" value="phosphorus" class="nutrient">  Phosphorus </button>
+		<button type="submit" name="nutrient" value="carbohydrate" class="nutrient"> Carbohydrate  </button>  
+		<button type="submit" name="nutrient" value="calories" class="nutrient">  Calories </button>
+		<button type="submit" name="nutrient" value="iron" class="nutrient">  Iron </button>
 	</form>
-
-
-
-
+	</div>
+	<div class="hidden" id="invisibletextbox">
+		<form action="/add-diet" method="POST">
+			<div>
+			<label for='nutrientgoal' class="labelinputnutrient"> Would you like a diet high or low in: <h5></h5>
+			<input type="radio" name = "highlow" value="high" id="highlow"> High
+			<input type="radio" name = "highlow" value="low" id="highlow"> Low  <p>
+			</div>
+			<div>
+			<label for='nutrientgoal' class="labelinputnutrient"> Please enter your nutrient goal for:<h5></h5>
+			<input type="number" name="goal" class='textinput' id="nutrientgoal" required> 
+			<input type="submit" class="submitbutton">
+			</div>
+		</form>
+	</div>
 
 <script src="https://code.jquery.com/jquery.js"></script> 
 	<script>
 	"use strict";
 
-		function hideAllergyOptions(evt) {
-			$('.show').toggleClass('hidden');
+	function showDiets(evt) {
+		console.log("got inside showDiets")
+		$('#hiddenadd').attr('class', 'show');
+	}
+
+
+	$(".adddiet").on("click", showDiets);
+
+
+	function showNutrientTextBox(evt) {
+		evt.preventDefault();
+		console.log("got inside showNutrientTextBox");
+		let nutrientvalue = $(this).val();
+		console.log(nutrientvalue);
+		$("h5").html(nutrientvalue)
+		$('#invisibletextbox').attr('class', 'show');
+	}
+
+
+	$(".nutrient").on("click", showNutrientTextBox);
+
+	function showResults(results) {
+		console.log("results")
+		alert(results);
+		console.log(results)
+		console.dir(results)
+	}
+
+	function addRecipe(evt) {
+		evt.preventDefault()
+		console.log("got inside addRecipe")
+		console.log(evt)
+		let formInputs =  {
+
+			"goal": $("#nutrientgoal").val(),
+			"highlow": $('#highlow').val(),
+			"nutrient": $('h5').html()
 		}
 
+		console.log(formInputs)
 
-		function showAllergyOptions(evt) {
-			$('.hidden').toggleClass('show');
-		}
+		$.post("/add-diet",
+			formInputs,
+			showResults)
+	}
 
-		$("#showallergyoptions").on("click", showAllergyOptions);
-
-			$("#hideallergyoptions").on("unclick", hideAllergyOptions);
-			$("#showallergyoptions").on("click", hideAllergyOptions);
-
+	$(".submitbutton").on("click", addRecipe);
 
 	</script>
+
 {% endblock %}

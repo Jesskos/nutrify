@@ -168,15 +168,18 @@ class UserToDiet(db.Model):
 	
 	user_diet_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-	diet_name = db.Column(db.String(20), nullable=False)
+	nutrient_name = db.Column(db.String(20), nullable=False)
+	high_or_low = db.Column(db.String(20), nullable=False)
+	nutrient_goal = db.Column(db.Integer, nullable=False)
+
 
 	user = db.relationship("User", backref="users_to_diets")
 
 	def __repr__(self):
 		""" Provide helpful representation of recipe object when printed"""
 
-		return "<UserToDiet user_diet_id={} user_id={} diet_name ={}".format(self.user_diet_id, 
-			self.user_id, self.diet_name) # pragma: no cover
+		return "<UserToDiet user_diet_id={} user_id={} nutrient_name ={} high_or_low = {} nutrient_goal = {}".format(self.user_diet_id, 
+		self.user_id, self.nutrient_name, self.high_or_low, self.nutrient_goal) # pragma: no cover
 
 
 
@@ -220,8 +223,10 @@ def example_data():
 	low_fat = RecipeLabel(recipe=pizza, diet_label="low-fat") 
 	sushi = Recipe(recipe_name='sushi', recipe_image='sushi.jpg', recipe_url='sushi.com', blog_url='sushi.blog.com', recipe_yield=9, 
 		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000, labels=['low-fat'])
-	user_to_lowcarb = UserToDiet(user=harry, diet="lowcarb")
+	user_to_lowcarb = UserToDiet(user=harry, nutrient_name="carbohydrates", high_or_low="high", nutrient_goal = 200)
 	user_to_egg = UserToAllergy(user=harry, allergy="egg")
+
+
 
 	db.session.add_all([pizza, olive, onecan, harry, user_to_pizza, halfcup_to_milk, pizza_to_olive, low_fat, sushi, user_to_egg, user_to_lowcarb])
 	db.session.commit()

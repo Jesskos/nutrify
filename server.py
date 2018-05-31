@@ -1,7 +1,7 @@
 from jinja2 import StrictUndefined
 from flask import (Flask, render_template, redirect, request, flash, session)
 # from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe, UserToAllergy
+from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe, UserToAllergy, UserToDiet
 import json
 import requests 
 from helperfunctions import *
@@ -122,6 +122,9 @@ def log_out():
 	return redirect("/")
 
 
+##################################################################################################################
+# OPENS USER PROFILE, PORTAL, FINDS AND GETS RECIPES FROM API
+
 @app.route("/user-portal")
 def open_user_portal():
 	"""renders template for user portal where user can either search or view recipes """
@@ -134,12 +137,11 @@ def open_user_portal():
 
 
 
-##################################################################################################################
-# OPENS USER PROFILE, FINDS AND GETS RECIPES FROM API
-
 @app.route("/profile")
 def open_profile():
 	""" renders template for user profile """
+
+	users_nutrients_goals=[]
 
 	if "name" in session:
 		session_user_id = session['id']
@@ -147,11 +149,17 @@ def open_profile():
 		fname = logged_in_user.fname
 		lname = logged_in_user.lname
 		email = logged_in_user.user_email
-		allergies = UserToAllergy.query.filter(UserToAllergy.user_id==session_user_id)
+		allergies = UserToAllergy.query.filter(UserToAllergy.user_id==session_user_id).all()
+		nutrient_goals = UserToDiet.query.filter(UserToDiet.user_id==session_user_id).all()
+
 		if allergies: 
 			users_allergies = allergies 
 
- 		return render_template('userprofile.html', fname=fname, lname=lname, email=email, allergies=users_allergies) 
+		if nutrient_goals:
+			users_nutrients_goals = nutrient_goals
+
+ 		return render_template('userprofile.html', fname=fname, lname=lname, email=email, allergies=users_allergies, 
+ 			users_nutrient_goals=users_nutrients_goals) 
 
  	else:
  		return redirect("/")
@@ -436,6 +444,54 @@ def delete_recipe():
 
 	print "\n\nRecipe deleted"
 	return "recipe deleted!"
+
+##################################################################################################################
+# ADDING NUTRIENT GOALS (AKA DIET GOALS)
+
+@app.route("/add-diet", methods=["POST"])
+def add_diet():
+	""" adds a diet to the user to diet table """
+
+	nutrient_goal = int(request.form.get("goal"))
+	print nutrient_goal
+
+	high_or_low = request.form.get("highlow")
+	print high_or_low
+
+	nutrient_name = request.form.get("nutrient")
+	print nutrient_name
+
+	session_user_id = session['id']
+
+	logged_in_user = User.query.get(session_user_id)
+	print logged_in_user
+
+	check_if_nutrient_goal_added_exists_in_db = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id, 
+		UserToDiet.nutrient_name==nutrient_name).first()
+
+
+	print check_if_nutrient_goal_added_exists_in_db 
+
+	if check_if_nutrient_goal_added_exists_in_db:
+		return "You already added this nutrient! If you want to change goal, please delete nutrient and add a new entry"
+
+	else:
+		new_nutrient_goal  = UserToDiet(user=logged_in_user, nutrient_name=nutrient_name, high_or_low=high_or_low, 
+			nutrient_goal=nutrient_goal)
+		db.session.add(new_nutrient_goal)
+		db.session.commit()
+
+	new_goal = {"high_or_low": high_or_low,
+				"nutrient_name": nutrient_name,
+				"nutrient_goal":nutrient_goal }
+
+
+	print new_goal 
+	print "!!!!!!!!"
+
+	return jsonify(new_goal)
+
+
 
 
 
