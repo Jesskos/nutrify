@@ -29,23 +29,9 @@
 				<form action="{{ recipe[0].recipe_url }}">
     			<input type="submit" class="instructionbutton" value="Directions">
 				</form>
-<<<<<<< HEAD
-<<<<<<< HEAD
-		   		<b><h5> Health Labels:</b>  
-		   			{{ recipe.labels }}
-		   			{% for label in recipe.labels %}
-		   		 		{{ label }} 
-		     		{% endfor %} </h5> 
-		     		<hr>
-		<!--      		fix this loop  -->
-=======
-		   		<b><h6> Health Labels:</b> | 
-=======
 		   		<b><h6 class="labels"> Health Labels:</b> | 
->>>>>>> edeffbfda41bbadfaf3e99afecaabe0338886685
 		   				{% for label in recipe[1] %}
 		   		 		{{ label.diet_label }} |
->>>>>>> f2e9213215d8ea996b6f4effd6c2a8b91e50574a
 
 		     		{% endfor %} </h6> 
 				<form action="/delete-recipe" method="POST" class="deleteForm">  		
