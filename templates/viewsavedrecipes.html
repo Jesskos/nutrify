@@ -9,17 +9,27 @@
 <ul>
 	{% if recipes != [] %}
 		<h2> Hello, {{ session["name"] }}. Here are your saved recipes! </h2>
+
+<p>
+<button type="submit" class="labelButton" id="showall" name="" value=""> Show All </button>
+<button type="submit" class="labelButton" id="balanced" name="" value=""> Balanced </button>
+<button type="submit" class="labelButton" id="vegetarian" name="" value=""> Vegetarian </button>
+<button type="submit" class="labelButton" id="lowcarb" name="" value=""> Low-Carb </button>
+<button type="submit" class="labelButton" id="vegan" name="" value=""> Vegan </button>
+<button type="submit" class="labelButton" id="sugarconciious" name="" value=""> Sugar-Concious </button>
+</p>
 	
-		  {% for recipe in recipes %}
-		 
+		{% for recipe in recipes %}
+		<ul class="eachRecipe" id="{{ recipe[0].blog_url }}">
 		   <p><img src= {{ recipe[0].recipe_image}} ></p>
 		   <p><h5>{{ recipe[0].recipe_name }} </h5></p>
  				<form action="{{ recipe[0].blog_url }}">
-    			<input type="submit" class="nutritionbutton" value="Nutrition Information" />
+    			<input type="submit" class="nutritionbutton" value="Nutrition Information">
 				</form>
-				 <form action="{{ recipe[0].recipe_url }}">
-    			<input type="submit" class="instructionbutton" value="Directions" />
+				<form action="{{ recipe[0].recipe_url }}">
+    			<input type="submit" class="instructionbutton" value="Directions">
 				</form>
+<<<<<<< HEAD
 <<<<<<< HEAD
 		   		<b><h5> Health Labels:</b>  
 		   			{{ recipe.labels }}
@@ -30,15 +40,19 @@
 		<!--      		fix this loop  -->
 =======
 		   		<b><h6> Health Labels:</b> | 
+=======
+		   		<b><h6 class="labels"> Health Labels:</b> | 
+>>>>>>> edeffbfda41bbadfaf3e99afecaabe0338886685
 		   				{% for label in recipe[1] %}
 		   		 		{{ label.diet_label }} |
 >>>>>>> f2e9213215d8ea996b6f4effd6c2a8b91e50574a
 
 		     		{% endfor %} </h6> 
-		<form action="/delete-recipe" method="POST" class="deleteForm">  		
-		<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'> Delete Recipe</button>
-		</form>
-		<hr>
+				<form action="/delete-recipe" method="POST" class="deleteForm">  		
+				<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'> Delete Recipe</button>
+				</form>
+				<hr>
+		</ul>
 		{% endfor %}
 
  	{% else %}
@@ -47,10 +61,19 @@
  	{% endif %}
 	</ul>
 
- 	<script src="https://code.jquery.com/jquery.js"></script> 
+ 		<script src="https://code.jquery.com/jquery.js"></script> 
+
 
    		<script>
+   		"use strict";
 
+
+   		function confirmDelete(result) {
+			alert(result);	
+			$(this).closest('li').remove();
+			console.log('got inside confirmDelete')
+
+		}
 
 		function deleteRecipe(evt) {
 			console.log('got inside deleteRecipe')
@@ -60,20 +83,136 @@
 			console.log(id)
 
 
-			let deletedRecipeUrl = {
+			let deleteRecipeUrl = {
 				"url": $(`#${id}`).val()
 			};
 	
 
-			$.post("/save-recipe", 
-				savedRecipeUrl,
-				confirmation);
+			$.post("/delete-recipe", 
+				deleteRecipeUrl,
+				confirmDelete);
+
+			console.log(this)
+			$(this).closest('ul').remove();
 		}
 
-			
+		$(".deleteForm").on("submit", deleteRecipe);
 
-		 
-		$(".deleteForm").on("submit", saveRecipe);
+		
+		function showBalanced(evt) {
+			console.log("got inside showBalanced")
+			$(".labels").each(function() {
+				$(this).closest('ul').show();
+				let a = ($(this).text());
+				console.log(a);
+				let b = a.includes("Balanced")
+				console.log(b);
+				if (b==false) {
+					$(this).closest('ul').hide();
+				}
+			});
+
+			}
+
+
+		$("#balanced").on("click", showBalanced);
+
+
+		function showVegetarian(evt) {
+			console.log("got inside showVegetarian")
+			$(".labels").each(function() {
+				$(this).closest('ul').show();
+				let a = ($(this).text());
+				console.log(a);
+				let b = a.includes("Vegetarian")
+				console.log(b);
+				if (b==false) {
+					$(this).closest('ul').hide();
+				}
+			});
+
+			}
+
+
+		$("#vegetarian").on("click", showVegetarian);
+
+
+		function showLowCarb(evt) {
+			console.log("got inside showLowCarb")
+			$(".labels").each(function() {
+				$(this).closest('ul').show();
+				let a = ($(this).text());
+				console.log(a);
+				let b = a.includes("Low-Carb")
+				console.log(b);
+				if (b==false) {
+					$(this).closest('ul').hide();
+				}
+			});
+
+			}
+
+
+		$("#lowcarb").on("click", showLowCarb);
+
+
+		function showSugarConscious(evt) {
+			console.log("got inside showSugarConscious")
+			$(".labels").each(function() {
+				$(this).closest('ul').show();
+				let a = ($(this).text());
+				console.log(a);
+				let b = a.includes("Sugar-Conscious")
+				console.log(b);
+				if (b==false) {
+					$(this).closest('ul').hide();
+				}
+			});
+
+			}
+
+
+		$("#sugarconciious").on("click", showSugarConscious);
+
+
+		function showVegan(evt) {
+			console.log("got inside showVegan")
+			$(".labels").each(function() {
+				$(this).closest('ul').show();
+				let a = ($(this).text());
+				console.log(a);
+				let b = a.includes("Vegan")
+				console.log(b);
+				if (b==false) {
+					$(this).closest('ul').hide();
+				}
+			});
+
+			}
+
+
+		$("#vegan").on("click", showVegan);
+
+		function showAll(evt) {
+			console.log("got inside showAll")
+			$(".labels").each(function() {
+				$(this).closest('ul').show();
+
+			});
+
+			}
+
+
+		$("#showall").on("click", showAll);
+
+
+
+
+
+
+
+
+		</script>
 
 
 {% endblock %}

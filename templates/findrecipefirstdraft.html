@@ -18,6 +18,7 @@
 	</p>
 
 <script>
+"use strict";
 
 	function showLowPotassiumRecipes(results) {
 
@@ -35,3 +36,40 @@
 </script>
 
 {% endblock %}
+
+
+
+	<p id='diets' class="show">
+	<input type="button" name="nutrient" value="sodium"> Sodium 
+	<input type="text" name="nutrientamount" class='textinput' id="sodium"> <p>
+	<input type="button" name="nutrient" value="protein"> Protein 
+	<input type="text" name="nutrientamount" class='textinput' id="protein"> <p>
+	<input type="checkbox" name="nutrient" value="fiber"> Fiber 
+	<input type="text" name="nutrientamount" class='textinput' id="fiber"> <p>
+	<input type="checkbox" name="nutrient" value="fat"> Fat  
+	<input type="text" name="nutrientamount" class='textinput' id="fat"> <p>
+	<input type="checkbox" name="nutrient" value="saturatedfat"> Saturated Fat  
+	<input type="text" name="nutrientamount" class='textinput' id="saturatedfat"> <p>
+	<input type="checkbox" name="nutrient" value="potassium"> Potassium 
+	<input type="text" name="nutrientamount" class='textinput' id="potassium"> <p>
+	<input type="checkbox" name="nutrient" value="phosphorus"> Phosphorus 
+	<input type="text" name="nutrientamount" class='textinput' id="phosphorus"> <p>
+	<input type="checkbox" name="nutrient" value="carbohydrate"> Carbohydrates  
+	<input type="text" name="nutrientamount" class='textinput' id="carbohydrate"> <p>
+	<input type="checkbox" name="nutrient" value="calories"> Calories 
+	<input type="text" name="nutrientamount" class='textinput' id="calories"> <p>
+	<input type="checkbox" name="nutrient" value="iron"> Iron 
+	<input type="text" name="nutrientamount" class='textinput' id="iron"> 
+	</p>
+
+
+	function addRecipe(evt) {
+		evt.preventDefault();
+		console.log("got inside addRecipe")
+		let nutrientamount = evt.currentTarget["0"].val()
+		console.log(nutrientamount)
+	}
+
+	$(".submitbutton").on("click", addRecipe)
+
+

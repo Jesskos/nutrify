@@ -17,6 +17,8 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 	low sodium: 140 mg maximim
 	low saturated fat: 2 gram maximim 
 	low fiber: 2 gram maximim 
+	low saturated fat: 2 grams maximum
+	high iron: 5 mg minimim
 
 	Examples: 
 
@@ -45,7 +47,7 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 	'carbohydratecontrolled45':'&nutrients[CHOCDF]=60-75&nutrients[SUGAR]=7',
 	'highfiber':'&nutrients[FIBTG]=5-20', 'lowfat':'&nutrients[FAT]=3', 'lowprotein':'&nutrients[PROCNT]=4',
 	'highprotein':'&nutrients[PROCNT]=7-30', 'lowcalories': '&nutrients[ENERC_KCAL]=200', 'lowsodium':'&nutrients[NA]=140',
-	'lowsaturatedfat':'&nutrients[FASAT]=2', 'lowfiber':'&nutrients[FIBTG]=2'}
+	'lowsaturatedfat':'&nutrients[FASAT]=2', 'lowfiber':'&nutrients[FIBTG]=2', 'highiron':'&nutrients[FE]=5-10'}
 
 	if unicode_nutrients_list == []:
 		return nutrients_string

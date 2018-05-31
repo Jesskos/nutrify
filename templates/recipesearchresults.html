@@ -20,12 +20,10 @@
 				</form>
 		   	   <b><h6> Health Labels:</b>  
 		            {% for label in recipe['labels'] %}
-		   		      {{ label }} 
+		   		      {{ label }} |
 		     	    {% endfor %} </h6> 
 
 		        <form action="/save-recipe" method="POST" class="saveForm">
-		 			<h6></h6>
-		        	
 		   	    <button type="submit" class="submitButton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}' data-tooltip="saved">Save Recipe</button>
 		        </form> <hr> 	
 		   </div>
@@ -40,10 +38,6 @@
 
    		<script>
 		"use strict";
-		function showText(evt) {
-			let text 
-		}
-
 
 		function changeColor(evt) {
 			console.log('got inside changeColor')
@@ -57,10 +51,8 @@
 
 		$(".submitButton").on("click", changeColor);
 
-		
 		function confirmation(result) {
-			alert(result);
-			
+			alert(result);		
 		}
 
 		function saveRecipe(evt) {
@@ -80,9 +72,6 @@
 				savedRecipeUrl,
 				confirmation);
 		}
-
-			
-
 		 
 		$(".saveForm").on("submit", saveRecipe);
 		
