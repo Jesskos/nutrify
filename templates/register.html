@@ -47,6 +47,8 @@
 			console.log(evt)
 			 // resets to what it already was, which was hidden
 			$('#hidden-checkbox').attr('class','hidden');
+			$('input:checkbox').removeAttr('checked');
+			$('form :text').val('');
 		}
 
 
