@@ -125,7 +125,7 @@ def open_user_portal():
 
 
 ##################################################################################################################
-# FINDS AND GETS RECIPES FROM API
+# OPENS USER PROFILE, FINDS AND GETS RECIPES FROM API
 
 @app.route("/profile")
 def open_profile():
@@ -312,7 +312,7 @@ def get_recipe():
 	return render_template("recipesearchresults.html", recipes=list_of_recipes)
 
 ##################################################################################################################
-# VIEWING AND SAVING RECIPES
+# VIEWING, SAVING, AND DELETING RECIPES
 
 @app.route("/view-saved-recipe")
 def view_save_recipe():
@@ -334,7 +334,9 @@ def view_save_recipe():
 	for logged_in_user_recipe in logged_in_user_recipes:
 
 		recipe = logged_in_user_recipe.recipe
-		recipes_to_display.append(recipe)
+		labels = RecipeLabel.query.filter(RecipeLabel.recipe_id==recipe.recipe_id).all()
+		recipes_to_display.append([recipe, labels])
+
 
 	return render_template('viewsavedrecipes.html', recipes=recipes_to_display) 
 
@@ -352,9 +354,7 @@ def save_recipe():
 
 	# gets saved recipe url from browser, which is a unique identifier
 	saved_recipe_url= request.form.get('url')
-	print "!!!!!!!!!!!!!!!!!!!!!!!!"
 
-	print saved_recipe_url
 	# checks databse to find recipe that matches recipe_url. There has to be one, since it was saved above. 
 	saved_recipe = Recipe.query.filter(Recipe.recipe_url==saved_recipe_url).first()
 	
@@ -391,6 +391,7 @@ def save_recipe():
 			print "\n\nRECIPE SAVED"
 			return "Recipe saved"
 
+# @app.route("/delete-recipe", methods=["POST"])
 
 			
 
