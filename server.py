@@ -1,5 +1,5 @@
 from jinja2 import StrictUndefined
-from flask import (Flask, render_template, redirect, request, flash, session)
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 # from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe, UserToAllergy, UserToDiet
 import json
@@ -481,15 +481,20 @@ def add_diet():
 		db.session.add(new_nutrient_goal)
 		db.session.commit()
 
-	new_goal = {"high_or_low": high_or_low,
+		new_goal = {"high_or_low": high_or_low,
 				"nutrient_name": nutrient_name,
 				"nutrient_goal":nutrient_goal }
+		return jsonify(new_goal)
 
 
-	print new_goal 
-	print "!!!!!!!!"
+@app.route("/delete-diet", methods=["POST"])
+def delete_diet():
+	""" adds a diet to the user to diet table """
+	diet_id = int(request.form.get("deleteGoalID")) 
 
-	return jsonify(new_goal)
+	print diet_id
+	print "!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
 
 
 
