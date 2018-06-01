@@ -9,6 +9,9 @@
 
 <h3> Last Name: {{ lname }} </h3>
 <h3> Email: {{ email }} </h3>
+
+<h6></h6>
+
 <h3> Allergies/Intolerances: </h3>
 
 	{% if allergies != [] %}
@@ -24,16 +27,19 @@
 	{% endif %}
 	</div> 
 
-<h3> Diet Choices: </h3>
+<h3> Nutrient Goals: </h3>
 
 
 	<div id="dietgoals">
 	{% if users_nutrient_goals != [] %}
 		{% for nutrient_goal in users_nutrient_goals %}
+		<li>
 		{{ nutrient_goal.high_or_low }} 
 		{{ nutrient_goal.nutrient_name }} |	
-		Goal: {{ nutrient_goal.nutrient_goal}} 
-		<button type="submit" name="nutrient" value="sodium"> remove </button><br> 
+		Goal: {{ nutrient_goal.nutrient_goal}}
+		<form action="/delete-diet" method="POST" class="deleteForm" name="dietid" id ="{{ nutrient_goal.nutrient_name}}" class="dietform">  
+		<button type="submit" class="deletebutton" name='diet'> remove </button>
+		</form></li>
 		{% endfor %} 
 	{% else %}
 
@@ -44,9 +50,6 @@
 	<p><form action="/add-diet" method="POST" class="adddiet">
 	<button type="button" class="" id="" name="" value="">Add Diet</button>
 	</form>
-	<form action="/remove-diet" method="POST" class="" display: inline>
-	<button type="submit" class="" id="" name="" value="">Remove Diet</button>
-	</form></p>
 
 	<div class="hidden" id="hiddenadd">
 	<form action="/add-diet" method="POST" >
@@ -95,7 +98,7 @@
 		console.log("got inside showNutrientTextBox");
 		let nutrientvalue = $(this).val();
 		console.log(nutrientvalue);
-		$("h5").html(nutrientvalue)
+		$("h5").html(nutrientvalue);
 		$('#invisibletextbox').attr('class', 'show');
 	}
 
@@ -103,13 +106,25 @@
 	$(".nutrient").on("click", showNutrientTextBox);
 
 	function showResults(results) {
-		console.log("results")
-		alert(results);
-		console.log(results)
-		console.dir(results)
+		console.log(results);
+		$('#hiddenadd').attr('class', 'hidden');
+		$('#invisibletextbox').attr('class', 'hidden');
+		let button = '<form action="/delete-diet" method="POST" class="tempdeleteForm" name="dietid" id =results["nutrient_name"] class="dietform">' + '<button type="submit" class="tempdeletebutton" name="diet"> remove </button>' + '</form>'
+		console.log(button)
+		console.log("results");
+		let words = document.querySelector("#dietgoals");
+		if (results='undefined') {
+			$("#dietgoals").append("<li>"+"A nutrient goal for this nutrient has already been added. Please remove nutrient to add a new goal for this nutrient" + "</li>"); 
+		}	
+		else {
+
+			let tempNutrientGoal = results['high_or_low'] + ' ' + results['nutrient_name'] + ' | ' + 'Goal: ' + results['nutrient_goal'] + button;
+				$("#dietgoals").append("<li>"+tempNutrientGoal+ "</li>");
+		}
 	}
 
-	function addRecipe(evt) {
+
+	function addDiet(evt) {
 		evt.preventDefault()
 		console.log("got inside addRecipe")
 		console.log(evt)
@@ -127,8 +142,42 @@
 			showResults)
 	}
 
-	$(".submitbutton").on("click", addRecipe);
+	$(".submitbutton").on("click", addDiet);
+
+
+
+	function confirmDelete(result) {
+		console.log("got into confirmDelete");
+		alert(result)
+	}
+
+		
+	function deleteGoal(evt) {
+		evt.preventDefault()
+		console.log('got inside deleteGoal')
+		let id = evt.currentTarget.id
+		console.log(evt);
+
+
+		let deletedGoalID = {
+			"dietid": id
+		};
+	
+		console.log(deletedGoalID)
+
+		$.post("/delete-diet", 
+				deletedGoalID,
+				confirmDelete);
+
+		console.log(this)
+		$(this).closest('li').remove();
+		}
+
+	$(".deleteForm").on("submit", deleteGoal);
+
+
 
 	</script>
 
 {% endblock %}
+

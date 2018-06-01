@@ -1,5 +1,5 @@
 from jinja2 import StrictUndefined
-from flask import (Flask, render_template, redirect, request, flash, session)
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 # from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Recipe, Ingredient, Amount, RecipeLabel, RecipeToIngredient, AmountToIngredient, User, UserToRecipe, UserToAllergy, UserToDiet
 import json
@@ -473,7 +473,7 @@ def add_diet():
 	print check_if_nutrient_goal_added_exists_in_db 
 
 	if check_if_nutrient_goal_added_exists_in_db:
-		return "You already added this nutrient! If you want to change goal, please delete nutrient and add a new entry"
+		return "undefined"
 
 	else:
 		new_nutrient_goal  = UserToDiet(user=logged_in_user, nutrient_name=nutrient_name, high_or_low=high_or_low, 
@@ -481,15 +481,35 @@ def add_diet():
 		db.session.add(new_nutrient_goal)
 		db.session.commit()
 
-	new_goal = {"high_or_low": high_or_low,
+		new_goal = {"high_or_low": high_or_low,
 				"nutrient_name": nutrient_name,
 				"nutrient_goal":nutrient_goal }
+		return jsonify(new_goal)
 
 
-	print new_goal 
-	print "!!!!!!!!"
+@app.route("/delete-diet", methods=["POST"])
+def delete_diet():
+	""" adds a diet to the user to diet table """
+	diet_id = request.form.get("dietid")
+	
+	session_user_id = session['id']
 
-	return jsonify(new_goal)
+	logged_in_user = User.query.get(session_user_id)
+
+	print diet_id
+	print "!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	diet_to_delete = UserToDiet.query.filter(UserToDiet.nutrient_name==diet_id, UserToDiet.user_id==session_user_id).first()
+
+	print diet_to_delete
+	print "!!!!!!!!!!!"
+
+	db.session.delete(diet_to_delete)
+	db.session.commit()
+
+	print "\n\nRecipe deleted"
+	return "Nutrient goal deleted!"
+
+
 
 
 

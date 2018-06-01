@@ -29,6 +29,11 @@
 				<form action="{{ recipe[0].recipe_url }}">
     			<input type="submit" class="instructionbutton" value="Directions">
 				</form>
+
+		   		<b><h6 class="labels"> Health Labels:</b> | 
+
+
+		   		<b><h6> Health Labels:</b> | 
 		   		<b><h6 class="labels"> Health Labels:</b> | 
 		   				{% for label in recipe[1] %}
 		   		 		{{ label.diet_label }} |
