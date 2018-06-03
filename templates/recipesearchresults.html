@@ -34,50 +34,9 @@
 	</ul>
 
 
- 	<script src="https://code.jquery.com/jquery.js"></script> 
+<script src="https://code.jquery.com/jquery.js"></script> 
+<script src="/static/javascript.js"></script>
 
-   		<script>
-		"use strict";
-
-		function changeColor(evt) {
-			console.log('got inside changeColor')
-			console.log(evt)
-			let id = evt.currentTarget.id
-		
-
-			$(`#${id}`).addClass('colorChange')
-		
-		} 
-
-		$(".submitButton").on("click", changeColor);
-
-		function confirmation(result) {
-			alert(result);		
-		}
-
-		function saveRecipe(evt) {
-			console.log('got inside saveRecipe')
-			console.log(evt)
-			evt.preventDefault();
-			let id = evt.currentTarget["0"].id
-			console.log(id)
-
-
-			let savedRecipeUrl = {
-				"url": $(`#${id}`).val()
-			};
-	
-
-			$.post("/save-recipe", 
-				savedRecipeUrl,
-				confirmation);
-		}
-		 
-		$(".saveForm").on("submit", saveRecipe);
-		
-
-
-		   </script>
 
 
 {% endblock %}

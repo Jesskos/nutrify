@@ -1,0 +1,141 @@
+{% extends 'base2.html' %}
+
+{% block title %} User Analysis {% endblock %}
+
+{% block content %}
+
+<div>
+<h3>Recipe: {{recipe.recipe_name}}</h3>
+<p><img src= {{ recipe.recipe_image}}></p>
+<h5> Recipe Yield: </h5> {{ recipe.recipe_yield }} </h5>
+
+<h4> Recipe Nutrition Facts</h4>
+<h5> Yield: {{ recipe.recipe_yield }} servings </h5>
+<h5> Calories: {{ recipe.calories }} calories </h5>
+<h5> Carbohydrates: {{ recipe.carbohydrates }} grams </h5>
+<h5> Protein: {{ recipe.protein }} grams </h5>
+<h5> Fat: {{ recipe.fat }} grams </h5>
+<h5> Saturated fat: {{ recipe.saturated_fat }} grams </h5>
+<h5> Iron: {{ recipe.iron }} mg</h5>
+<h5> Fiber: {{ recipe.fiber }} grams </h5>
+<h5> Potassium: {{ recipe.potassium }} mg</h5>
+<h5> Phosphorus: {{ recipe.phosphorus }} mg</h5>
+<h5> Sodium: {{ recipe.sodium }} mg</h5>
+</div>
+
+<div> <h4> How many servings did you eat? </h4>
+	<input type="text" name="allergy" class='textinput'> <p>
+	</div>
+	<input type="submit" class="submitbutton">
+</div>
+<div>
+	{% for goal in goals %}
+	<button type="button" class="chartbutton" id="{{ goal.nutrient_name }}" value ="{{ recipe.recipe_id }}">{{ goal.nutrient_name }}</button>
+	{% endfor %}
+</div>
+
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
+</body>
+
+<div class="nutrient-chart">
+	<canvas width="700px;" height="200px;" id="barChart"></canvas>
+	<div id="barLegend" class="chart-legend"></div>
+<div id="percent"></div>
+<script>
+	'use strict'
+
+
+
+
+	function sendSelectedNutrient(evt) {
+		let goalnutrient = evt.target.id;
+		let recipeid = document.getElementById(goalnutrient).value
+		$.get("/analyze-goal.json",
+			{goal: goalnutrient, recipe: recipeid},
+			makeBarChart)
+		console.log("made ajax request")
+	}
+
+	$(".chartbutton").on("click", sendSelectedNutrient)
+
+
+	function makeBarChart(data) {
+		$("#percent").html("<h4>" + "this provides " + data['percent'] + "% of " + data['nutrient_name'] + "</h4>")
+  		let newChart = document.getElementById('barChart').getContext('2d');
+
+  		let barChart = new Chart(newChart, {
+  			type: 'horizontalBar', 
+  			data: {
+  				labels: ["amount"],
+  				datasets: [{
+  					label: data['nutrient_name'],
+  					data: [data['amount']],
+  					backgroundColor: 'red',
+  					borderWidth: 1,
+  					borderColor: '#777'
+  				}]
+  			},
+  			options: {
+  				title: {
+  					display: true,
+  					text: 'Amount of Daily Goal'
+  				},
+  				responsive: false,
+  				scales: {
+  					xAxes: [{
+  						ticks: {
+  							min: 0, 
+  							max: data['goal_amount'] + (0.25 * data['goal_amount'])
+  						}
+  					}]
+  				}
+  			}
+  				
+  		});
+  	}
+
+
+ var originalLineDraw = Chart.controllers.horizontalBar.prototype.draw;
+  Chart.helpers.extend(Chart.controllers.horizontalBar.prototype, {
+  
+      draw: function () {
+          originalLineDraw.apply(this, arguments);
+  
+          var chart = this.chart;
+          var ctx = chart.chart.ctx;
+  
+          var index = chart.config.options.lineAtIndex;
+          if (index) {
+  
+              var xaxis = chart.scales['x-axis-0'];
+              var yaxis = chart.scales['y-axis-0'];
+  
+              var x1 = xaxis.getPixelForValue(index);                       
+              var y1 = yaxis.top;                                                   
+  
+              var x2 = xaxis.getPixelForValue(index);                       
+              var y2 = yaxis.bottom;                                        
+  
+              ctx.save();
+              ctx.beginPath();
+              ctx.moveTo(x1, y1);
+              ctx.strokeStyle = 'red';
+              ctx.lineTo(x2, y2);
+              ctx.stroke();
+  
+              ctx.restore();
+          }
+      }
+  });
+
+
+</script>
+
+
+
+
+
+
+
+{% endblock %}                     

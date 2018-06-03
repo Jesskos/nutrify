@@ -1,0 +1,25 @@
+{
+  "name": "my_package",
+  "version": "1.0.0",
+  "description": "for chartJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jesskos/project.git"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": " <Jessica jesskos@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jesskos/project/issues"
+  },
+  "homepage": "https://github.com/Jesskos/project#readme",
+  "dependencies": {
+    "chart.js": "^2.7.2"
+  }
+}

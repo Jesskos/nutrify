@@ -43,47 +43,31 @@
 
 </form>
 
-	<script src="https://code.jquery.com/jquery.js"></script> 
-	<script>
-	"use strict";
+<script src="https://code.jquery.com/jquery.js"></script> 
+<script>
 
-		function hideAllergyOptions(evt) {
-			console.log(evt)
-			 // resets to what it already was, which was hidden
-			$('#hidden-checkbox').attr('class','hidden');
-			$('input:checkbox').removeAttr('checked');
-			$('form :text').val('');
-		}
-
-
-		function showAllergyOptions(evt) {
-			$('#hidden-checkbox').attr('class', 'show');
-		}
-
-		$("#showallergyoptions").on("click", showAllergyOptions);
-
-		$("#hideallergyoptions").on("click", hideAllergyOptions);
-		$("#showallergyoptions").on("unclick", hideAllergyOptions);
+	function hideAllergyOptions(evt) {
+		console.log(evt)
+		 // resets to what it already was, which was hidden
+		$('#hidden-checkbox').attr('class','hidden');
+		$('input:checkbox').removeAttr('checked');
+		$('form :text').val('');
+	}
 
 
+	function showAllergyOptions(evt) {
+	$('#hidden-checkbox').attr('class', 'show');
+	}
+
+	$("#showallergyoptions").on("click", showAllergyOptions);
+
+	$("#hideallergyoptions").on("click", hideAllergyOptions);
+	$("#showallergyoptions").on("unclick", hideAllergyOptions);
+</script>
 
 
 
 
-	</script>
-<!-- <form action="/update-registration-info" method="POST"> -->
-<!-- 	<h4> Types of Diet you would like to follow: (optional) </h4>  -->
-<!-- 	will not receive information nor from this yet, but will at the end if time permits -->
-<!-- 	<input type="checkbox" name="diet" value="lowpotassium"> Low Potassium  -->
-<!-- 	<input type="checkbox" name="diet" value="Hypertension"> Low Phosphorus <p> -->
-<!-- 	<input type="checkbox" name="diet" value="lowsodium"> Low Sodium  -->
-<!-- 	<input type="checkbox" name="diet" value="lowcalorie"> Low Calorie <p> -->
-<!-- 	<input type="checkbox" name="diet" value="Carbcontrolled"> Carbohydrate Controlled  -->
-<!-- 	<input type="checkbox" name="diet" value="highfiber"> High Fiber <p> -->
-<!-- 	<input type="checkbox" name="diet" value="lowfiber"> Low Fiber <p>
- -->	<!-- <input type="submit"> -->
-<!-- </form>
- -->
 
 
 {% endblock %}

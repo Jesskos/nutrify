@@ -29,16 +29,16 @@
 				<form action="{{ recipe[0].recipe_url }}">
     			<input type="submit" class="instructionbutton" value="Directions">
 				</form>
-
-		   		<b><h6 class="labels"> Health Labels:</b> | 
-
-
-		   		<b><h6> Health Labels:</b> | 
+		  
 		   		<b><h6 class="labels"> Health Labels:</b> | 
 		   				{% for label in recipe[1] %}
 		   		 		{{ label.diet_label }} |
 
 		     		{% endfor %} </h6> 
+		     	<form action="/analyze-goal" class="analyzegoal">  		
+				<button type="submit" class="analyzegoalButton" name='url' value='{{ recipe[0].recipe_url }}'> Analyze Recipe </button>
+				</form>
+
 				<form action="/delete-recipe" method="POST" class="deleteForm">  		
 				<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'> Delete Recipe</button>
 				</form>
@@ -52,159 +52,10 @@
  	{% endif %}
 	</ul>
 
- 		<script src="https://code.jquery.com/jquery.js"></script> 
+<script src="https://code.jquery.com/jquery.js"></script> 
+<script src="/static/javascript.js"></script>
 
-
-   		<script>
-   		"use strict";
-
-
-   		function confirmDelete(result) {
-			alert(result);	
-			$(this).closest('li').remove();
-			console.log('got inside confirmDelete')
-
-		}
-
-		function deleteRecipe(evt) {
-			console.log('got inside deleteRecipe')
-			console.log(evt)
-			evt.preventDefault();
-			let id = evt.currentTarget["0"].id
-			console.log(id)
-
-
-			let deleteRecipeUrl = {
-				"url": $(`#${id}`).val()
-			};
-	
-
-			$.post("/delete-recipe", 
-				deleteRecipeUrl,
-				confirmDelete);
-
-			console.log(this)
-			$(this).closest('ul').remove();
-		}
-
-		$(".deleteForm").on("submit", deleteRecipe);
-
-		
-		function showBalanced(evt) {
-			console.log("got inside showBalanced")
-			$(".labels").each(function() {
-				$(this).closest('ul').show();
-				let a = ($(this).text());
-				console.log(a);
-				let b = a.includes("Balanced")
-				console.log(b);
-				if (b==false) {
-					$(this).closest('ul').hide();
-				}
-			});
-
-			}
-
-
-		$("#balanced").on("click", showBalanced);
-
-
-		function showVegetarian(evt) {
-			console.log("got inside showVegetarian")
-			$(".labels").each(function() {
-				$(this).closest('ul').show();
-				let a = ($(this).text());
-				console.log(a);
-				let b = a.includes("Vegetarian")
-				console.log(b);
-				if (b==false) {
-					$(this).closest('ul').hide();
-				}
-			});
-
-			}
-
-
-		$("#vegetarian").on("click", showVegetarian);
-
-
-		function showLowCarb(evt) {
-			console.log("got inside showLowCarb")
-			$(".labels").each(function() {
-				$(this).closest('ul').show();
-				let a = ($(this).text());
-				console.log(a);
-				let b = a.includes("Low-Carb")
-				console.log(b);
-				if (b==false) {
-					$(this).closest('ul').hide();
-				}
-			});
-
-			}
-
-
-		$("#lowcarb").on("click", showLowCarb);
-
-
-		function showSugarConscious(evt) {
-			console.log("got inside showSugarConscious")
-			$(".labels").each(function() {
-				$(this).closest('ul').show();
-				let a = ($(this).text());
-				console.log(a);
-				let b = a.includes("Sugar-Conscious")
-				console.log(b);
-				if (b==false) {
-					$(this).closest('ul').hide();
-				}
-			});
-
-			}
-
-
-		$("#sugarconciious").on("click", showSugarConscious);
-
-
-		function showVegan(evt) {
-			console.log("got inside showVegan")
-			$(".labels").each(function() {
-				$(this).closest('ul').show();
-				let a = ($(this).text());
-				console.log(a);
-				let b = a.includes("Vegan")
-				console.log(b);
-				if (b==false) {
-					$(this).closest('ul').hide();
-				}
-			});
-
-			}
-
-
-		$("#vegan").on("click", showVegan);
-
-		function showAll(evt) {
-			console.log("got inside showAll")
-			$(".labels").each(function() {
-				$(this).closest('ul').show();
-
-			});
-
-			}
-
-
-		$("#showall").on("click", showAll);
-
-
-
-
-
-
-
-
-		</script>
-
+   		
 
 {% endblock %}
 

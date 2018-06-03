@@ -1,6 +1,6 @@
  {% extends 'base2.html' %}
 
-{% block title %} View Saved Recipes  {% endblock %}
+{% block title %} User Profile  {% endblock %}
 
 {% block content %}
 
@@ -37,7 +37,7 @@
 		{{ nutrient_goal.high_or_low }} 
 		{{ nutrient_goal.nutrient_name }} |	
 		Goal: {{ nutrient_goal.nutrient_goal}}
-		<form action="/delete-diet" method="POST" class="deleteForm" name="dietid" id ="{{ nutrient_goal.nutrient_name}}" class="dietform">  
+		<form action="/delete-diet" method="POST" class="deleteForm" name="dietid" id ="{{nutrient_goal.nutrient_name}}" class="dietform">  
 		<button type="submit" class="deletebutton" name='diet'> remove </button>
 		</form></li>
 		{% endfor %} 
@@ -56,11 +56,11 @@
 		<button type="submit" name="nutrient" value="sodium" class="nutrient"> Sodium </button>
 		<button type="submit" name="nutrient" value="protein" class="nutrient"> Protein </button>
 		<button type="submit" name="nutrient" value="fiber" class="nutrient"> Fiber </button>
-		<button type="submit" name="nutrient" value="fat" class="nutrient"> Fat </button>  
-		<button type="submit" name="nutrient" value="saturated fat" class="nutrient"> Saturated Fat </button>
+		<button type="submit" name="nutrient" value="totalfat" class="nutrient"> Total Fat </button>  
+		<button type="submit" name="nutrient" value="saturatedfat" class="nutrient"> Saturated fat </button>
 		<button type="submit" name="nutrient" value="potassium" class="nutrient">  Potassium </button>
 		<button type="submit" name="nutrient" value="phosphorus" class="nutrient">  Phosphorus </button>
-		<button type="submit" name="nutrient" value="carbohydrate" class="nutrient"> Carbohydrate  </button>  
+		<button type="submit" name="nutrient" value="carbohydrates" class="nutrient"> Carbohydrates  </button>  
 		<button type="submit" name="nutrient" value="calories" class="nutrient">  Calories </button>
 		<button type="submit" name="nutrient" value="iron" class="nutrient">  Iron </button>
 	</form>
@@ -77,107 +77,15 @@
 			<input type="number" name="goal" class='textinput' id="nutrientgoal" required> 
 			<input type="submit" class="submitbutton">
 			</div>
+
 		</form>
 	</div>
 
-<script src="https://code.jquery.com/jquery.js"></script> 
-	<script>
-	"use strict";
-
-	function showDiets(evt) {
-		console.log("got inside showDiets")
-		$('#hiddenadd').attr('class', 'show');
-	}
-
-
-	$(".adddiet").on("click", showDiets);
-
-
-	function showNutrientTextBox(evt) {
-		evt.preventDefault();
-		console.log("got inside showNutrientTextBox");
-		let nutrientvalue = $(this).val();
-		console.log(nutrientvalue);
-		$("h5").html(nutrientvalue);
-		$('#invisibletextbox').attr('class', 'show');
-	}
-
-
-	$(".nutrient").on("click", showNutrientTextBox);
-
-	function showResults(results) {
-		console.log(results);
-		$('#hiddenadd').attr('class', 'hidden');
-		$('#invisibletextbox').attr('class', 'hidden');
-		let button = '<form action="/delete-diet" method="POST" class="tempdeleteForm" name="dietid" id =results["nutrient_name"] class="dietform">' + '<button type="submit" class="tempdeletebutton" name="diet"> remove </button>' + '</form>'
-		console.log(button)
-		console.log("results");
-		let words = document.querySelector("#dietgoals");
-		if (results='undefined') {
-			$("#dietgoals").append("<li>"+"A nutrient goal for this nutrient has already been added. Please remove nutrient to add a new goal for this nutrient" + "</li>"); 
-		}	
-		else {
-
-			let tempNutrientGoal = results['high_or_low'] + ' ' + results['nutrient_name'] + ' | ' + 'Goal: ' + results['nutrient_goal'] + button;
-				$("#dietgoals").append("<li>"+tempNutrientGoal+ "</li>");
-		}
-	}
-
-
-	function addDiet(evt) {
-		evt.preventDefault()
-		console.log("got inside addRecipe")
-		console.log(evt)
-		let formInputs =  {
-
-			"goal": $("#nutrientgoal").val(),
-			"highlow": $('#highlow').val(),
-			"nutrient": $('h5').html()
-		}
-
-		console.log(formInputs)
-
-		$.post("/add-diet",
-			formInputs,
-			showResults)
-	}
-
-	$(".submitbutton").on("click", addDiet);
-
-
-
-	function confirmDelete(result) {
-		console.log("got into confirmDelete");
-		alert(result)
-	}
-
-		
-	function deleteGoal(evt) {
-		evt.preventDefault()
-		console.log('got inside deleteGoal')
-		let id = evt.currentTarget.id
-		console.log(evt);
-
-
-		let deletedGoalID = {
-			"dietid": id
-		};
 	
-		console.log(deletedGoalID)
+	<div id="description"></div>
 
-		$.post("/delete-diet", 
-				deletedGoalID,
-				confirmDelete);
-
-		console.log(this)
-		$(this).closest('li').remove();
-		}
-
-	$(".deleteForm").on("submit", deleteGoal);
-
-
-
-	</script>
+<script src="https://code.jquery.com/jquery.js"></script> 
+<script src="/static/javascript.js"></script>
 
 {% endblock %}
 

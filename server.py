@@ -446,7 +446,7 @@ def delete_recipe():
 	return "recipe deleted!"
 
 ##################################################################################################################
-# ADDING NUTRIENT GOALS (AKA DIET GOALS)
+# ADDING NUTRIENT GOALS (AKA DIET GOALS) AND ANALYZING NUTRIENT GOALS
 
 @app.route("/add-diet", methods=["POST"])
 def add_diet():
@@ -457,6 +457,8 @@ def add_diet():
 
 	high_or_low = request.form.get("highlow")
 	print high_or_low
+
+	print "!!!!!!!!"
 
 	nutrient_name = request.form.get("nutrient")
 	print nutrient_name
@@ -473,14 +475,18 @@ def add_diet():
 	print check_if_nutrient_goal_added_exists_in_db 
 
 	if check_if_nutrient_goal_added_exists_in_db:
+		print "It's going to be undefined!"
+		print "!!!!!!!!!!!!!!"
 		return "undefined"
+
 
 	else:
 		new_nutrient_goal  = UserToDiet(user=logged_in_user, nutrient_name=nutrient_name, high_or_low=high_or_low, 
 			nutrient_goal=nutrient_goal)
 		db.session.add(new_nutrient_goal)
 		db.session.commit()
-
+		print "nutrient goal"
+		print "!!!!!!!!!!!!!!!!"
 		new_goal = {"high_or_low": high_or_low,
 				"nutrient_name": nutrient_name,
 				"nutrient_goal":nutrient_goal }
@@ -510,7 +516,75 @@ def delete_diet():
 	return "Nutrient goal deleted!"
 
 
+@app.route("/analyze-goal")
+def analyze_diet():
 
+	recipe_url_from_browser = request.args.get('url') 
+
+	chosen_recipe = Recipe.query.filter(Recipe.recipe_url == recipe_url_from_browser).first()
+
+	session_user_id = session['id']
+
+	logged_in_user = User.query.get(session_user_id)
+
+	logged_in_users_goals = UserToDiet.query.filter(UserToDiet.user_id == logged_in_user.user_id).all()
+
+
+
+	# for logged_in_users_goals in logged_in_users_goals:
+
+	# 	if logged_in_users_goal.nutrient_name == 'potassium':
+
+	# 		nutrient = logged_in_users_goal.nutrient_name
+
+
+	return render_template("analysis.html", recipe=chosen_recipe, goals=logged_in_users_goals)
+
+@app.route("/analyze-goal.json", methods=["GET"])
+def analyze_diet_json():
+
+	session_user_id = session['id']
+
+	logged_in_user = User.query.get(session_user_id)
+
+	goal = request.args.get('goal')
+
+	diet_goal = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id, UserToDiet.nutrient_name==goal).first()
+
+	recipeid = request.args.get('recipe')
+
+	recipe = Recipe.query.get(recipeid)
+
+	nutrient_amount = ""
+
+	nutrient_goal_to_nutrient_amount = {'totalfat':recipe.fat, 'sodium': recipe.sodium, 'protein': recipe.protein, 
+				'fiber': recipe.fiber, 'saturatedfat': recipe.saturated_fat, 'potassium': recipe.potassium,
+				'phosphorus':recipe.phosphorus, 'iron':recipe.iron, 'calories':recipe.calories, 
+				'carbohydrates':recipe.carbohydrates} 
+
+	
+	if goal in nutrient_goal_to_nutrient_amount:
+
+		print "inside"
+		nutrient_amount_in_recipe = nutrient_goal_to_nutrient_amount[goal]
+		print nutrient_amount_in_recipe
+		goal_amount = diet_goal.nutrient_goal
+		print goal_amount
+		percent_of_goal_amount = round(nutrient_amount_in_recipe/float(goal_amount)) * 100
+		print percent_of_goal_amount
+
+		data_dict = {'amount': nutrient_amount_in_recipe, 'goal_amount': goal_amount, 'nutrient_name':goal, 
+		'percent':percent_of_goal_amount }
+
+		print data_dict
+
+		return jsonify(data_dict)
+
+	else:
+		print "not there"
+
+
+	return "hello"
 
 
 
