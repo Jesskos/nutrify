@@ -42,7 +42,7 @@
 
 
 
-	// recipeanalysis.html
+	// userprofile.html
 
 	function showDiets(evt) {
 		console.log("got inside showDiets")
@@ -53,22 +53,33 @@
 	$(".adddiet").on("click", showDiets);
 
 
+// on click, this will show a nutrient text box with text about the nutrient
 	function showNutrientTextBox(evt) {
 		evt.preventDefault();
 		console.log("got inside showNutrientTextBox");
 		let nutrientvalue = $(this).val();
 		$("h5").html(nutrientvalue);
 		$('#invisibletextbox').attr('class', 'show');
-		if (nutrientvalue==="Potassium") {$("#description").html("Please enter response in mg daily. Potassium RDI Female: 4,700 mg daily. Potassium RDI Male: 4,700 mg daily");
-		} else if (nutrientvalue==="Sodium") {$("#description").html("Please enter response in mg daily. Average Sodium (male and female): 1,500 mg daily.")
-		} else if (nutrientvalue==="Fat") {$("#description").html("Please enter response in grams daily. Low fat diet is 20 grams per day");
-		} else if (nutrientvalue==="Saturated fat") {$("#description").html("Please enter response in grams daily. Maximum saturated fat per day is 20 grams.");
-		} else if (nutrientvalue==="Phosphorus") {$("#description").html("Please enter response in grams daily. Maximum phosphorus is 700 grams per day.");
-		} else if (nutrientvalue==="Carbohydrate") {$("#description").html("Please enter response in grams per day. Recommended daily value is 275 grams per day. Check with your doctor if you need more or less due to medical condition");
-		} else if (nutrientvalue==="Iron") {$("#description").html("Please enter response in mg. RDI (female) is 18 mg and 8 mg (male)");
-		} else if (nutrientvalue==="Fiber") {$("#description").html("Please enter response in grams. DV Fiber is 28 grams a day on 2000 Calorie Diet");
-		} else if (nutrientvalue==="Protein") {$("#description").html("Please enter your response in grams. Recommended DV is 50 grams per day. Check with your doctor if you need more or less protein");
-		} else if (nutrientvalue==="Calories") {$("#description").html("Please enter your response in grams. Recommended DV is 2000 Calories per day");
+
+		if (nutrientvalue==="potassium") {$("#description").html("Please enter response in mg daily. Potassium RDI Female: 4,700 mg daily. Potassium RDI Male: 4,700 mg daily"); $("#unit").html("mg per day");
+		} else if (nutrientvalue==="sodium") {$("#description").html("Please enter response in mg daily. Average Sodium (male and female): 1,500 mg daily.")
+		$("#unit").html("mg per day");
+		} else if (nutrientvalue==="totalfat") {$("#description").html("Please enter response in grams daily. Low fat diet is 20 grams per day");
+		$("#unit").html("grams per day");
+		} else if (nutrientvalue==="saturatedfat") {$("#description").html("Please enter response in grams daily. Maximum saturated fat per day is 20 grams.");
+		$("#unit").html("grams per day");
+		} else if (nutrientvalue==="phosphorus") {$("#description").html("Please enter response in grams daily. Maximum phosphorus is 700 grams per day.");
+		$("#unit").html("mg per day");
+		} else if (nutrientvalue==="carbohydrates") {$("#description").html("Please enter response in grams per day. Recommended daily value is 275 grams per day. Check with your doctor if you need more or less due to medical condition");
+		$("#unit").html("grams per meal");
+		} else if (nutrientvalue==="iron") {$("#description").html("Please enter response in mg. RDI (female) is 18 mg and 8 mg (male)");
+		$("#unit").html("mg per day");
+		} else if (nutrientvalue==="fiber") {$("#description").html("Please enter response in grams. DV Fiber is 28 grams a day on 2000 Calorie Diet");
+		$("#unit").html("grams per day");
+		} else if (nutrientvalue==="protein") {$("#description").html("Please enter your response in grams. Recommended DV is 50 grams per day. Check with your doctor if you need more or less protein");
+		$("#unit").html("grams per day");
+		} else if (nutrientvalue==="calories") {$("#description").html("Please enter your response in grams. Recommended DV is 2000 Calories per day");
+		$("#unit").html("Calories per day");
 		} 
 	}
 
@@ -76,12 +87,10 @@
 	$(".nutrient").on("click", showNutrientTextBox);
 
 	function showResults(results) {
-		console.log("results here");
-		console.log(results)
 		$('#hiddenadd').attr('class', 'hidden');
 		$('#invisibletextbox').attr('class', 'hidden');
+		$("#description").html('')
 		let button = '<form action="/delete-diet" method="POST" class="deleteForm" name="dietid" id ="' + results["nutrient_name"] + '" class="dietform">' + '<button type="submit" class="deletebutton" name="diet"> remove </button>' + '</form>'
-		console.log("results");
 		let words = document.querySelector("#dietgoals");
 		if (results==='undefined') {
 			(alert("A nutrient goal for this nutrient has already been added. Please remove nutrient to add a new goal for this nutrient")) 
@@ -98,14 +107,23 @@
 		evt.preventDefault()
 		console.log("got inside addRecipe")
 		console.log(evt)
+		let radioButtonValue = 'none';
+
+		if (document.getElementById('high').checked) {
+			radioButtonValue = document.getElementById('high').value;
+		} else if (document.getElementById('low').checked) {
+			radioButtonValue = document.getElementById('low').value;
+		} 
+
 		let formInputs =  {
 
 			"goal": $("#nutrientgoal").val(),
-			"highlow": $('#highlow').val(),
+			"highlow": radioButtonValue,
 			"nutrient": $('h5').html()
 		}
 
 		console.log(formInputs)
+
 
 		$.post("/add-diet",
 			formInputs,
@@ -141,6 +159,7 @@
 		}
 
 	$(".deleteForm").on("submit", deleteGoal);
+
 
 	// viewsavedrecipes.html
 

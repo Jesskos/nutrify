@@ -45,6 +45,7 @@
 
 	
 		<h6> No nutrient Goals. Please Add! </h6>
+
 	{% endif %}</div>
 
 	<p><form action="/add-diet" method="POST" class="adddiet">
@@ -69,23 +70,23 @@
 		<form action="/add-diet" method="POST">
 			<div>
 			<label for='nutrientgoal' class="labelinputnutrient"> Would you like a diet high or low in: <h5></h5>
-			<input type="radio" name = "highlow" value="high" id="highlow"> High
-			<input type="radio" name = "highlow" value="low" id="highlow"> Low  <p>
+			<input type="radio" name = "highlow" value="high" id="high" required> High
+			<input type="radio" name = "highlow" value="low" id="low" required> Low  <p>
 			</div>
 			<div>
 			<label for='nutrientgoal' class="labelinputnutrient"> Please enter your nutrient goal for:<h5></h5>
-			<input type="number" name="goal" class='textinput' id="nutrientgoal" required> 
+			<input type="number" name="goal" class='textinput' id="nutrientgoal" required><h4 id='unit'></h4>
 			<input type="submit" class="submitbutton">
 			</div>
 
 		</form>
 	</div>
-
-	
 	<div id="description"></div>
+
 
 <script src="https://code.jquery.com/jquery.js"></script> 
 <script src="/static/javascript.js"></script>
+
 
 {% endblock %}
 

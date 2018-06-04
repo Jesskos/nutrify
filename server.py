@@ -6,6 +6,7 @@ import json
 import requests 
 from helperfunctions import *
 import ast
+from random import sample 
 
 app = Flask(__name__)
 
@@ -123,17 +124,29 @@ def log_out():
 
 
 ##################################################################################################################
-# OPENS USER PROFILE, PORTAL, FINDS AND GETS RECIPES FROM API
+# OPENS USER PROFILE, USER PORTAL, FINDS AND GETS RECIPES FROM API
 
 @app.route("/user-portal")
 def open_user_portal():
 	"""renders template for user portal where user can either search or view recipes """
  	
- 	if "name" in session:
- 		return render_template('userportal.html') 
-
- 	else:
+ 	if "name" not in session:
  		return redirect("/")
+
+ 	session_user_id = session['id']
+	logged_in_user = User.query.get(session_user_id)
+
+
+	goals = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id).all()
+
+	print get_recipes_meeting_goals(goals)
+
+ 
+	
+ 
+ 	return render_template('userportal.html') 
+
+
 
 
 
@@ -152,11 +165,15 @@ def open_profile():
 		allergies = UserToAllergy.query.filter(UserToAllergy.user_id==session_user_id).all()
 		nutrient_goals = UserToDiet.query.filter(UserToDiet.user_id==session_user_id).all()
 
+		users_allergies = []
+		users_nutrients_goals = []
+
 		if allergies: 
 			users_allergies = allergies 
 
 		if nutrient_goals:
 			users_nutrients_goals = nutrient_goals
+
 
  		return render_template('userprofile.html', fname=fname, lname=lname, email=email, allergies=users_allergies, 
  			users_nutrient_goals=users_nutrients_goals) 
@@ -485,8 +502,7 @@ def add_diet():
 			nutrient_goal=nutrient_goal)
 		db.session.add(new_nutrient_goal)
 		db.session.commit()
-		print "nutrient goal"
-		print "!!!!!!!!!!!!!!!!"
+
 		new_goal = {"high_or_low": high_or_low,
 				"nutrient_name": nutrient_name,
 				"nutrient_goal":nutrient_goal }
@@ -502,12 +518,7 @@ def delete_diet():
 
 	logged_in_user = User.query.get(session_user_id)
 
-	print diet_id
-	print "!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	diet_to_delete = UserToDiet.query.filter(UserToDiet.nutrient_name==diet_id, UserToDiet.user_id==session_user_id).first()
-
-	print diet_to_delete
-	print "!!!!!!!!!!!"
 
 	db.session.delete(diet_to_delete)
 	db.session.commit()
@@ -529,32 +540,17 @@ def analyze_diet():
 
 	logged_in_users_goals = UserToDiet.query.filter(UserToDiet.user_id == logged_in_user.user_id).all()
 
-
-
-	# for logged_in_users_goals in logged_in_users_goals:
-
-	# 	if logged_in_users_goal.nutrient_name == 'potassium':
-
-	# 		nutrient = logged_in_users_goal.nutrient_name
-
-
 	return render_template("analysis.html", recipe=chosen_recipe, goals=logged_in_users_goals)
 
 @app.route("/analyze-goal.json", methods=["GET"])
 def analyze_diet_json():
 
 	session_user_id = session['id']
-
 	logged_in_user = User.query.get(session_user_id)
-
 	goal = request.args.get('goal')
-
 	diet_goal = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id, UserToDiet.nutrient_name==goal).first()
-
 	recipeid = request.args.get('recipe')
-
 	recipe = Recipe.query.get(recipeid)
-
 	nutrient_amount = ""
 
 	nutrient_goal_to_nutrient_amount = {'totalfat':recipe.fat, 'sodium': recipe.sodium, 'protein': recipe.protein, 
@@ -564,28 +560,17 @@ def analyze_diet_json():
 
 	
 	if goal in nutrient_goal_to_nutrient_amount:
-
-		print "inside"
 		nutrient_amount_in_recipe = nutrient_goal_to_nutrient_amount[goal]
-		print nutrient_amount_in_recipe
 		goal_amount = diet_goal.nutrient_goal
-		print goal_amount
-		percent_of_goal_amount = round(nutrient_amount_in_recipe/float(goal_amount)) * 100
-		print percent_of_goal_amount
+	
+		percent_of_goal_amount = int(round(nutrient_amount_in_recipe/float(goal_amount) * 100))
 
 		data_dict = {'amount': nutrient_amount_in_recipe, 'goal_amount': goal_amount, 'nutrient_name':goal, 
 		'percent':percent_of_goal_amount }
 
-		print data_dict
-
 		return jsonify(data_dict)
 
-	else:
-		print "not there"
-
-
-	return "hello"
-
+	return "undefined"
 
 
 
