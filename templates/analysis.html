@@ -22,12 +22,14 @@
 <h5> Phosphorus: {{ recipe.phosphorus }} mg</h5>
 <h5> Sodium: {{ recipe.sodium }} mg</h5>
 </div>
+<h3 id='serving'></h3>
 
 <div> <h4> How many servings did you eat? </h4>
-	<input type="text" name="allergy" class='textinput'> <p>
-	</div>
-	<input type="submit" class="submitbutton">
-</div>
+  <form>
+	<input type="text" name="allergy" class='textinput' id="textforserving">
+  <input type="submit" class="submitbutton" id="textservingbutton" value="submit"> 
+</form>
+  </div>
 <div>
 	{% for goal in goals %}
 	<button type="button" class="chartbutton" id="{{ goal.nutrient_name }}" value ="{{ recipe.recipe_id }}">{{ goal.nutrient_name }}</button>
@@ -46,6 +48,13 @@
 	'use strict'
 
 
+  function showServing(evt) {
+    console.log('got inside showServing')
+    let servingText = document.getElementById("#textforserving").value
+    $("#serving").html(servingText)
+  }
+
+  $("#textservingbutton").on("click", showServing)
 
 
 	function sendSelectedNutrient(evt) {
