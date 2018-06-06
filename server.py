@@ -6,7 +6,7 @@ import json
 import requests 
 from helperfunctions import *
 import ast
-from random import sample 
+from random import sample, choice
 
 app = Flask(__name__)
 
@@ -74,7 +74,7 @@ def add_registration_info():
 		db.session.add(new_user)
 		db.session.commit()
 
-		if allergies: 
+		if allergies and allergies[0].isalpha():
 			for allergy in allergies: 
 				new_allergy = UserToAllergy(user=new_user, allergy_name=allergy)
 				db.session.add(new_allergy)
@@ -136,19 +136,79 @@ def open_user_portal():
  	session_user_id = session['id']
 	logged_in_user = User.query.get(session_user_id)
 
-
 	goals = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id).all()
+	allergies = UserToAllergy.query.filter(UserToAllergy.user_id==logged_in_user.user_id).all()
 
-	print get_recipes_meeting_goals(goals)
+	allergens = []
 
- 
-	
- 
- 	return render_template('userportal.html') 
+	print allergies
+	print "!!!!!!!!!!!!!!"
+
+	if not goals:
+		if not allergies:
+			recipes = Recipe.query.filter(Recipe.recipe_id<100).all()
+			recipe = choice(recipes)
+			print recipe
+			print "got into not goals"
+
+	elif allergies: 
+		if goals:
+			for allergy in allergies:
+				allergens.append(allergy.allergy_name)
+			allergy_free_recipes = get_recipes_meeting_goals(goals, allergens)
+			random_recipe = sample((allergy_free_recipes), 1)
+			print random_recipe
+			print "The above is a random recipe"
 
 
+	elif not allergies:
+		if goals: 
+			print "got into not allergies but goals"
+			recipes = get_recipes_meeting_goals(goals)
+			random_recipe = sample((recipes), 1)
+			print random_recipe
+
+	elif allergies:
+		if not goals:
+			Recipes.query.
+
+		#allergies and no goals,  
+ 	
+ 	return render_template('userportal.html')
+
+@app.route("/recommend-recipe")
+def recommend_recipe():
+
+	pass 
+	# session_user_id = session['id']
+	# logged_in_user = User.query.get(session_user_id)
 
 
+	# goals = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id).all()
+	# allergies = UserToAllergy.query.filter(UserToAllergy.user_id==logged_in_user.user_id).all()
+
+	# allergens = []
+
+	# if not goals:
+	# 	if not allergies:
+	# 		recipes = Recipe.query.filter(Recipe.recipe_id<100).all()
+	# 		random_recipe = random.sample((recipes), 1)
+
+
+	# if allergies: 
+	# 	for allergy in allergies:
+	# 		allergens.append(allergy.allergy_name)
+	# 	allergy_free_recipes = get_recipes_meeting_goals(goals, allergens)
+	# 	random_recipe = random.sample((allergy_free_recipes), 1)
+	# 	print random_recipe
+	# 	print "The above is a random recipe"
+
+
+	# if not allergies:
+	# 	recipes = get_recipes_meeting_goals(goals)
+	# 	print recipes 
+	# 	print 'above are recipes for no allergies'
+	# 	random_recipe = random.sample((recipes), 1)
 
 @app.route("/profile")
 def open_profile():
@@ -470,20 +530,14 @@ def add_diet():
 	""" adds a diet to the user to diet table """
 
 	nutrient_goal = int(request.form.get("goal"))
-	print nutrient_goal
 
 	high_or_low = request.form.get("highlow")
-	print high_or_low
-
-	print "!!!!!!!!"
 
 	nutrient_name = request.form.get("nutrient")
-	print nutrient_name
 
 	session_user_id = session['id']
 
 	logged_in_user = User.query.get(session_user_id)
-	print logged_in_user
 
 	check_if_nutrient_goal_added_exists_in_db = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id, 
 		UserToDiet.nutrient_name==nutrient_name).first()
@@ -492,10 +546,7 @@ def add_diet():
 	print check_if_nutrient_goal_added_exists_in_db 
 
 	if check_if_nutrient_goal_added_exists_in_db:
-		print "It's going to be undefined!"
-		print "!!!!!!!!!!!!!!"
 		return "undefined"
-
 
 	else:
 		new_nutrient_goal  = UserToDiet(user=logged_in_user, nutrient_name=nutrient_name, high_or_low=high_or_low, 
@@ -548,15 +599,24 @@ def analyze_diet_json():
 	session_user_id = session['id']
 	logged_in_user = User.query.get(session_user_id)
 	goal = request.args.get('goal')
+	print "goal = {}".format(goal)
 	diet_goal = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id, UserToDiet.nutrient_name==goal).first()
 	recipeid = request.args.get('recipe')
-	recipe = Recipe.query.get(recipeid)
+	print "recipe id = {} ".format(recipeid)
+	recipe = Recipe.query.get(int(recipeid))
 	nutrient_amount = ""
+
+	print "recipe id = {} diet_goal = {}".format(recipeid, diet_goal)
 
 	nutrient_goal_to_nutrient_amount = {'totalfat':recipe.fat, 'sodium': recipe.sodium, 'protein': recipe.protein, 
 				'fiber': recipe.fiber, 'saturatedfat': recipe.saturated_fat, 'potassium': recipe.potassium,
 				'phosphorus':recipe.phosphorus, 'iron':recipe.iron, 'calories':recipe.calories, 
 				'carbohydrates':recipe.carbohydrates} 
+
+	unit_of_measurement = {'totalfat':'grams', 'sodium': 'mg', 'protein': 'grams', 
+				'fiber': 'grams', 'saturatedfat': 'grams', 'potassium': 'mg',
+				'phosphorus':'mg', 'iron':'mg', 'calories':'calories', 
+				'carbohydrates':'grams per meal'} 
 
 	
 	if goal in nutrient_goal_to_nutrient_amount:
@@ -565,8 +625,12 @@ def analyze_diet_json():
 	
 		percent_of_goal_amount = int(round(nutrient_amount_in_recipe/float(goal_amount) * 100))
 
+		unit = unit_of_measurement[goal]
+
 		data_dict = {'amount': nutrient_amount_in_recipe, 'goal_amount': goal_amount, 'nutrient_name':goal, 
-		'percent':percent_of_goal_amount }
+		'percent':percent_of_goal_amount, 'unit_of_measurement': unit}
+
+		print "data dict ={}".format(data_dict)
 
 		return jsonify(data_dict)
 

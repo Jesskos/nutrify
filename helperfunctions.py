@@ -1,4 +1,4 @@
-from model import UserToDiet, Recipe
+from model import UserToDiet, Recipe, UserToAllergy
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 # from nose import with_setup
 
@@ -61,7 +61,7 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 	return nutrients_string
 
 
-def get_recipes_meeting_goals(users_goals):
+def get_recipes_meeting_goals(users_goals, allergies=None):
 	""" queries a users goal to find a recipe which recipes meet goals from recipe database, including seed data
 	NOTE: THIS IS ESPECIALLY LONG AND NOT EFFICIENT AND WILL BE IMPROVED BY MODIFYING DATA MODEL AT A LATER POINT  
 	However, it is designed to work with seeddata in case any issue occurs with API """
@@ -72,9 +72,6 @@ def get_recipes_meeting_goals(users_goals):
 
 	 		goal_nutrient = goal.nutrient_name
 	 		high_or_low = goal.high_or_low
-	 		print goal_nutrient
-	 		print high_or_low
-	 		print "??????????"
 
 	 		if goal_nutrient == 'totalfat':
 	 			if high_or_low  == 'low':
@@ -85,7 +82,7 @@ def get_recipes_meeting_goals(users_goals):
 	 				list_of_recipes.append(low_fat_recipes_set)
 
 	 			elif high_or_low == 'high':
-	 				high_fat_recipes = Recipes.query.filter(Recipe.fat >= 5).all()
+	 				high_fat_recipes = Recipe.query.filter(Recipe.fat >= 5).all()
 	 				high_fat_recipes_set = set()
 	 				for recipe in high_fat_recipes:
 	 					high_fat_recipes_set.add(recipe)
@@ -100,7 +97,7 @@ def get_recipes_meeting_goals(users_goals):
 	 				list_of_recipes.append(low_sodium_recipes_set)
 
 	 			elif high_or_low == 'high':
-	 				high_sodium_recipes = Recipes.query.filter(Recipe.fat >= 300).all()
+	 				high_sodium_recipes = Recipe.query.filter(Recipe.fat >= 300).all()
 	 				high_sodium_recipes_set = set()
 	 				for recipe in high_sodium_recipes:
 	 					high_sodium_recipes_set.add(recipe)
@@ -116,7 +113,7 @@ def get_recipes_meeting_goals(users_goals):
 	 				list_of_recipes.append(low_protein_recipes_set)
 
 	 			elif high_or_low == 'high':
-	 				high_protein_recipes = Recipes.query.filter(Recipe.protein >= 7).all()
+	 				high_protein_recipes = Recipe.query.filter(Recipe.protein >= 7).all()
 	 				high_protein_recipes_set = set()
 	 				for recipe in high_protein_recipes:
 	 					high_protein_recipes_set.add(recipe)
@@ -131,14 +128,14 @@ def get_recipes_meeting_goals(users_goals):
 	 				list_of_recipes.append(low_fiber_recipes_set)
 
 	 			elif high_or_low == 'high':
-	 				high_fiber_recipes = Recipes.query.filter(Recipe.fiber >= 5).all()
+	 				high_fiber_recipes = Recipe.query.filter(Recipe.fiber >= 5).all()
 	 				high_fiber_recipes_set = set()
 	 				for recipe in high_fiber_recipes:
 	 					high_fiber_recipes_set.add(recipe)
 	 				list_of_recipes.append(high_fiber_recipes_set)
 
 	 		elif goal_nutrient == 'iron':
-	 			low_iron_recipes = Recipes.query.filter(Recipe.iron <= 1).all()
+	 			low_iron_recipes = Recipe.query.filter(Recipe.iron <= 1).all()
 	 			if high_or_low  == 'low':
 	 				low_iron_recipes_set = set()
 	 				for recipe in low_iron_recipes:
@@ -146,7 +143,7 @@ def get_recipes_meeting_goals(users_goals):
 	 				list_of_recipes.append(low_iron_recipes_set)
 
 	 			elif high_or_low == 'high':
-	 				high_iron_recipes = Recipes.query.filter(Recipe.iron >= 5).all()
+	 				high_iron_recipes = Recipe.query.filter(Recipe.iron >= 5).all()
 	 				high_iron_recipes_set = set()
 	 				for recipe in high_iron_recipes:
 	 					high_iron_recipes_set.add(recipe)
@@ -161,7 +158,7 @@ def get_recipes_meeting_goals(users_goals):
 	 				list_of_recipes.append(low_saturatedfat_recipes_set)
 
 	 			elif high_or_low == 'high':
-	 				high_saturatedfat_recipes = Recipes.query.filter(Recipe.saturated_fat >= 5).all()
+	 				high_saturatedfat_recipes = Recipe.query.filter(Recipe.saturated_fat >= 5).all()
 	 				high_saturated_recipes_set = set()
 	 				for recipe in high_saturatedfat_recipes:
 	 					high_saturated_recipes_set.add(recipe)
@@ -176,7 +173,7 @@ def get_recipes_meeting_goals(users_goals):
 	 				list_of_recipes.append(low_potassium_recipes_set)
 
 	 			elif high_or_low == 'high':
-	 				high_potassium_recipes = Recipes.query.filter(Recipe.potassium >= 300).all()
+	 				high_potassium_recipes = Recipe.query.filter(Recipe.potassium >= 300).all()
 	 				high_potassium_recipes_set = set()
 	 				for recipe in high_potassium_recipes:
 	 					high_potassium_recipes_set.add(recipe)
@@ -186,36 +183,74 @@ def get_recipes_meeting_goals(users_goals):
 	 		elif goal_nutrient == 'phosphorus':
 	 			if high_or_low  == 'low':
 	 				low_phosphorus_recipes = Recipe.query.filter(Recipe.phosphorus <= 50).all()
-	 				list_of_recipes.append({low_phosphorus_recipes})
+	 				low_phosphorus_recipes_set = set()
+	 				for recipe in low_phosphorus_recipes:
+	 					low_phosphorus_recipes_set.add(recipe)
+	 				list_of_recipes.append(low_phosphorus_recipes_set)
+
 	 			elif high_or_low == 'high':
-	 				high_phosphorus_recipes = Recipes.query.filter(Recipe.phosphorus >= 200).all()
-	 				list_of_recipes.append({high_phosphorus_recipes})
+	 				high_phosphorus_recipes = Recipe.query.filter(Recipe.phosphorus >= 200).all()
+	 				high_phosphorus_recipes_set = set()
+	 				for recipe in high_phosphorus_recipes:
+	 					high_phosphorus_recipes_set.add(recipe)
+	 				list_of_recipes.append(high_phosphorus_recipes_set)
 
 	 		elif goal_nutrient == 'calories':
 	 			if high_or_low  == 'low':
 	 				low_calories_recipes = Recipe.query.filter(Recipe.calories <= 200, Recipe.fat < 3).all()
-	 				list_of_recipes.append({low_calories_recipes})
+	 				low_calories_recipes_set = set()
+	 				for recipe in low_calories_recipes:
+	 					low_calories_recipes_set.add(recipe)
+	 				list_of_recipes.append(low_calories_recipes_set)
+
 	 			elif high_or_low == 'high':
-	 				high_calories_recipes = Recipes.query.filter(Recipe.calories >= 500).all()
-	 				list_of_recipes.append({high_calories_recipes})
+	 				high_calories_recipes = Recipe.query.filter(Recipe.calories >= 500).all()
+	 				high_calories_recipes_set = set()
+	 				for recipe in high_calories_recipes:
+	 					high_calories_recipes_set.add(recipe)
+	 				list_of_recipes.append(high_calories_recipes_set)
 
 	 		elif goal_nutrient == 'carbohydrates':
 	 			if high_or_low  == 'low':
 	 				low_carbohydrates_recipes = Recipe.query.filter(Recipe.carbohydrates <= 45, Recipe.recipe_id==RecipeLabel.recipe_id).all()
-	 				list_of_recipes.append({low_carbohydrates_recipes})
+	 				low_carbohydrates_recipes_set = set()
+	 				for recipe in low_carbohydrates_recipes:
+	 					low_carbohydrates_recipes_set.add(recipe)
+	 				list_of_recipes.append(low_carbohydrates_recipes_set)
+
 	 			elif high_or_low == 'high':
-	 				high_calories_recipes = Recipes.query.filter(Recipe.carbohydrates >= 70).all()
-	 				list_of_recipes.append({high_carbohydrates_recipes})
+	 				high_carbohydrates_recipes = Recipe.query.filter(Recipe.carbohydrates >= 70).all()
+	 				high_carbohydrates_recipes_set = set()
+	 				for recipe in high_carbohydrates_recipes:
+	 					high_carbohydrates_recipes_set.add(recipe)
+	 				list_of_recipes.append(high_carbohydrates_recipes_set)
+
+
+	set_of_recipes_meeting_goals = set(list_of_recipes[0])
+
+
+ 	for set_of_recipes in list_of_recipes:
+ 		new_set = set_of_recipes_meeting_goals & set_of_recipes
+ 		set_of_recipes_meeting_goals = new_set 
+
+
+ 	set_of_recipes_meeting_goals_without_allergens = set()
+
+ 	if allergies: 
+ 		for allergy in allergies:
+ 			for recipe in set_of_recipes_meeting_goals:
+ 				if allergy not in recipe.ingredients_list:
+ 					set_of_recipes_meeting_goals_without_allergens.add(recipe)
+
+ 		return set_of_recipes_meeting_goals_without_allergens
+
+
+ 	return set_of_recipes_meeting_goals
 
 
 
-	# set_of_recipes_meeting_goals = set(list_of_recipes[0])
 
- # 	for sets_of_recipes in set_of_recipes:
- # 		new_set = set_of_recipes_meeting_goals & sets_of_recipes
- # 		set_of_recipes_meeting_goals = new_set 
 
- # 	return set_of_recipes_meeting_goals
 
 
 

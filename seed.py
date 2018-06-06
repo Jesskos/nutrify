@@ -53,7 +53,7 @@ def load_recipes(recipes_filename):
 
 
 
-def load_users(user):
+def load_users(user_file):
 
     for i, row in enumerate(open(users_filename)):
         row = row.lstrip()
@@ -62,6 +62,10 @@ def load_users(user):
         user = User(fname=fname, lname=lname, user_email=user_email, user_password=user_password)
         db.session.add(user)
         db.session.commit()
+
+def load_labels(label_file):
+
+	pass 
 
 def set_val_recipe_id():
     """Set value for the next recipe_id after seeding database"""
@@ -86,6 +90,7 @@ def set_val_user_id():
     query = "SELECT setval('users_user_id_seq', :new_id)"
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
+
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-
+	
 	// recipe search results 
 
 
@@ -108,6 +108,7 @@
 		console.log("got inside addRecipe")
 		console.log(evt)
 		let radioButtonValue = 'none';
+		$("#nogoals").remove()
 
 		if (document.getElementById('high').checked) {
 			radioButtonValue = document.getElementById('high').value;
@@ -144,6 +145,7 @@
 
 		evt.preventDefault()
 		console.log('got inside deleteGoal')
+		console.log(evt)
 		let id = evt.currentTarget.id
 
 
@@ -158,7 +160,7 @@
 		$(this).closest('li').remove();
 		}
 
-	$(".deleteForm").on("submit", deleteGoal);
+	$(".dietgoals").on("click", ".deleteForm", deleteGoal);
 
 
 	// viewsavedrecipes.html
@@ -300,11 +302,5 @@
 
 
 		$("#showall").on("click", showAll);
-
-
-
-
-
-
 
 

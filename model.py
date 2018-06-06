@@ -15,7 +15,7 @@ class Recipe(db.Model):
 	__tablename__ = "recipes"
 
 	recipe_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-	recipe_name = db.Column(db.String(100), nullable=False)
+	recipe_name = db.Column(db.String(200), nullable=False)
 	recipe_image = db.Column(db.String(200), nullable=True)
 	recipe_url = db.Column(db.String(200), nullable=False)
 	blog_url = db.Column(db.String(200), nullable=True)
@@ -39,7 +39,7 @@ class Recipe(db.Model):
 
 		return "<Recipe recipe_id={} recipe_name={} recipe_image={} recipe_url={} blog_url ={} ingredients_list={} recipe_yield ={} calories={} \
 		carbohydrates={} protein ={} fiber={} fat={} potassium={} phosphorus={} sodium={}, iron={}, saturated_fat={}>".format(self.recipe_id, 
-			self.recipe_name, self.recipe_image, self.recipe_url, self.blog_url, self.ingredients_list.encode('ascii', 'ignore'), self.recipe_yield, self.calories, 
+			self.recipe_name.encode('ascii', 'ignore'), self.recipe_image.encode('ascii', 'ignore'), self.recipe_url.encode('ascii', 'ignore'), self.blog_url.encode('ascii', 'ignore'), self.ingredients_list.encode('ascii', 'ignore'), self.recipe_yield, self.calories, 
 			self.carbohydrates, self.protein, self.fiber, self.fat, self.potassium, self.phosphorus, self.sodium, self.iron, self.saturated_fat) # pragma: no cover
 
 class RecipeLabel(db.Model):

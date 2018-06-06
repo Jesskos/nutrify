@@ -4,32 +4,37 @@
 
 {% block content %}
 
-<div>
+<div id="recipeinfo">
 <h3>Recipe: {{recipe.recipe_name}}</h3>
 <p><img src= {{ recipe.recipe_image}}></p>
-<h5> Recipe Yield: </h5> {{ recipe.recipe_yield }} </h5>
+<h5> Recipe Yield: </h5> {{ recipe.recipe_yield }} servings </h5>
 
 <h4> Recipe Nutrition Facts</h4>
 <h5> Yield: {{ recipe.recipe_yield }} servings </h5>
-<h5> Calories: {{ recipe.calories }} calories </h5>
-<h5> Carbohydrates: {{ recipe.carbohydrates }} grams </h5>
-<h5> Protein: {{ recipe.protein }} grams </h5>
-<h5> Fat: {{ recipe.fat }} grams </h5>
-<h5> Saturated fat: {{ recipe.saturated_fat }} grams </h5>
-<h5> Iron: {{ recipe.iron }} mg</h5>
-<h5> Fiber: {{ recipe.fiber }} grams </h5>
-<h5> Potassium: {{ recipe.potassium }} mg</h5>
-<h5> Phosphorus: {{ recipe.phosphorus }} mg</h5>
-<h5> Sodium: {{ recipe.sodium }} mg</h5>
+<h5> Amount per serving:</h5><h5 id='servingtext'> 1 </h5>
+<h5> Calories </h5><h5 class = 'nutrientamount' name={{ recipe.calories }} > {{ recipe.calories }}<h5> calorie </h5><h5> calorie </h5>
+<h5> Carbohydrates </h5><h5 class = 'nutrientamount' name={{ recipe.carbohydrates }} > {{ recipe.carbohydrates }}</h5><h5> grams </h5>
+<h5> Protein </h5><h5 class = 'nutrientamount' name={{ recipe.protein }} > {{ recipe.protein }} grams </h5>
+<h5> Fat </h5><h5 class = 'nutrientamount' name={{ recipe.fat }}> {{ recipe.fat }} grams </h5>
+<h5> Saturated Fat </h5><h5 class = 'nutrientamount' name={{ recipe.saturated_fat }}> {{ recipe.saturated_fat }}</h5><h5> grams </h5>
+<h5> Iron </h5><h5 class = 'nutrientamount' name={{ recipe.iron }}> {{ recipe.iron }}</h5><h5> mg </h5>
+<h5> Fiber </h5><h5 class = 'nutrientamount' name={{ recipe.fiber }}> {{ recipe.fiber }}</h5><h5> grams </h5>
+<h5> Potassium </h5><h5 class = 'nutrientamount' name= {{ recipe.potassium }} > {{ recipe.potassium }}</h5><h5> mg </h5>
+<h5> Phosphorus </h5><h5 class = 'nutrientamount' name={{ recipe.phosphorus }}> {{ recipe.phosphorus }}</h5><h5> mg </h5>
+<h5> Sodium </h5><h5 class = 'nutrientamount' name={{ recipe.sodium }} > {{ recipe.sodium }}</h5><h5> mg </h5>
 </div>
-<h3 id='serving'></h3>
+
 
 <div> <h4> How many servings did you eat? </h4>
-  <form>
-	<input type="text" name="allergy" class='textinput' id="textforserving">
-  <input type="submit" class="submitbutton" id="textservingbutton" value="submit"> 
-</form>
+  <h3 id='serving'> 1 </h3>
+
+  <input type="button" id="editserving" value='change'> 
+
+  <div id="hiddenchangeinfo" class="hidden">
+	  <input type="text" name="allergy" id="textforserving">
+    <input type="button" id="showserving" value='change'> 
   </div>
+
 <div>
 	{% for goal in goals %}
 	<button type="button" class="chartbutton" id="{{ goal.nutrient_name }}" value ="{{ recipe.recipe_id }}">{{ goal.nutrient_name }}</button>
@@ -40,7 +45,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
 </body>
 
-<div class="nutrient-chart">
+<div id="nutrient-chart" class="hidden">
 	<canvas width="700px;" height="200px;" id="barChart"></canvas>
 	<div id="barLegend" class="chart-legend"></div>
 <div id="percent"></div>
@@ -50,28 +55,60 @@
 
   function showServing(evt) {
     console.log('got inside showServing')
-    let servingText = document.getElementById("#textforserving").value
-    $("#serving").html(servingText)
+    let servingText = document.getElementById("textforserving").value
+    $('#serving').html(servingText);
+    $('#servingtext').html(servingText);
+    $('#hiddenchangeinfo').attr('class','hidden');
+    let nutrients = document.getElementsByClassName("nutrientamount");
+    let servings = document.getElementById("serving").innerHTML;
+    console.log(nutrients)
+    for (let nutrient of nutrients) { 
+      let nutrientValue = nutrient.attributes[1].value;
+      console.log(servings);
+      nutrient.innerHTML = (Number(nutrientValue) * Number(servings));
+    }
   }
 
-  $("#textservingbutton").on("click", showServing)
+
+  $("#showserving").on("click", showServing)
 
 
-	function sendSelectedNutrient(evt) {
-		console.log(evt)
-		let goalnutrient = evt.target.id;
-		let recipeid = document.getElementById(goalnutrient).value
-		$.get("/analyze-goal.json",
-			{goal: goalnutrient, recipe: recipeid},
-			makeBarChart)
-		console.log("made ajax request")
-	}
+  function showChangeTextBox(evt) {
+    console.log('got inside showChangeTextBox')
+    $('#hiddenchangeinfo').attr('class','show');
+    $('#nutrient-chart').attr('class', 'hidden');
+  }
+  
+  $("#editserving").on("click", showChangeTextBox)
 
-	$(".chartbutton").on("click", sendSelectedNutrient)
+
+  function sendSelectedNutrient(evt) {
+    console.log(evt)
+    let goalnutrient = evt.target.id;
+    let recipeid = document.getElementById(goalnutrient).value
+    console.log(recipeid)
+    $.get("/analyze-goal.json",
+      {goal: goalnutrient, recipe: recipeid},
+      makeBarChart)
+    console.log("made ajax request")
+  }
+  $(".chartbutton").on("click", sendSelectedNutrient)
 
 
 	function makeBarChart(data) {
-		$("#percent").html("<h4>" + "this provides " + data['percent'] + "% of " + data['nutrient_name'] + "</h4>")
+    $('#nutrient-chart').attr('class', 'show')
+    console.log("got inside bar chart")
+    let serving = document.getElementById("serving").innerHTML;
+    console.log(serving)
+
+    // servingValue = serving.value
+    // console.log(servingValue)
+    // let integerServing = Number(serving);
+    // console.log(integerServing)
+    console.log(data['nutrient_name'])
+    console.log(data['amount'])
+    console.log(data['goal_amount'])
+		$("#percent").html("<h4>" + "this is " + (Number(data['percent']) * Number(serving)) + "% of " + "your " + data['nutrient_name'] + " goal of " + data['goal_amount'] + " " + data['unit_of_measurement'] + "</h4>")
   		let newChart = document.getElementById('barChart').getContext('2d');
 
   		let barChart = new Chart(newChart, {
@@ -80,7 +117,7 @@
   				labels: ["amount"],
   				datasets: [{
   					label: data['nutrient_name'],
-  					data: [data['amount']],
+  					data: [data['amount'] * Number(serving)],
   					backgroundColor: 'red',
   					borderWidth: 1,
   					borderColor: '#777'
