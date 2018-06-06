@@ -221,10 +221,10 @@ def example_data():
 	halfcup_to_milk = AmountToIngredient(amount=onecan, ingredient=olive)
 	pizza_to_olive = RecipeToIngredient(recipe=pizza, ingredient=olive)
 	low_fat = RecipeLabel(recipe=pizza, diet_label="low-fat") 
-	sushi = Recipe(recipe_name='sushi', recipe_image='sushi.jpg', recipe_url='sushi.com', blog_url='sushi.blog.com', recipe_yield=9, 
-		ingredients_list="[]", calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000, labels=['low-fat'])
+	sushi = Recipe(recipe_name='sushi', recipe_image='sushi.jpg', recipe_url='sushi.com', blog_url='sushi.blog.com', ingredients_list="[]", recipe_yield=9, 
+	 calories= 500, carbohydrates=60, protein=10, fiber=1, fat=30, potassium=200, phosphorus=230, sodium=1000, iron=4, saturated_fat=3)
 	user_to_lowcarb = UserToDiet(user=harry, nutrient_name="carbohydrates", high_or_low="high", nutrient_goal = 200)
-	user_to_egg = UserToAllergy(user=harry, allergy="egg")
+	user_to_egg = UserToAllergy(user=harry, allergy_name="egg")
 
 
 

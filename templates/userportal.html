@@ -5,6 +5,33 @@
 {% block content %}
 <h2> Welcome, {{ session["name"] }} </h2>
 
+
+<p id="recipename"> </p>
+<p id="image"></p>
+<p id="url"> </p>
+<p id="blogurl"> </p>
+<p id="url"> </p>
+
+
+
+
+
 <h3> USER INFO WILL APPEAR HERE </h3>
+
+<script src="https://code.jquery.com/jquery.js"></script>
+   		
+<script>
+'use strict'
+
+
+	   $.get("/recommend-recipe", function (data) {
+	        $('#recipename').html(data.recipe_name);
+	        $('#image').html("<" + "img src=" + " " + data.image + ">");
+	        $('#url').html(data.url);
+	        $('#blogurl').html(data.blog_url);
+	    });
+
+
+</script>
 
 {% endblock %}                     

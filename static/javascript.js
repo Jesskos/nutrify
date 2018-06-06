@@ -1,4 +1,3 @@
-	
 	// recipe search results 
 
 
@@ -154,13 +153,13 @@
 		};
 		
 		$.post("/delete-diet", 
-				deletedGoalID,
-				confirmDelete);
+		 		deletedGoalID,
+		 		confirmDelete);
 
 		$(this).closest('li').remove();
 		}
 
-	$(".dietgoals").on("click", ".deleteForm", deleteGoal);
+	$(".deleteForm").on("submit", deleteGoal);
 
 
 	// viewsavedrecipes.html

@@ -5,8 +5,6 @@ from model import connect_to_db, db, example_data, Recipe, Ingredient, Amount, R
 from flask import session 
 from helperfunctions import *
 
-from nose import with_setup
-
 ############################################################################################################################
 
 # HOMEPAGE AND REGISTRATION

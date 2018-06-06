@@ -72,6 +72,9 @@ def get_recipes_meeting_goals(users_goals, allergies=None):
 
 	 		goal_nutrient = goal.nutrient_name
 	 		high_or_low = goal.high_or_low
+	 		print goal_nutrient
+	 		print high_or_low
+	 		print "??????????"
 
 	 		if goal_nutrient == 'totalfat':
 	 			if high_or_low  == 'low':
@@ -226,8 +229,13 @@ def get_recipes_meeting_goals(users_goals, allergies=None):
 	 				list_of_recipes.append(high_carbohydrates_recipes_set)
 
 
+	print list_of_recipes
+
+
 	set_of_recipes_meeting_goals = set(list_of_recipes[0])
 
+	print set_of_recipes_meeting_goals
+	print "!!!!!!!!!!HELPERFUNCTION"
 
  	for set_of_recipes in list_of_recipes:
  		new_set = set_of_recipes_meeting_goals & set_of_recipes
@@ -246,6 +254,8 @@ def get_recipes_meeting_goals(users_goals, allergies=None):
 
 
  	return set_of_recipes_meeting_goals
+
+
 
 
 

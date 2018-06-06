@@ -133,82 +133,93 @@ def open_user_portal():
  	if "name" not in session:
  		return redirect("/")
 
- 	session_user_id = session['id']
+ 	
+ 	
+ 	return render_template('userportal.html')
+
+@app.route("/recommend-recipe", methods=["GET"])
+def recommend_recipe():
+	""" recommends a recipe based on allergies and goals """ 
+
+	session_user_id = session['id']
 	logged_in_user = User.query.get(session_user_id)
 
 	goals = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id).all()
 	allergies = UserToAllergy.query.filter(UserToAllergy.user_id==logged_in_user.user_id).all()
 
-	allergens = []
-
+	print goals
 	print allergies
-	print "!!!!!!!!!!!!!!"
+	print "!!!!!!!!!!!!!!!!!!!!"
 
-	if not goals:
-		if not allergies:
+	allergens = []
+	for allergy in allergies:
+		allergens.append(allergy.allergy_name)
+
+	if not goals and not allergies:
 			recipes = Recipe.query.filter(Recipe.recipe_id<100).all()
-			recipe = choice(recipes)
-			print recipe
-			print "got into not goals"
+			random_recipe = choice(recipes)
+			data_dict = {'recipeid': random_recipe.recipe_id, 
+			'recipe_name': random_recipe.recipe_name, 
+			'url': random_recipe.recipe_url, 
+			'blog_url': random_recipe.blog_url,
+			'image': random_recipe.recipe_image}
+			return jsonify(data_dict)
 
-	elif allergies: 
-		if goals:
+
+
+	elif allergies and goals:
+			allergens = []
 			for allergy in allergies:
 				allergens.append(allergy.allergy_name)
+			
 			allergy_free_recipes = get_recipes_meeting_goals(goals, allergens)
+			print "!!!!!!!!!!!!!"
+			print allergy_free_recipes
 			random_recipe = sample((allergy_free_recipes), 1)
-			print random_recipe
-			print "The above is a random recipe"
+			data_dict = {'recipeid': random_recipe[0].recipe_id, 
+			'recipe_name': random_recipe[0].recipe_name, 
+			'url': random_recipe[0].recipe_url, 
+			'blog_url': random_recipe[0].blog_url,
+			'image': random_recipe[0].recipe_image}
+			return jsonify(data_dict)
 
 
-	elif not allergies:
-		if goals: 
+	elif goals and not allergies:
 			print "got into not allergies but goals"
 			recipes = get_recipes_meeting_goals(goals)
 			random_recipe = sample((recipes), 1)
-			print random_recipe
+			data_dict = {'recipeid': random_recipe[0].recipe_id, 
+			'recipe_name': random_recipe[0].recipe_name, 
+			'url': random_recipe[0].recipe_url, 
+			'blog_url': random_recipe[0].blog_url,
+			'image': random_recipe[0].recipe_image}
+			return jsonify(data_dict)
 
-	elif allergies:
-		if not goals:
-			Recipes.query.
-
-		#allergies and no goals,  
- 	
- 	return render_template('userportal.html')
-
-@app.route("/recommend-recipe")
-def recommend_recipe():
-
-	pass 
-	# session_user_id = session['id']
-	# logged_in_user = User.query.get(session_user_id)
-
-
-	# goals = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id).all()
-	# allergies = UserToAllergy.query.filter(UserToAllergy.user_id==logged_in_user.user_id).all()
-
-	# allergens = []
-
-	# if not goals:
-	# 	if not allergies:
-	# 		recipes = Recipe.query.filter(Recipe.recipe_id<100).all()
-	# 		random_recipe = random.sample((recipes), 1)
+	else: 
+		print "ALLERGIES BUT NOT GOALS"
+		allergens = []
+		for allergy in allergies:
+			allergens.append(allergy.allergy_name)
+		recipes_list = Recipe.query.filter(Recipe.recipe_id<100).all()
+		recipes = set()
+		for allergy in allergens:
+			for recipe in recipes_list:
+				if allergy not in recipe.ingredients_list:
+					recipes.add(recipe)
+		random_recipe = sample((recipes), 1)
+		print random_recipe
+		print "!!!!!!!!!!!!!!!!!"
 
 
-	# if allergies: 
-	# 	for allergy in allergies:
-	# 		allergens.append(allergy.allergy_name)
-	# 	allergy_free_recipes = get_recipes_meeting_goals(goals, allergens)
-	# 	random_recipe = random.sample((allergy_free_recipes), 1)
-	# 	print random_recipe
-	# 	print "The above is a random recipe"
+		data_dict = {'recipeid': random_recipe[0].recipe_id, 
+		'recipe_name': random_recipe[0].recipe_name, 
+		'url': random_recipe[0].recipe_url, 
+		'blog_url': random_recipe[0].blog_url,
+		'image': random_recipe[0].recipe_image}
+		return jsonify(data_dict)
 
 
-	# if not allergies:
-	# 	recipes = get_recipes_meeting_goals(goals)
-	# 	print recipes 
-	# 	print 'above are recipes for no allergies'
-	# 	random_recipe = random.sample((recipes), 1)
+
 
 @app.route("/profile")
 def open_profile():
