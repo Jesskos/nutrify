@@ -20,7 +20,7 @@
 		   		      {{ label }} |
 		     	    {% endfor %} </h6> </p>
 		    <div style="display: inline-block;"><div style="display: block;"><a href="{{ recipe['recipe_blog_url'] }}" class="{{ recipe['recipe_blog_url'] }}">Nutrition </a></div>
-		    <div style="display: block;"><a href="#" class="{{ recipe['recipe_url'] }}">    Directions</a></div></div>
+		    <div style="display: block;"><a href="{{ recipe['recipe_url'] }}" class="{{ recipe['recipe_url'] }}">    Directions</a></div></div>
 		      <div style="display: inline-block; padding-left: 75px;"><form action="/save-recipe" method="POST" class="saveForm">
 		   	    <button type="submit" class="submitButton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}' data-tooltip="saved">Save </button>
 		        </form> </div>

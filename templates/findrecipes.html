@@ -12,11 +12,76 @@
 	{% endfor %}
 </ul>
 
-<h2> Hello, {{ session["name"] }} . Please find recipes here! </h2>
-<h3> Please search for recipes using our cool API! </h3>
+<h2> Hello, {{ session["name"] }} . Please use the section below to search for recipes. </h2>
 
+<form action="/get-recipe.json">
+  <div class="form-group">
+    <label for="formGroupExampleInput">Please enter ingredients you want to search for in recipes:</label>
+    <input type="text" class="form-control" id="formGroupExampleInput" name="food" placeholder="example: spicy tofu broccoli">
+  </div>
 
+<label for="formGroupExampleInput">You can find recipes that meet your nutritional needs by selecting the diets below:  </label>
 <div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name='nutrient' value="lowpotassium">
+  <label class="form-check-label" for="inlineCheckbox1">Low Potassium</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="lowphosphorus">
+  <label class="form-check-label" for="inlineCheckbox2">Low Phosphorus</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="carbohydratecontrolled45">
+  <label class="form-check-label" for="inlineCheckbox2">Carbohydrate Controlled (60-75 grams per serving)</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="carbohydratecontrolled34">
+  <label class="form-check-label" for="inlineCheckbox2">Carbohydrate Controlled (45-60 grams per serving)</label>
+</div>
+<div>
+  <div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name='nutrient' value="highfiber">
+  <label class="form-check-label" for="inlineCheckbox1">High Fiber</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="lowfat">
+  <label class="form-check-label" for="inlineCheckbox2">Low Fat</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="highprotein">
+  <label class="form-check-label" for="inlineCheckbox2">High Protein</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="lowprotein">
+  <label class="form-check-label" for="inlineCheckbox2">Low Protein</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="lowsodium">
+  <label class="form-check-label" for="inlineCheckbox2">Low Sodium</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="lowfiber">
+  <label class="form-check-label" for="inlineCheckbox2">Low Fiber</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="lowsaturatedfat">
+  <label class="form-check-label" for="inlineCheckbox2">Low Saturated Fat</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="lowcalories">
+  <label class="form-check-label" for="inlineCheckbox2">Low Calories</label>
+</div>
+<div class="form-check form-check-block">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name='nutrient' value="highiron">
+  <label class="form-check-label" for="inlineCheckbox2">High Iron</label>
+</div>
+
+ <button class="btn btn-primary submit-button" type="submit">Find my recipes!</button>
+</div>
+</form>
+
+
+<!-- <div>
 <form action="/get-recipe.json">
 	What food are you searching for? (ex: tofu, apple, chocolate) <input type="text" name="food" required> <p>
 	<h4> Please select the kind of diet(s) you would like: </h4>
@@ -34,11 +99,11 @@
 	<input type="checkbox" name="nutrient" value="lowcalories"> Low Calories <p>
 	<input type="checkbox" name="nutrient" value="highiron"> High Iron
 <!-- # TRY MAKING THIS AN AJAX CALL TO DB -->
-
-    <p> <input type="submit">
-
+<!-- 
+    <p> <input type="submit"> -->
+<!-- 
 </form>
-</div>
+</div>  -->
 
 
 

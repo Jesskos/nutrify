@@ -4,23 +4,25 @@
 
 {% block content %}
 <div>
-<h2> Welcome, {{ session["name"] }} </h2>
+<h2> Welcome, {{ session["name"].title() }} </h2>
 <h2> The place to find recipes for your nutrient goals! </h2>
-<div>
+</div>
 
 
 
-
-<h3> Recommended Recipe: </h3>
 
 	<center><div class="roundborder">
-	<div style="display: block;"><p id="recipename" align="left"></p></div>
-	<div style="display: inline-block;"><p id="image" align="right"></p></div>
-	<div style="display: inline-block;"><p id="url"> </p>
-	<p id="blogurl"> </p>
-	<p id="url"> </p> </div>
+	<div class="recommended"><h3>{{session["name"].title() }}'s Recommended Recipe </h3> </div>
+	<div class="info"><h6>This recipe was recommended based on your nutrition goals and allergies. Please click links below for more information.</h6></div>
+	<div class="title" style="display: block;"><p id="recipename"></p></div>
+	<div style="display: inline-block;"><p id="image" class="recipeImage"></p></div>
+
+	<div class="directions"><p id="url"></p></div>
+	<div class="nutrition1"><p id="blogurl"></p></div>
+
+	
 	</div></center>
-  <center></div>
+
 
 
 
@@ -34,10 +36,11 @@
 
 
 	   $.get("/recommend-recipe", function (data) {
-	        $('#recipename').html(data.recipe_name);
+	        $('#recipename').html("<h4>" + data.recipe_name + "</h4>");
 	        $('#image').html("<" + "img src=" + " " + data.image + ">");
-	        $('#url').html(data.url);
-	        $('#blogurl').html(data.blog_url);
+	        $('#url').html("<a href=" + data.url + " " + "class='linkbutton'" + ">" + "Directions__________________________________" + "</a>");
+	        $('#blogurl').html("<a href=" + data.blog_url + " " + "class='linkbutton'" + ">" + "Nutrition___________________________________" + "</a>");
+
 	    });
 
 

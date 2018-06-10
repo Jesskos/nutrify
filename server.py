@@ -162,7 +162,8 @@ def recommend_recipe():
 			'recipe_name': random_recipe.recipe_name, 
 			'url': random_recipe.recipe_url, 
 			'blog_url': random_recipe.blog_url,
-			'image': random_recipe.recipe_image}
+			'image': random_recipe.recipe_image,
+			'ingredients': random_recipe.ingredients_list}
 			return jsonify(data_dict)
 
 
@@ -180,7 +181,8 @@ def recommend_recipe():
 			'recipe_name': random_recipe[0].recipe_name, 
 			'url': random_recipe[0].recipe_url, 
 			'blog_url': random_recipe[0].blog_url,
-			'image': random_recipe[0].recipe_image}
+			'image': random_recipe[0].recipe_image,
+			'ingredients': random_recipe[0].ingredients_list}
 			return jsonify(data_dict)
 
 
@@ -192,7 +194,8 @@ def recommend_recipe():
 			'recipe_name': random_recipe[0].recipe_name, 
 			'url': random_recipe[0].recipe_url, 
 			'blog_url': random_recipe[0].blog_url,
-			'image': random_recipe[0].recipe_image}
+			'image': random_recipe[0].recipe_image,
+			'ingredients': random_recipe[0].ingredients_list}
 			return jsonify(data_dict)
 
 	else: 
@@ -215,7 +218,8 @@ def recommend_recipe():
 		'recipe_name': random_recipe[0].recipe_name, 
 		'url': random_recipe[0].recipe_url, 
 		'blog_url': random_recipe[0].blog_url,
-		'image': random_recipe[0].recipe_image}
+		'image': random_recipe[0].recipe_image,
+		'ingredients': random_recipe[0].ingredients_list}
 		return jsonify(data_dict)
 
 
