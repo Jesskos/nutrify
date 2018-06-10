@@ -6,8 +6,31 @@
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	  <style> 
+	  <!-- Load Bootstrap 4 -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+	  <!-- Load Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	  <!-- Load our stylesheet -->
+  <link rel="stylesheet" href="/static/project.css">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+</head>
+
+    <style> 
+
+    body {
+  background-color: #B2DBBF;
+  }
 
     .hidden {
     visibility: hidden;
@@ -50,16 +73,17 @@
     }
 
     .submitButton {
-    background-color:  #944743; 
+    background-color:  #F3FFBD; 
     font-family: Verdana;
     border: none;
-    color: white;
+    color: black;
     padding: 10px 20px;
     font-size: 16px;
     margin: 6px 2px;
     text-align: center;
     display: inline-block;
-    border: 4px solid #6B5B95;
+    border-radius: 12px;
+    border: 3px solid #247BA0;
   }
 
      .nutritionbutton {
@@ -96,7 +120,7 @@
   }
 
     .colorChange{
-    background-color:  #6B5B95; 
+    background-color:  #FF1654; 
     font-family: Verdana;
     border: none;
     color: white;
@@ -105,28 +129,70 @@
     margin: 6px 2px;
     text-align: center;
     display: inline-block;
-    border: 4px solid #6B5B95;
+  }
+
+  .shadow {
+   border:2px solid #fff;
+  box-shadow: 10px 10px 5px #ccc;
+      -moz-box-shadow: 10px 10px 5px #ccc;
+      -webkit-box-shadow: 10px 10px 5px #ccc;
+      -khtml-box-shadow: 10px 10px 5px #ccc;
   }
 
 
+    h3 {
+    color: #944743; 
+    font-family: Verdana;
+    }
 
+    .recipecard {
+      background-color: #5F9FB9;
+      width: 700px;
+      height: 550px;
+      box-shadow: 10px 10px 5px #D3D3D3;
+}
 
+    
 
+    .roundborder {
+    border-radius: 5px;
+    background-color: #70C1B3;
+    width: 700px;
+    height:500px;
+    box-shadow: 10px 10px 5px #A0A0A0 ;
+}
+
+.labelButton {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background-color: #F3FFBD;
+}
+.button2 {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background-color: #F3FFBD
+}
+
+.deleteButton {
+  background-color: transparent;
+  color: green;
+  border: none;
+  padding-left: 200px;
+}
+
+.analyzegoalButton {
+  background-color: #247BA0;
+   border-radius: 5px;
+   color: white;
+
+}
+
+.title {
+    margin-left: 20px;
+}
   </style>
 
-	  <!-- Load Bootstrap 4 -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-
-	  <!-- Load Font Awesome -->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.11/css/all.css" integrity="sha384-p2jx59pefphTFIpeqCcISO9MdVfIm4pNnsL08A6v5vaQc4owkQqxMV8kg4Yvhaw/" crossorigin="anonymous">
-	  <!-- Load our stylesheet -->
-
-</head>
-
-
-
 <!-- Code goes here. -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-md navbar-dark navbar-custom p-0">
+
   <a class="navbar-brand" href="#">NutriFi</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -158,12 +224,15 @@
 <style>
 
 </style>
-<ul> 
+
+
+<body>
+
+  <ul> 
   {% for message in get_flashed_messages() %}
   <li>{{ message }}</li>
   {% endfor %}
 </ul>
-<body>
 
 {% block content %} Base {% endblock %}
 

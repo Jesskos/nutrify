@@ -5,23 +5,34 @@
 {% block content %}
 
 <div id="recipeinfo">
+
 <h3>Recipe: {{recipe.recipe_name}}</h3>
 <p><img src= {{ recipe.recipe_image}}></p>
-<h5> Recipe Yield: </h5> {{ recipe.recipe_yield }} servings </h5>
+<h5 style="display:inline;"> Recipe Yield: </h5><h5 style="display:inline;"> {{ recipe.recipe_yield }} servings </h5>
 
 <h4> Recipe Nutrition Facts</h4>
-<h5> Yield: {{ recipe.recipe_yield }} servings </h5>
-<h5> Amount per serving:</h5><h5 id='servingtext'> 1 </h5>
-<h5> Calories </h5><h5 class = 'nutrientamount' name={{ recipe.calories }} > {{ recipe.calories }}<h5> calorie </h5><h5> calorie </h5>
-<h5> Carbohydrates </h5><h5 class = 'nutrientamount' name={{ recipe.carbohydrates }} > {{ recipe.carbohydrates }}</h5><h5> grams </h5>
-<h5> Protein </h5><h5 class = 'nutrientamount' name={{ recipe.protein }} > {{ recipe.protein }} grams </h5>
-<h5> Fat </h5><h5 class = 'nutrientamount' name={{ recipe.fat }}> {{ recipe.fat }} grams </h5>
-<h5> Saturated Fat </h5><h5 class = 'nutrientamount' name={{ recipe.saturated_fat }}> {{ recipe.saturated_fat }}</h5><h5> grams </h5>
-<h5> Iron </h5><h5 class = 'nutrientamount' name={{ recipe.iron }}> {{ recipe.iron }}</h5><h5> mg </h5>
-<h5> Fiber </h5><h5 class = 'nutrientamount' name={{ recipe.fiber }}> {{ recipe.fiber }}</h5><h5> grams </h5>
-<h5> Potassium </h5><h5 class = 'nutrientamount' name= {{ recipe.potassium }} > {{ recipe.potassium }}</h5><h5> mg </h5>
-<h5> Phosphorus </h5><h5 class = 'nutrientamount' name={{ recipe.phosphorus }}> {{ recipe.phosphorus }}</h5><h5> mg </h5>
-<h5> Sodium </h5><h5 class = 'nutrientamount' name={{ recipe.sodium }} > {{ recipe.sodium }}</h5><h5> mg </h5>
+<h5 style="display:inline;"> Amount per serving: </h5><h5 id='servingtext' style="display:inline;"> 1 </h5>
+
+<li><h5 style="display:inline;"> Calories: </h5><h5 class = 'nutrientamount' name={{ recipe.calories }} style="display:inline;"> {{ recipe.calories }}<h5 style="display:inline;"> calories </h5></li>
+
+<li><h5 style="display:inline;"> Carbohydrates: </h5><h5 class = 'nutrientamount' name={{ recipe.carbohydrates }} style="display:inline;"> {{ recipe.carbohydrates }}</h5><h5 style="display:inline;"> grams </h5></li>
+
+<li><h5 style="display:inline;"> Protein: </h5><h5 class = 'nutrientamount' name={{ recipe.protein }} style="display:inline;"> {{ recipe.protein }}</h5><h5 style="display:inline;"> gram(s)</h5></li>
+
+<li><h5 style="display:inline;"> Fat: </h5><h5 class = 'nutrientamount' name={{ recipe.fat }} style="display:inline;"> {{ recipe.fat }} grams </h5></li>
+
+<li><h5 style="display:inline;"> Saturated Fat: </h5><h5 class = 'nutrientamount' name={{ recipe.saturated_fat }} style="display:inline;"> {{ recipe.saturated_fat }}</h5><h5 style="display:inline;"> grams </h5></li>
+
+<li><h5 style="display:inline;"> Iron: </h5><h5 class = 'nutrientamount' name={{ recipe.iron }} style="display:inline;"> {{ recipe.iron }}</h5><h5 style="display:inline;"> mg </h5></li>
+
+<li><h5 style="display:inline;"> Fiber: </h5><h5 class = 'nutrientamount' name={{ recipe.fiber }} style="display:inline;"> {{ recipe.fiber }} <h5 style="display:inline;"> grams </h5></li>
+
+<li><h5 style="display:inline;"> Potassium: </h5><h5 class = 'nutrientamount' name= {{ recipe.potassium }} style="display:inline;"> {{ recipe.potassium }}</h5><h5 style="display:inline;"> mg </h5></li>
+
+<li><h5 style="display:inline;"> Phosphorus </h5><h5 class = 'nutrientamount' name={{ recipe.phosphorus }} style="display:inline;"> {{ recipe.phosphorus }}</h5><h5 style="display:inline;"> mg </h5></li>
+
+<li><h5 style="display:inline;"> Sodium </h5><h5 class = 'nutrientamount' name={{ recipe.sodium }} style="display:inline;"> {{ recipe.sodium }}</h5><h5 style="display:inline;"> mg </h5></li>
+
 </div>
 
 
@@ -49,6 +60,8 @@
 	<canvas width="700px;" height="200px;" id="barChart"></canvas>
 	<div id="barLegend" class="chart-legend"></div>
 <div id="percent"></div>
+
+
 <script>
 	'use strict'
 
@@ -118,7 +131,7 @@
   				datasets: [{
   					label: data['nutrient_name'],
   					data: [data['amount'] * Number(serving)],
-  					backgroundColor: 'red',
+  					backgroundColor: '#FF1654',
   					borderWidth: 1,
   					borderColor: '#777'
   				}]

@@ -190,7 +190,7 @@
 				confirmDelete);
 
 			console.log(this)
-			$(this).closest('ul').remove();
+			$(this).closest('.eachRecipe').remove();
 		}
 
 		$(".deleteForm").on("submit", deleteRecipe);
@@ -199,13 +199,13 @@
 		function showBalanced(evt) {
 			console.log("got inside showBalanced")
 			$(".labels").each(function() {
-				$(this).closest('ul').show();
+				$(this).closest('.eachRecipe').show();
 				let a = ($(this).text());
 				console.log(a);
 				let b = a.includes("Balanced")
 				console.log(b);
 				if (b==false) {
-					$(this).closest('ul').hide();
+					$(this).closest('.eachRecipe').hide();
 				}
 			});
 
@@ -218,13 +218,13 @@
 		function showVegetarian(evt) {
 			console.log("got inside showVegetarian")
 			$(".labels").each(function() {
-				$(this).closest('ul').show();
+				$(this).closest('.eachRecipe').show();
 				let a = ($(this).text());
 				console.log(a);
 				let b = a.includes("Vegetarian")
 				console.log(b);
 				if (b==false) {
-					$(this).closest('ul').hide();
+					$(this).closest('.eachRecipe').hide();
 				}
 			});
 
@@ -237,13 +237,13 @@
 		function showLowCarb(evt) {
 			console.log("got inside showLowCarb")
 			$(".labels").each(function() {
-				$(this).closest('ul').show();
+				$(this).closest('.eachRecipe').show();
 				let a = ($(this).text());
 				console.log(a);
 				let b = a.includes("Low-Carb")
 				console.log(b);
 				if (b==false) {
-					$(this).closest('ul').hide();
+					$(this).closest('.eachRecipe').hide();
 				}
 			});
 
@@ -256,13 +256,13 @@
 		function showSugarConscious(evt) {
 			console.log("got inside showSugarConscious")
 			$(".labels").each(function() {
-				$(this).closest('ul').show();
+				$(this).closest('.eachRecipe').show();
 				let a = ($(this).text());
 				console.log(a);
 				let b = a.includes("Sugar-Conscious")
 				console.log(b);
 				if (b==false) {
-					$(this).closest('ul').hide();
+					$(this).closest('.eachRecipe').hide();
 				}
 			});
 
@@ -275,13 +275,13 @@
 		function showVegan(evt) {
 			console.log("got inside showVegan")
 			$(".labels").each(function() {
-				$(this).closest('ul').show();
+				$(this).closest('.eachRecipe').show();
 				let a = ($(this).text());
 				console.log(a);
 				let b = a.includes("Vegan")
 				console.log(b);
 				if (b==false) {
-					$(this).closest('ul').hide();
+					$(this).closest('.eachRecipe').hide();
 				}
 			});
 
@@ -293,7 +293,7 @@
 		function showAll(evt) {
 			console.log("got inside showAll")
 			$(".labels").each(function() {
-				$(this).closest('ul').show();
+				$(this).closest('.eachRecipe').show();
 
 			});
 

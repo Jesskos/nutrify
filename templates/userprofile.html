@@ -5,19 +5,20 @@
 {% block content %}
 
 
-<h3> First Name: {{ fname }} </h3>  
+<div><h3 style="display:inline;";> First Name:</h3> <h4 style="display:inline;"> {{ fname }} </h4></div>
 
-<h3> Last Name: {{ lname }} </h3>
-<h3> Email: {{ email }} </h3>
+<div><h3 style="display:inline;"> Last Name:</h3><h4  style="display:inline;">  {{ lname }} <h4></div>
 
-<h6></h6>
+<div><h3 style="display:inline;"> Email: </h3><h4 style="display:inline;">{{ email }} </h4></div>
 
-<h3> Allergies/Intolerances: </h3>
+<h6 class="willaddtext"></h6>
+
+<div><h3> Allergies/Intolerances: </h3>
 
 	{% if allergies != [] %}
 		<div id="allergies">
 		{% for allergy in allergies %}
-		{{ allergy.allergy_name }} <br>	
+		<li>{{ allergy.allergy_name }}</li>	
 		{% endfor %} 
 
 	{% else %}

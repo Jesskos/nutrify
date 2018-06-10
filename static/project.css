@@ -1,0 +1,43 @@
+
+.navbar-custom {
+    background-color: #247BA0;
+}
+
+.labelButton {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background-color: #F3FFBD;
+    color: black;
+    margin-bottom: 15px
+}
+
+.btn-space {
+    margin-right: 5px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.margins {
+	 top-margin: 10px; 
+	 bottom-margin: 10px; 
+}
+
+
+.btn-primary {
+	color: black;
+  background-color: #70C1B3;
+   border-radius: 5px;
+   border: #247BA0;
+
+
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: green;
+    border-color: #285e8e; /*set the color you want here*/
+}
+
+btn-primary

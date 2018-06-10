@@ -9,19 +9,69 @@
 <ul>
 	{% if recipes != [] %}
 		<h2> Hello, {{ session["name"] }}. Here are your saved recipes! </h2>
+<div>
 
-<p>
-<button type="submit" class="labelButton" id="showall" name="" value=""> Show All </button>
-<button type="submit" class="labelButton" id="balanced" name="" value=""> Balanced </button>
-<button type="submit" class="labelButton" id="vegetarian" name="" value=""> Vegetarian </button>
-<button type="submit" class="labelButton" id="lowcarb" name="" value=""> Low-Carb </button>
-<button type="submit" class="labelButton" id="vegan" name="" value=""> Vegan </button>
-<button type="submit" class="labelButton" id="sugarconciious" name="" value=""> Sugar-Concious </button>
-</p>
+<button type="button" class="btn btn-success labelButton btn-space" id="showall">Show All</button>
+<button type="button" class="btn btn-success labelButton btn-space" id="balanced" >Balanced</button>
+<button type="button" class="btn btn-success labelButton btn-space" id="vegetarian">Vegetarian</button>
+<button type="button" class="btn btn-success labelButton btn-space" id="lowcarb">Low-Carb</button>
+<button type="button" class="btn btn-success labelButton btn-space" id="vegan">Vegan</button>
+<button type="button" class="btn btn-success labelButton btn-space" id="sugarconciious">Sugar-Concious</button>
+
+</div>
+
 	
 		{% for recipe in recipes %}
-		<ul class="eachRecipe" id="{{ recipe[0].blog_url }}">
-		   <p><img src= {{ recipe[0].recipe_image}} ></p>
+
+<!-- <div class="card eachRecipe" id="{{ recipe[0].blog_url }}" style="width: 18rem display:inline;">
+  <img class="card-img-top shadow" src={{ recipe[0].recipe_image}}> alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{ recipe[0].recipe_name }}</h5>
+    <p class="card-text"><b><h6 class="labels"> Health Labels:ßß</b> | 
+		   				{% for label in recipe[1] %}
+		   		 		{{ label.diet_label }} |
+
+		     		{% endfor %} </h6> </p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"> <form action="/analyze-goal" class="analyzegoal">  		
+				<button type="submit" class="analyzegoalButton" name='url' value='{{ recipe[0].recipe_url }}'> Analyze Recipe </button>
+				</form>
+				<form action="/delete-recipe" method="POST" class="deleteForm">  		
+				<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'> Delete Recipe</button>
+				</form>
+    </li>
+  </ul>
+  <div class="card-body">
+    <a href="{{ recipe[0].recipe_url }}" class="card-link">Directions</a>
+    <a href="{{ recipe[0].blog_url }}" class="card-link">Nutrition</a>
+  </div>
+</div> -->
+<div class="card eachRecipe" style="display: inline-block; width: 18rem;" id="{{ recipe[0].blog_url }}">
+	    <div class="card-header">
+      <div display: inline-block;><h5>{{ recipe[0].recipe_name }} </h5></div> <div display: inline-block;>
+      
+    </div>    
+  </div>
+  <img class="card-img-top" src={{ recipe[0].recipe_image}} alt="Card image cap">
+  <div class="card-body">
+    <p class="card-text"><b><h6 class="labels"> Health Labels:</b> | 
+		   				{% for label in recipe[1] %}
+		   		 		{{ label.diet_label }} |
+		     		{% endfor %} </h6> </p>
+    <div style="display: inline-block"><a href="{{ recipe[0].recipe_url }}" class="btn btn-primary btn-primary:hover">Directions</a></div>
+    	<div style="display: inline-block"><form action="/analyze-goal" class="analyzegoal">  		
+				<button type="submit" class="btn btn-primary btn-primary:hover" name='url' value='{{ recipe[0].recipe_url }}'> Analyze </button>
+				</form></div>
+				<form action="/delete-recipe" method="POST" class="deleteForm">  		
+				<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'>delete</button>
+				</form>
+  </div>
+</div>
+
+
+<!-- 		<ul class="eachRecipe" id="{{ recipe[0].blog_url }}">
+		   <p><img class="shadow" src= {{ recipe[0].recipe_image}}></p>
 		   <p><h5>{{ recipe[0].recipe_name }} </h5></p>
  				<form action="{{ recipe[0].blog_url }}">
     			<input type="submit" class="nutritionbutton" value="Nutrition Information">
@@ -43,15 +93,17 @@
 				<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'> Delete Recipe</button>
 				</form>
 				<hr>
-		</ul>
+		</ul> -->
 		{% endfor %}
+		
 
  	{% else %}
 
  		<h6> No recipes Saved </h6>
- 	{% endif %}
 	</ul>
+	<div>
 
+	{% endif %}
 
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="/static/javascript.js"></script>

@@ -3,20 +3,29 @@
 {% block title %} User Portal {% endblock %}
 
 {% block content %}
+<div>
 <h2> Welcome, {{ session["name"] }} </h2>
-
-
-<p id="recipename"> </p>
-<p id="image"></p>
-<p id="url"> </p>
-<p id="blogurl"> </p>
-<p id="url"> </p>
+<h2> The place to find recipes for your nutrient goals! </h2>
+<div>
 
 
 
 
+<h3> Recommended Recipe: </h3>
 
-<h3> USER INFO WILL APPEAR HERE </h3>
+	<center><div class="roundborder">
+	<div style="display: block;"><p id="recipename" align="left"></p></div>
+	<div style="display: inline-block;"><p id="image" align="right"></p></div>
+	<div style="display: inline-block;"><p id="url"> </p>
+	<p id="blogurl"> </p>
+	<p id="url"> </p> </div>
+	</div></center>
+  <center></div>
+
+
+
+
+
 
 <script src="https://code.jquery.com/jquery.js"></script>
    		
