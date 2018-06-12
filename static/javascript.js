@@ -303,3 +303,98 @@
 		$("#showall").on("click", showAll);
 
 
+		// analysis
+
+	function showServing(evt) {
+    console.log('got inside showServing')
+    let servingText = document.getElementById("textforserving").value
+    $('#serving').html(servingText);
+    $('#servingtext').html(servingText);
+    $('#hiddenchangeinfo').attr('class','hidden');
+    let nutrients = document.getElementsByClassName("nutrientamount");
+    let servings = document.getElementById("serving").innerHTML;
+    console.log(nutrients)
+    for (let nutrient of nutrients) { 
+      let nutrientValue = nutrient.attributes[1].value;
+      console.log(servings);
+      nutrient.innerHTML = (Number(nutrientValue) * Number(servings));
+    }
+  }
+
+
+  $("#showserving").on("click", showServing)
+
+
+  function showChangeTextBox(evt) {
+    console.log('got inside showChangeTextBox')
+    $('#hiddenchangeinfo').attr('class','show');
+    $('#nutrient-chart').attr('class', 'hidden');
+  }
+  
+  $("#editserving").on("click", showChangeTextBox)
+
+
+  function sendSelectedNutrient(evt) {
+    console.log(evt)
+    let goalnutrient = evt.target.id;
+    let recipeid = document.getElementById(goalnutrient).value
+    console.log(recipeid)
+    $.get("/analyze-goal.json",
+      {goal: goalnutrient, recipe: recipeid},
+      makeBarChart)
+    console.log("made ajax request")
+  }
+  $(".chartbutton").on("click", sendSelectedNutrient)
+
+
+	function makeBarChart(data) {
+    $('#nutrient-chart').attr('class', 'show')
+    console.log("got inside bar chart")
+    let serving = document.getElementById("serving").innerHTML;
+    console.log(serving)
+
+    // servingValue = serving.value
+    // console.log(servingValue)
+    // let integerServing = Number(serving);
+    // console.log(integerServing)
+    console.log(data['nutrient_name'])
+    console.log(data['amount'])
+    console.log(data['goal_amount'])
+		$("#percent").html("<h4>" + "this is " + (Number(data['percent']) * Number(serving)) + "% of " + "your " + data['nutrient_name'] + " goal of " + data['goal_amount'] + " " + data['unit_of_measurement'] + "</h4>")
+  		let newChart = document.getElementById('barChart').getContext('2d');
+
+  		let barChart = new Chart(newChart, {
+  			type: 'horizontalBar', 
+  			data: {
+  				labels: ["amount"],
+  				datasets: [{
+  					label: data['nutrient_name'],
+  					data: [data['amount'] * Number(serving)],
+  					backgroundColor: '#FF1654',
+  					borderWidth: 1,
+  					borderColor: '#777'
+  				}]
+  			},
+  			options: {
+  				title: {
+  					display: true,
+  					text: 'Amount of Daily Goal'
+  				},
+  				responsive: false,
+  				scales: {
+  					xAxes: [{
+  						ticks: {
+  							min: 0, 
+  							max: data['goal_amount'] + (0.25 * data['goal_amount'])
+  						}
+  					}]
+  				}
+  			}
+  				
+  		});
+  	}
+
+
+
+
+

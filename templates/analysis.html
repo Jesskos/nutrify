@@ -4,12 +4,80 @@
 
 {% block content %}
 
-<div id="recipeinfo">
 
-<h3>Recipe: {{recipe.recipe_name}}</h3>
-<p><img src= {{ recipe.recipe_image}}></p>
+
+<center><div class="recipename">
+<h3>Recipe: {{recipe.recipe_name}}</h3></div></center>
+
+<div class="container-fluid">
+
+  <div class="row">
+
+    <div class="span-5">
+
+
+      <div><img src= {{ recipe.recipe_image}} class="shadow"></div>
+
+
+      <h4 class="servingtitle"> How many servings did you eat? </h4>
+      <h3 id='serving' style="display:inline; padding-right: 10px, padding-top: 20px" > 1 </h3>
+      <input type="button" id="editserving" value='change' class='labelButton' style="display:inline; margin-left: 20px;">
+   
+
+
+      <div id="hiddenchangeinfo" class="hidden">
+      <input type="text" name="allergy" id="textforserving">
+      <input type="button" id="showserving" value='save' class='button3'> 
+      </div>
+    
+    </div>
+
+
+   
+   <!--  ending span-6 -->
+
+
+   <div class="span-6" style="display: margin-left: 20px;">
+    <div class="card border-info mb-3 shadow" style="max-width: 25rem;">
+      <div class="card-header">Recipe Nutrition Facts</div>
+      <div class="card-body text-info">
+        <h5 class="card-title"><h5 style="display:inline;"> Recipe Yield: </h5><h5 style="display:inline;"> {{ recipe.recipe_yield }} servings </h5></h5></p>
+
+        <p><h5 style="display:inline;"> Amount per serving: </h5><h5 id='servingtext' style="display:inline;"> 1 </h5>
+        <p class="card-text"><li><h5 style="display:inline;"> Calories: </h5><h5 class = 'nutrientamount' name={{ recipe.calories }} style="display:inline;"> {{ recipe.calories }}<h5 style="display:inline;"> calories </h5></li>
+
+    <li><h5 style="display:inline;"> Carbohydrates: </h5><h5 class = 'nutrientamount' name={{ recipe.carbohydrates }} style="display:inline;"> {{ recipe.carbohydrates }}</h5><h5 style="display:inline;"> grams </h5></li>
+
+    <li><h5 style="display:inline;"> Protein: </h5><h5 class = 'nutrientamount' name={{ recipe.protein }} style="display:inline;"> {{ recipe.protein }}</h5><h5 style="display:inline;"> gram(s)</h5></li>
+
+    <li><h5 style="display:inline;"> Fat: </h5><h5 class = 'nutrientamount' name={{ recipe.fat }} style="display:inline;"> {{ recipe.fat }} grams </h5></li>
+
+    <li><h5 style="display:inline;"> Saturated Fat: </h5><h5 class = 'nutrientamount' name={{ recipe.saturated_fat }} style="display:inline;"> {{ recipe.saturated_fat }}</h5><h5 style="display:inline;"> grams </h5></li>
+
+    <li><h5 style="display:inline;"> Iron: </h5><h5 class = 'nutrientamount' name={{ recipe.iron }} style="display:inline;"> {{ recipe.iron }}</h5><h5 style="display:inline;"> mg </h5></li>
+
+    <li><h5 style="display:inline;"> Fiber: </h5><h5 class = 'nutrientamount' name={{ recipe.fiber }} style="display:inline;"> {{ recipe.fiber }} <h5 style="display:inline;"> grams </h5></li>
+
+    <li><h5 style="display:inline;"> Potassium: </h5><h5 class = 'nutrientamount' name= {{ recipe.potassium }} style="display:inline;"> {{ recipe.potassium }}</h5><h5 style="display:inline;"> mg </h5></li>
+
+    <li><h5 style="display:inline;"> Phosphorus </h5><h5 class = 'nutrientamount' name={{ recipe.phosphorus }} style="display:inline;"> {{ recipe.phosphorus }}</h5><h5 style="display:inline;"> mg </h5></li>
+
+    <li><h5 style="display:inline;"> Sodium </h5><h5 class = 'nutrientamount' name={{ recipe.sodium }} style="display:inline;"> {{ recipe.sodium }}</h5><h5 style="display:inline;"> mg </h5></li>
+
+    </p>
+      </div>
+      <!-- ending card border -->
+    </div>
+
+    </div>
+<!--     ending span 6 -->
+  </div>
+
+<!--   ending row 
+ -->
+
+<!-- <div class="recipeinfo" style="margin-left:40px col">
 <h5 style="display:inline;"> Recipe Yield: </h5><h5 style="display:inline;"> {{ recipe.recipe_yield }} servings </h5>
-
 <h4> Recipe Nutrition Facts</h4>
 <h5 style="display:inline;"> Amount per serving: </h5><h5 id='servingtext' style="display:inline;"> 1 </h5>
 
@@ -32,132 +100,49 @@
 <li><h5 style="display:inline;"> Phosphorus </h5><h5 class = 'nutrientamount' name={{ recipe.phosphorus }} style="display:inline;"> {{ recipe.phosphorus }}</h5><h5 style="display:inline;"> mg </h5></li>
 
 <li><h5 style="display:inline;"> Sodium </h5><h5 class = 'nutrientamount' name={{ recipe.sodium }} style="display:inline;"> {{ recipe.sodium }}</h5><h5 style="display:inline;"> mg </h5></li>
+ -->
 
+
+
+<!-- end chart container
+ -->
+
+<!-- end flex container -->
+
+<!-- end for recipe info class -->
+
+
+<div class="row">
+
+ <div class="span9">
+  <div>
+  {% for goal in goals %}
+  <button type="button" class="chartbutton analyzegoalButton" id="{{ goal.nutrient_name }}" value ="{{ recipe.recipe_id }}">{{ goal.nutrient_name }}</button>
+  {% endfor %} </div> 
+
+  <div id="nutrient-chart" class="hidden row-2">
+  <canvas width="500px;" height="200px;" id="barChart"></canvas>
+  <div id="barLegend" class="chart-legend"></div>
+  <div id="percent"></div>
+
+<!--   for nutrient chart -->
+</div>
+
+<!-- for row -->
+</div>
+
+<!-- for span-9 -->
+</div>
+<!-- for body fluid container -->
+</div>
 </div>
 
 
-<div> <h4> How many servings did you eat? </h4>
-  <h3 id='serving'> 1 </h3>
 
-  <input type="button" id="editserving" value='change'> 
-
-  <div id="hiddenchangeinfo" class="hidden">
-	  <input type="text" name="allergy" id="textforserving">
-    <input type="button" id="showserving" value='change'> 
-  </div>
-
-<div>
-	{% for goal in goals %}
-	<button type="button" class="chartbutton" id="{{ goal.nutrient_name }}" value ="{{ recipe.recipe_id }}">{{ goal.nutrient_name }}</button>
-	{% endfor %}
-</div>
-
-<body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
-</body>
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="/static/javascript.js"></script>
 
-<div id="nutrient-chart" class="hidden">
-	<canvas width="700px;" height="200px;" id="barChart"></canvas>
-	<div id="barLegend" class="chart-legend"></div>
-<div id="percent"></div>
-
-
-<script>
-	'use strict'
-
-
-  function showServing(evt) {
-    console.log('got inside showServing')
-    let servingText = document.getElementById("textforserving").value
-    $('#serving').html(servingText);
-    $('#servingtext').html(servingText);
-    $('#hiddenchangeinfo').attr('class','hidden');
-    let nutrients = document.getElementsByClassName("nutrientamount");
-    let servings = document.getElementById("serving").innerHTML;
-    console.log(nutrients)
-    for (let nutrient of nutrients) { 
-      let nutrientValue = nutrient.attributes[1].value;
-      console.log(servings);
-      nutrient.innerHTML = (Number(nutrientValue) * Number(servings));
-    }
-  }
-
-
-  $("#showserving").on("click", showServing)
-
-
-  function showChangeTextBox(evt) {
-    console.log('got inside showChangeTextBox')
-    $('#hiddenchangeinfo').attr('class','show');
-    $('#nutrient-chart').attr('class', 'hidden');
-  }
-  
-  $("#editserving").on("click", showChangeTextBox)
-
-
-  function sendSelectedNutrient(evt) {
-    console.log(evt)
-    let goalnutrient = evt.target.id;
-    let recipeid = document.getElementById(goalnutrient).value
-    console.log(recipeid)
-    $.get("/analyze-goal.json",
-      {goal: goalnutrient, recipe: recipeid},
-      makeBarChart)
-    console.log("made ajax request")
-  }
-  $(".chartbutton").on("click", sendSelectedNutrient)
-
-
-	function makeBarChart(data) {
-    $('#nutrient-chart').attr('class', 'show')
-    console.log("got inside bar chart")
-    let serving = document.getElementById("serving").innerHTML;
-    console.log(serving)
-
-    // servingValue = serving.value
-    // console.log(servingValue)
-    // let integerServing = Number(serving);
-    // console.log(integerServing)
-    console.log(data['nutrient_name'])
-    console.log(data['amount'])
-    console.log(data['goal_amount'])
-		$("#percent").html("<h4>" + "this is " + (Number(data['percent']) * Number(serving)) + "% of " + "your " + data['nutrient_name'] + " goal of " + data['goal_amount'] + " " + data['unit_of_measurement'] + "</h4>")
-  		let newChart = document.getElementById('barChart').getContext('2d');
-
-  		let barChart = new Chart(newChart, {
-  			type: 'horizontalBar', 
-  			data: {
-  				labels: ["amount"],
-  				datasets: [{
-  					label: data['nutrient_name'],
-  					data: [data['amount'] * Number(serving)],
-  					backgroundColor: '#FF1654',
-  					borderWidth: 1,
-  					borderColor: '#777'
-  				}]
-  			},
-  			options: {
-  				title: {
-  					display: true,
-  					text: 'Amount of Daily Goal'
-  				},
-  				responsive: false,
-  				scales: {
-  					xAxes: [{
-  						ticks: {
-  							min: 0, 
-  							max: data['goal_amount'] + (0.25 * data['goal_amount'])
-  						}
-  					}]
-  				}
-  			}
-  				
-  		});
-  	}
-
-
-
-</script>
 
 
 

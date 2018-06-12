@@ -16,7 +16,8 @@
 
 .flex-container {
   display: flex;
-  flex-direction: row;
+  margin-left: 0px;
+
 }
 
 .margins {
@@ -45,3 +46,15 @@
 	width: 300px;
 }
 
+.span-5 {
+	margin-right: 30px;
+	padding-left: 30px;
+}
+
+.span-6 {
+	margin-right: 30px;
+}
+
+.row {
+	margin-left: 20px;
+}

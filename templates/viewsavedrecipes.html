@@ -47,28 +47,31 @@
     <a href="{{ recipe[0].blog_url }}" class="card-link">Nutrition</a>
   </div>
 </div> -->
-<div class="card eachRecipe" style="display: inline-block; width: 18rem;" id="{{ recipe[0].blog_url }}">
-	    <div class="card-header">
-      <div display: inline-block;><h5>{{ recipe[0].recipe_name }} </h5></div> <div display: inline-block;>
-      
-    </div>    
-  </div>
-  <img class="card-img-top" src={{ recipe[0].recipe_image}} alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text"><b><h6 class="labels"> Health Labels:</b> | 
-		   				{% for label in recipe[1] %}
-		   		 		{{ label.diet_label }} |
-		     		{% endfor %} </h6> </p>
-    <div style="display: inline-block"><a href="{{ recipe[0].recipe_url }}" class="btn btn-primary btn-primary:hover">Directions</a></div>
-    	<div style="display: inline-block"><form action="/analyze-goal" class="analyzegoal">  		
-				<button type="submit" class="btn btn-primary btn-primary:hover" name='url' value='{{ recipe[0].recipe_url }}'> Analyze </button>
-				</form></div>
-				<form action="/delete-recipe" method="POST" class="deleteForm">  		
-				<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'>delete</button>
-				</form>
-  </div>
-</div>
+<!-- <div class="container">
+<div class='card-group'>
+<div class="col-xs-12 col-md-6 col-lg-4 col-xl-4"> -->
 
+<div class="card eachRecipe" style="display: inline-block; width: 18rem;" id="{{ recipe[0].blog_url }}">
+  <div class="card-header">
+     <div display: inline-block;><h5>{{ recipe[0].recipe_name }} </h5></div> <div display: inline-block;></div>    
+   </div>
+    <img class="card-img-top" src={{ recipe[0].recipe_image}} alt="Card image cap">
+  	<div class="card-body">
+    <p class="card-text"><b><h6 class="labels"> Health Labels:</b> | 
+		   				 {% for label in recipe[1] %}
+		   		 		 {{ label.diet_label }} |
+		     		     {% endfor %} </h6> </p> </div>
+    <div style="display: inline-block"><a href="{{ recipe[0].recipe_url }}" class="btn btn-primary btn-primary:hover">Directions</a></div>
+      <div style="display: inline-block"><form action="/analyze-goal" class="analyzegoal">  		
+		<button type="submit" class="btn btn-primary btn-primary:hover" name='url' value='{{ recipe[0].recipe_url }}'> Analyze </button></form></div>
+		<form action="/delete-recipe" method="POST" class="deleteForm">  		
+		<button type="submit" class="deleteButton" id="{{recipe[0].recipe_id}}" name='url' value='{{ recipe[0].recipe_url }}'>delete</button>
+		</form>
+	  </div>			
+  </div>
+
+<!-- </div>
+</div> -->
 
 <!-- 		<ul class="eachRecipe" id="{{ recipe[0].blog_url }}">
 		   <p><img class="shadow" src= {{ recipe[0].recipe_image}}></p>
