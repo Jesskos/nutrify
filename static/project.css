@@ -25,21 +25,25 @@
 	 bottom-margin: 10px; 
 }
 
+.searchButton {
+	margin-top: 20px;
+}
 
 .btn-primary {
 	color: black;
   background-color: #70C1B3;
    border-radius: 5px;
-   border: 2px solid #FF1654;
-   margin-top: 10px
+   margin-left: 20px;
+   margin-bottom: 20px
 
 
 }
 
+
 .btn-primary:hover {
     color: #fff;
     background-color: green;
-    border-color: #285e8e; /*set the color you want here*/
+
 }
 
 .form-control {
@@ -53,6 +57,10 @@
 
 .span-6 {
 	margin-right: 30px;
+}
+
+.goalcard {
+	margin-left: 50px;
 }
 
 .row {

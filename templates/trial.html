@@ -1,0 +1,68 @@
+
+<!-- {% extends 'base2.html' %}
+
+{% block title %} View Recipes {% endblock %}
+
+{% block content %}
+
+
+
+	{% if recipes != [] %}
+		<h2> Hello, {{ session["name"] }}. We found the following recipes for you. </h2>
+
+
+<div class="container">
+		   {% for recipe in recipes %}
+
+	<div class="card recipe-card" style="width: 18rem; display: inline-block">
+		  <img class="card-img-top shadow" src={{ recipe['recipe_image'] }} alt="Card image cap">
+		  <div class="card-body"> 
+		    <h5 class="card-title"> <p><h4>{{ recipe['recipe_name'] }} </h4></p></h5>
+		    <p class="card-text"><b><h6> Health Labels:</b>  
+		            {% for label in recipe['labels'] %}
+		   		      {{ label }} |
+		     	    {% endfor %} </h6> </p>
+		      <div style="display: inline-block;">
+		      	<div style="display: block;"><a href="{{ recipe['recipe_blog_url'] }}" class="{{ recipe['recipe_blog_url'] }}">Nutrition </a>
+		        </div>
+		        <div style="display: block;"><a href="{{ recipe['recipe_url'] }}" class="{{ recipe['recipe_url'] }}">    Directions</a></div>
+		      </div>
+		        <div style="display: inline-block; padding-left: 75px;"><form action="/save-recipe" method="POST" class="saveForm">
+		   	    <button type="submit" class="submitButton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}' data-tooltip="saved">Save </button>
+		        </form> 
+		       </div>
+		  </div>
+		</div>
+	</div>
+</div>
+ -->
+<!-- 		   <div class="container2"> 
+		       <p><img class="shadow" src= {{ recipe['recipe_image'] }}></p>
+		       <p><h3>{{ recipe['recipe_name'] }} </h3></p>
+		       <form action="{{ recipe['recipe_blog_url'] }}">
+    			<input type="submit" class="nutritionbutton" value="Nutrition Information" />
+				</form>
+				 <form action="{{ recipe['recipe_url'] }}">
+    			<input type="submit" class="instructionbutton" value="Instructions" />
+				</form>
+		   	   <b><h6> Health Labels:</b>  
+		            {% for label in recipe['labels'] %}
+		   		      {{ label }} |
+		     	    {% endfor %} </h6> 
+
+		        <form action="/save-recipe" method="POST" class="saveForm">
+		   	    <button type="submit" class="submitButton" id="{{recipe['recipeid']}}" name='url' value='{{recipe['recipe_url']}}' data-tooltip="saved">Save Recipe</button>
+		        </form> <hr> 	
+		   </div> -->
+<!-- 		{% endfor %}
+	{% else %}
+	    <h2> Sorry, {{ session["name"] }}. No recipes found with those criteria. Try to narrow your search. </h2>
+ 	{% endif %}
+	</ul>
+ -->
+
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="/static/javascript.js"></script>
+
+{% endblock %}

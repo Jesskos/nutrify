@@ -4,88 +4,123 @@
 
 {% block content %}
 
+<div class="container-fluid">
+  <div class="row">
+	  <div class="span-6" style="display: margin-right: 30px;">
+		<div class="card border-info mb-3 cardinfo" style="max-width: 24rem; height: 25rem">
+		  <div class="card-header">Your Information</div>
+		  <div class="card-body text-info">
+		    <p class="card-text">
+		    	<div class="userinfo">
+				  <p><b><h6 style="display:inline;";> First Name:</h6></b><h6 style="display:inline;"> {{ fname.title() }} </h6></p>
 
-<div><h3 style="display:inline;";> First Name:</h3> <h4 style="display:inline;"> {{ fname }} </h4></div>
+				  <p><b><h6 style="display:inline;"> Last Name:</h6></b><h6  style="display:inline;">  {{ lname.title() }} </h6></p>
 
-<div><h3 style="display:inline;"> Last Name:</h3><h4  style="display:inline;">  {{ lname }} <h4></div>
+				  <p><b><h6 style="display:inline;"> Email: </h6></b><h6 style="display:inline;">{{ email }} </h6></p>
 
-<div><h3 style="display:inline;"> Email: </h3><h4 style="display:inline;">{{ email }} </h4></div>
+				  <p><h6 class="willaddtext"></h6></p>
 
-<h6 class="willaddtext"></h6>
+				<div>
+				  <h6> <b>Allergies/Intolerances:</b> </h6>
 
-<div><h3> Allergies/Intolerances: </h3>
+				  {% if allergies != [] %}
+				  <div id="allergies">
+				  {% for allergy in allergies %}
+				  <li>{{ allergy.allergy_name }}</li>	
+				  {% endfor %} 
+				  </div>
 
-	{% if allergies != [] %}
-		<div id="allergies">
-		{% for allergy in allergies %}
-		<li>{{ allergy.allergy_name }}</li>	
-		{% endfor %} 
+				  {% else %}
 
-	{% else %}
+				  <h6> No allergies!</h6>
 
-		<h6> No allergies!</h6>
+				{% endif %}
+				</div> 
+				</div></p>
+		  </div>
+		</div>
+	  </div>
+	<div class="span-6 goalcard">
+		<div class="card border-info mb-3 cardinfo" style="max-width: 24rem; height: 25rem">
+		  <div class="card-header"> Nutrient Goals: </div>
+		  <div class="card-body text-info">
+		    <p class="card-text">	<div id="dietgoals">
+			{% if users_nutrient_goals != [] %}
+				{% for nutrient_goal in users_nutrient_goals %}
+				<li>
+				{{ nutrient_goal.high_or_low }} 
+				{{ nutrient_goal.nutrient_name }} |	
+				Goal: {{ nutrient_goal.nutrient_goal}}
+				<form action="/delete-diet" method="POST" class="deleteForm" name="dietid" id ="{{nutrient_goal.nutrient_name}}" class="dietform" style="display: inline-block";>  
+				<button type="submit" class="deletebutton deleteGoalButton" name='diet'> remove </button>
+				</form></li>
+				{% endfor %} 
+			{% else %}
+			<div id="nogoals"><h6> No nutrient Goals. Please Add! </h6></div>
 
-	{% endif %}
-	</div> 
+			{% endif %}</div></p>
+	  	  </div>
+		</div>
+	  </div>
+   </div>
 
-<h3> Nutrient Goals: </h3>
 
 
-	<div id="dietgoals">
-	{% if users_nutrient_goals != [] %}
-		{% for nutrient_goal in users_nutrient_goals %}
-		<li>
-		{{ nutrient_goal.high_or_low }} 
-		{{ nutrient_goal.nutrient_name }} |	
-		Goal: {{ nutrient_goal.nutrient_goal}}
-		<form action="/delete-diet" method="POST" class="deleteForm" name="dietid" id ="{{nutrient_goal.nutrient_name}}" class="dietform">  
-		<button type="submit" class="deletebutton" name='diet'> remove </button>
-		</form></li>
-		{% endfor %} 
-	{% else %}
+  <div class="row">
+    <div class="span-12">
+  
+		<div class="addDietFirst"><p><form action="/add-diet" method="POST" class="adddiet">
+		<button type="button" class="btn btn-info" id="" name="" value="">Add Nutrient Goal</button>
+		</form></div>
+     </div>
+  </div>
 
-		
-		<div id="nogoals"><h6> No nutrient Goals. Please Add! </h6></div>
+  <div class="row">
+    <div class="span-12">
 
-	{% endif %}</div>
-
-	<p><form action="/add-diet" method="POST" class="adddiet">
-	<button type="button" class="" id="" name="" value="">Add Diet</button>
-	</form>
-
-	<div class="hidden" id="hiddenadd">
-	<form action="/add-diet" method="POST" >
-		<button type="submit" name="nutrient" value="sodium" class="nutrient"> Sodium </button>
-		<button type="submit" name="nutrient" value="protein" class="nutrient"> Protein </button>
-		<button type="submit" name="nutrient" value="fiber" class="nutrient"> Fiber </button>
-		<button type="submit" name="nutrient" value="totalfat" class="nutrient"> Total Fat </button>  
-		<button type="submit" name="nutrient" value="saturatedfat" class="nutrient"> Saturated fat </button>
-		<button type="submit" name="nutrient" value="potassium" class="nutrient">  Potassium </button>
-		<button type="submit" name="nutrient" value="phosphorus" class="nutrient">  Phosphorus </button>
-		<button type="submit" name="nutrient" value="carbohydrates" class="nutrient"> Carbohydrates  </button>  
-		<button type="submit" name="nutrient" value="calories" class="nutrient">  Calories </button>
-		<button type="submit" name="nutrient" value="iron" class="nutrient">  Iron </button>
-	</form>
-	</div>
-	<div class="hidden" id="invisibletextbox">
-		<form action="/add-diet" method="POST">
-			<div>
-			<label for='nutrientgoal' class="labelinputnutrient"> Would you like a diet high or low in: <h5></h5>
-			<input type="radio" name = "highlow" value="high" id="high" required> High
-			<input type="radio" name = "highlow" value="low" id="low" required> Low  <p>
-			</div>
-			<div>
-			<label for='nutrientgoal' class="labelinputnutrient"> Please enter your nutrient goal for:<h5></h5>
-			<input type="number" name="goal" class='textinput' id="nutrientgoal" required><h4 id='unit'></h4>
-			<input type="submit" class="submitbutton">
-			</div>
-
+		<div class="hidden" id="hiddenadd" style="display:margin-botton: 30px">
+		<form action="/add-diet" method="POST" >
+			<button type="submit" name="nutrient" value="sodium" class="nutrient btn btn-outline-info"> Sodium </button>
+			<button type="submit" name="nutrient" value="protein" class="nutrient btn btn-outline-info"> Protein </button>
+			<button type="submit" name="nutrient" value="fiber" class="nutrient btn btn-outline-info"> Fiber </button>
+			<button type="submit" name="nutrient" value="totalfat" class="nutrient btn btn-outline-info"> Total Fat </button>  
+			<button type="submit" name="nutrient" value="saturatedfat" class="nutrient btn btn-outline-info"> Saturated fat </button>
+			<button type="submit" name="nutrient" value="potassium" class="nutrient btn btn-outline-info">  Potassium </button>
+			<button type="submit" name="nutrient" value="phosphorus" class="nutrient btn btn-outline-info">  Phosphorus </button>
+			<button type="submit" name="nutrient" value="carbohydrates" class="nutrient btn btn-outline-info"> Carbohydrates  </button>  
+			<button type="submit" name="nutrient" value="calories" class="nutrient btn btn-outline-info">  Calories </button>
+			<button type="submit" name="nutrient" value="iron" class="nutrient btn btn-outline-info">  Iron </button>
 		</form>
+		</div>
 	</div>
-	<div id="description"></div>
+  </div>
+      <div class="row">
+         <div class="span-12">
 
-<script src="https://code.jquery.com/jquery.js"></script>
-<script src="/static/javascript.js"></script>
+
+		<div class="hidden" id="invisibletextbox">
+			<form action="/add-diet" method="POST">
+				<div class="dietquestionsradio" style="display: inline-block">
+				  <label for='nutrientgoal' class="labelinputnutrient"> Would you like a diet high or low in: <h5></h5>
+				  <input type="radio" name = "highlow" value="high" id="high" required> High
+				  <input type="radio" name = "highlow" value="low" id="low" required> Low  <p>
+				</div>
+				<div class="dietquestionstext" style="display: inline-block">
+				  <label for='nutrientgoal' class="labelinputnutrient"> Please enter your nutrient goal for:<h5></h5>
+				  <input type="number" name="goal" class='textinput' id="nutrientgoal" required><h6 id='unit' style="display: inline-block"></h6>
+				  <input type="submit" class="submitbutton btn btn-info" value="save"> 
+				</div>
+		</div>
+
+			</form>
+		<div class="dietinstruction" id="description"></div>
+	</div>
+  </div>
+</div>
+
+
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="/static/javascript.js"></script>
 
 {% endblock %}
 

@@ -2,23 +2,24 @@
 
 {% block title %} User Portal {% endblock %}
 
+
+
 {% block content %}
 <div>
-<h2> Welcome, {{ session["name"].title() }} </h2>
-<h2> The place to find recipes for your nutrient goals! </h2>
+<center><h2 class="quicksand"> Welcome, {{ session["name"].title() }} </h2></center>
 </div>
 
 
 
 
 	<center><div class="roundborder">
-	<div class="recommended"><h3>{{session["name"].title() }}'s Recommended Recipe </h3> </div>
-	<div class="info"><h6>This recipe was recommended based on your nutrition goals and allergies. Please click links below for more information.</h6></div>
-	<div class="title" style="display: block;"><p id="recipename"></p></div>
+	<div class="recommended"><h3 class="indieflower">{{session["name"].title() }}'s Recommended Recipe </h3> </div>
+	<div class="info"><h6 class="indieflower">This recipe was recommended based on your nutrition goals and allergies. Please select the links below</div>
+	<div class="title" style="display: block;"><p id="recipename" class="indieflower"></p></div>
 	<div style="display: inline-block;"><p id="image" class="recipeImage"></p></div>
 
-	<div class="directions"><p id="url"></p></div>
-	<div class="nutrition1"><p id="blogurl"></p></div>
+	<div class="directions quicksand"><p id="url"></p></div>
+	<div class="nutrition1 quicksand"><p id="blogurl"></p></div>
 
 	
 	</div></center>
@@ -38,8 +39,8 @@
 	   $.get("/recommend-recipe", function (data) {
 	        $('#recipename').html("<h4>" + data.recipe_name + "</h4>");
 	        $('#image').html("<" + "img src=" + " " + data.image + ">");
-	        $('#url').html("<a href=" + data.url + " " + "class='linkbutton'" + ">" + "Directions__________________________________" + "</a>");
-	        $('#blogurl').html("<a href=" + data.blog_url + " " + "class='linkbutton'" + ">" + "Nutrition___________________________________" + "</a>");
+	        $('#url').html("<a href=" + data.url + " " + "class='linkbutton'" + ">" + "Recipe Directions" + "</a>");
+	        $('#blogurl').html("<a href=" + data.blog_url + " " + "class='linkbutton'" + ">" + "Recipe Nutrition" + "</a>");
 
 	    });
 

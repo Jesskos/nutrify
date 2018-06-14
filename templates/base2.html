@@ -21,6 +21,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<link href="https://fonts.googleapis.com/css?family=Quicksand|Indie+Flower" rel="stylesheet">
+    <style>
+      .indieflower { font-family: "Indie+Flower", cursive; }
+
+       .quicksand body { font-family: "Quicksand", sans-serif;}
+
+       body { font-family: "Quicksand", sans-serif;}
+
+   </style>
+
 
 
 
@@ -29,7 +39,7 @@
     <style> 
 
     body {
-  background-color: #B2DBBF;
+  background-color: #FBFBFB;
   }
 
     .hidden {
@@ -53,35 +63,70 @@
     border-style: inset;
     }
 
-    .container {
+    .searchrecipe {
     margin: 0px;
     }
 
-     .container2 {
-    margin-left: 25px;
-    display: block;
-    border: 1px red;
+  .card1 {
+      width: 18em;
+      margin: 4px;
+    }
+
+  .cardbody1 {
+    background-color: #F0F0F0;
+  }
+
+     .cardinfo {
+      width: 25em;
+      margin: 4px;
+      height: 40;
+      margin-left: 28px;
+    }
+
+    .addDietFirst {
+      margin-left: 385px;
+      margin-bottom: 30px;
+    }
+
+
+      .container {
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
     }
 
     h2 {
     margin-left: 20px;
-    color: #944743;
-    font-family: Verdana;
     padding-bottom:40px;
     }
 
+    .sortbuttons {
+      margin-bottom: 30px;
+    }
+
+    .listofbuttons {
+      margin-left: 30px;
+      margin-bottom: 20px;
+    }
+
+    .goalsummary {
+      margin-left: 50px;
+      margin-bottom: 30px
+    }
+
     .submitButton {
-    background-color:  #F3FFBD; 
-    font-family: Verdana;
+    background-color:  #B2DBBF; 
     border: none;
     color: black;
-    padding: 10px 20px;
+    padding: 5px 15px;
     font-size: 16px;
     margin: 6px 2px;
     text-align: center;
     display: inline-block;
     border-radius: 12px;
     border: 3px solid #247BA0;
+    margin-left: 10px;
   }
 
      .nutritionbutton {
@@ -138,10 +183,6 @@
   }
 
 
-    h3 {
-    color: #944743; 
-    font-family: Verdana;
-    }
 
     .recipecard {
       background-color: #5F9FB9;
@@ -179,6 +220,14 @@
   color: green;
   border: none;
   padding-left: 200px;
+  margin-left: 35px;
+}
+
+.deleteGoalButton {
+  background-color: transparent;
+  color: green;
+  border: none;
+  padding-left: 10px;
 }
 
 .analyzegoalButton {
@@ -210,13 +259,14 @@
 
 .directions {
   position: absolute;
-  margin-left: 10px;
+  margin-left: 120px;
   margin-top: 250px;
+  margin-right: 20px;
 }
 
 .nutrition1 {
   position: absolute;
-  margin-left: 10px;
+  margin-left: 124px;
   margin-top: 300px;
 }
 
@@ -229,7 +279,7 @@
 .info {
   position: absolute;
   margin-left: 10px;
-  margin-top: 150px;
+  margin-top: 170px;
   width: 350px;
 }
 
@@ -239,6 +289,11 @@
   margin-top: 150px;
   width: 20px;
   height: 10px;
+}
+
+.found {
+  margin-left:70px;
+  padding-bottom: 60px;
 }
 
 .flex-container-row {
@@ -254,12 +309,39 @@
   margin-top: 20px;
 }
 
+.directionsbutton {
+  margin-left: 30px;
+  margin-right: 10px;
+
+}
+
+.dietquestionsradio {
+  margin-top: 0px;
+  margin-right: 50px;
+  margin-left: 100px;
+}
+
+.dietquestionstext {
+  margin-top: 30px;
+  margin-left: 90px;
+}
+
+.dietinstruction {
+  margin-left: 100px;
+}
+
+.analysistitle {
+  margin-left: 220px;
+  margin-bottom: 50px;
+  margin-top: 20px;
+}
+
   </style>
 
 <!-- Code goes here. -->
 <nav class="navbar navbar-expand-md navbar-dark navbar-custom p-0">
 
-  <a class="navbar-brand" href="#">Nutrify</a>
+  <a class="navbar-brand" href="#" style="padding:10px">   Nutrify</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

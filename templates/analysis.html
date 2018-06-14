@@ -6,8 +6,8 @@
 
 
 
-<center><div class="recipename">
-<h3>Recipe: {{recipe.recipe_name}}</h3></div></center>
+<div class="recipename">
+<h3 class="analysistitle">Recipe: {{recipe.recipe_name}}</h3></div>
 
 <div class="container-fluid">
 
@@ -44,25 +44,25 @@
         <h5 class="card-title"><h5 style="display:inline;"> Recipe Yield: </h5><h5 style="display:inline;"> {{ recipe.recipe_yield }} servings </h5></h5></p>
 
         <p><h5 style="display:inline;"> Amount per serving: </h5><h5 id='servingtext' style="display:inline;"> 1 </h5>
-        <p class="card-text"><li><h5 style="display:inline;"> Calories: </h5><h5 class = 'nutrientamount' name={{ recipe.calories }} style="display:inline;"> {{ recipe.calories }}<h5 style="display:inline;"> calories </h5></li>
+        <p class="card-text"><li><h5 style="display:inline;"><b> Calories: </b></h5><h5 class = 'nutrientamount' name={{ recipe.calories }} style="display:inline;"> {{ recipe.calories }}<h5 style="display:inline;"> calories </h5></li>
 
-    <li><h5 style="display:inline;"> Carbohydrates: </h5><h5 class = 'nutrientamount' name={{ recipe.carbohydrates }} style="display:inline;"> {{ recipe.carbohydrates }}</h5><h5 style="display:inline;"> grams </h5></li>
+    <li><h5 style="display:inline;"><b> Carbohydrates: </b></h5><h5 class = 'nutrientamount' name={{ recipe.carbohydrates }} style="display:inline;"> {{ recipe.carbohydrates }}</h5><h5 style="display:inline;"> grams </h5></li>
 
-    <li><h5 style="display:inline;"> Protein: </h5><h5 class = 'nutrientamount' name={{ recipe.protein }} style="display:inline;"> {{ recipe.protein }}</h5><h5 style="display:inline;"> gram(s)</h5></li>
+    <li><h5 style="display:inline;"><b> Protein: </b></h5><h5 class = 'nutrientamount' name={{ recipe.protein }} style="display:inline;"> {{ recipe.protein }}</h5><h5 style="display:inline;"> gram(s)</h5></li>
 
-    <li><h5 style="display:inline;"> Fat: </h5><h5 class = 'nutrientamount' name={{ recipe.fat }} style="display:inline;"> {{ recipe.fat }} grams </h5></li>
+    <li><h5 style="display:inline;"><b> Fat: </b></h5><h5 class = 'nutrientamount' name={{ recipe.fat }} style="display:inline;"> {{ recipe.fat }} grams </h5></li>
 
-    <li><h5 style="display:inline;"> Saturated Fat: </h5><h5 class = 'nutrientamount' name={{ recipe.saturated_fat }} style="display:inline;"> {{ recipe.saturated_fat }}</h5><h5 style="display:inline;"> grams </h5></li>
+    <li><h5 style="display:inline;"><b> Saturated Fat: </b></h5><h5 class = 'nutrientamount' name={{ recipe.saturated_fat }} style="display:inline;"> {{ recipe.saturated_fat }}</h5><h5 style="display:inline;"> grams </h5></li>
 
-    <li><h5 style="display:inline;"> Iron: </h5><h5 class = 'nutrientamount' name={{ recipe.iron }} style="display:inline;"> {{ recipe.iron }}</h5><h5 style="display:inline;"> mg </h5></li>
+    <li><h5 style="display:inline;"><b>Iron: </b></h5><h5 class = 'nutrientamount' name={{ recipe.iron }} style="display:inline;"> {{ recipe.iron }}</h5><h5 style="display:inline;"> mg </h5></li>
 
-    <li><h5 style="display:inline;"> Fiber: </h5><h5 class = 'nutrientamount' name={{ recipe.fiber }} style="display:inline;"> {{ recipe.fiber }} <h5 style="display:inline;"> grams </h5></li>
+    <li><h5 style="display:inline;"><b> Fiber: </b></h5></b><h5 class = 'nutrientamount' name={{ recipe.fiber }} style="display:inline;"> {{ recipe.fiber }} <h5 style="display:inline;"> grams </h5></li>
 
-    <li><h5 style="display:inline;"> Potassium: </h5><h5 class = 'nutrientamount' name= {{ recipe.potassium }} style="display:inline;"> {{ recipe.potassium }}</h5><h5 style="display:inline;"> mg </h5></li>
+    <li><h5 style="display:inline;"><b>Potassium:</b></h5><h5 class = 'nutrientamount' name= {{ recipe.potassium }} style="display:inline;"> {{ recipe.potassium }}</h5><h5 style="display:inline;"> mg </h5></li>
 
-    <li><h5 style="display:inline;"> Phosphorus </h5><h5 class = 'nutrientamount' name={{ recipe.phosphorus }} style="display:inline;"> {{ recipe.phosphorus }}</h5><h5 style="display:inline;"> mg </h5></li>
+    <li><h5 style="display:inline;"><b>Phosphorus:</b></h5><h5 class = 'nutrientamount' name={{ recipe.phosphorus }} style="display:inline;"> {{ recipe.phosphorus }}</h5><h5 style="display:inline;"> mg </h5></li>
 
-    <li><h5 style="display:inline;"> Sodium </h5><h5 class = 'nutrientamount' name={{ recipe.sodium }} style="display:inline;"> {{ recipe.sodium }}</h5><h5 style="display:inline;"> mg </h5></li>
+    <li><h5 style="display:inline;"><b>Sodium:</b> </h5><h5 class = 'nutrientamount' name={{ recipe.sodium }} style="display:inline;"> {{ recipe.sodium }}</h5><h5 style="display:inline;"> mg </h5></li>
 
     </p>
       </div>
@@ -115,7 +115,7 @@
 <div class="row">
 
  <div class="span9">
-  <div>
+  <div class="listofbuttons">
   {% for goal in goals %}
   <button type="button" class="chartbutton analyzegoalButton" id="{{ goal.nutrient_name }}" value ="{{ recipe.recipe_id }}">{{ goal.nutrient_name }}</button>
   {% endfor %} </div> 
@@ -123,7 +123,7 @@
   <div id="nutrient-chart" class="hidden row-2">
   <canvas width="500px;" height="200px;" id="barChart"></canvas>
   <div id="barLegend" class="chart-legend"></div>
-  <div id="percent"></div>
+  <div class="goalsummary" id="percent"></div>
 
 <!--   for nutrient chart -->
 </div>
