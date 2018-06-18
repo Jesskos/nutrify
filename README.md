@@ -55,24 +55,28 @@ A user can analyze all saved reicpes. Chart.js is used to visualize how the amou
 
 ###  Setup 
 
-Clone the repository 
+1. Clone the repository 
 
-From an activate virtual environment:
+2. From an activate virtual environment: 
+
   `pip install requirements.txt`
 
-Create the database 
+3. Create the database 
+
   `createdb recipesdb`
 
-Seed the database by running seed.py 
+4. Seed the database by running seed.py
+
    `python seed.py`
 
-In order to view Chart.js images: 
+5. In order to view Chart.js images: 
    1. Install package.json
    		* This is a very helpful link: [Install package.json instructions](https://docs.npmjs.com/getting-started/using-a-package.json)
    2. Install Chart.js 
        * Please view Chart.js documentation: [Install Chart.js instructions ](https://www.chartjs.org/docs/latest/getting-started/installation.html)
 
-Run server.py 
+6. Run server.py
+
    `python server.py`
 
  
