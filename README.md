@@ -26,8 +26,17 @@ Nutrify allows a user to:
 * analyze saved recipes to determine how a nutrient compares with his or her goals set in the profile section 
 
 ![User Profile](static/profile.png)
+A user can add new nutritional goals the profile section. This feature using AJAX to add and remove new goals from database, as well as Javascript and JQUERY, to enhance user experience while on the page. 
 
 
+![User Portal](static/userportal.png)
+A user can get a recommended recipe when logging in based on nutritional goals and allergies using an algorithm that queries the database on the backend and AJAX while the page loads to get a recommended recipe.
+
+![Find-Recipes](static/findrecipes.png)
+The app makes an API call to the Edamam API when the user searches for a micro- or macro-nutrient, and returns the results. 
+
+![User Portal](static/searchresults.png)
+All returned recipes are saved to the database on each call. However, the results are returned to the user directly from the parsed API results to avoid a second query of the database. When a user saves a recipe, a recipe becomed saved to a middle table connecting users and recipes. AJAX is used to a user can save multiple recipes while on the same page. 
 
 
 
