@@ -25,7 +25,7 @@ Nutrify allows a user to:
 * change servings to see how the serving size affects nutrient composition 
 * analyze saved recipes to determine how a nutrient compares with his or her goals set in the profile section 
 
-![User Profile](Users/Jessica/src/project/static/profile)
+![User Profile](Users/Jessica/src/project/static/profile.png)
 
 
 
