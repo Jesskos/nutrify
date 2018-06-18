@@ -19,13 +19,13 @@ Nutrify can be used by anyone, but is specifically targetted for users managing 
 
 Nutrify allows a user to: 
 * set nutritional goals in his or her profile based on target micronutrients and/or macronutrients
-* get a recommended recipe each time he or she logs in 
-* search for recipes based on the amount of a nutrient and recipe ingredients
+* get a recommended recipe each time he or she logs in to the Nutrify app 
+* search for recipes based on the amount of a nutrient as well as a recipe or ingredient keyword
 * save recipes from search results and view saved recipes 
-* change servings to see how the serving size affects nutrient composition 
+* change servings of a recipe to see how the serving size affects nutrient composition 
 * analyze saved recipes to determine how a nutrient compares with his or her goals set in the profile section 
 
-![User Profile](Users/Jessica/src/project/static/profile.png)
+![User Profile](static/profile.png)
 
 
 
