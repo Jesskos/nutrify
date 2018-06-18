@@ -38,6 +38,14 @@ The app makes an API call to the Edamam API when the user searches for a micro- 
 ![User Portal](static/searchresults.png)
 All returned recipes are saved to the database on each call. However, the results are returned to the user directly from the parsed API results to avoid a second query of the database. When a user saves a recipe, a recipe becomed saved to a middle table connecting users and recipes. AJAX is used to a user can save multiple recipes while on the same page. 
 
+![View Recipes](static/viewrecipes.png)
+A user can view and analyze all saved recipes. Recipes are queried from the database for a user on the backend, and an AJAX call is made to delete recipes on the page. 
+
+![Analysis](static/analysis.png)
+A user can analyze all saved reicpes. chart.js is used to visualize how the amount of a nutrient in a recipe affects the nutrient goals. A user can change the serving of a recipe to see how change in serving affects amount of nutrients. This feature uses JavaScript and jQuery. 
+
+
+
 
 
 ###  Setup 
