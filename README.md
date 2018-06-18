@@ -21,11 +21,12 @@ Nutrify allows a user to:
 * set nutritional goals in his or her profile based on target micronutrients and/or macronutrients
 * get a recommended recipe each time he or she logs in 
 * search for recipes based on the amount of a nutrient and recipe ingredients
-* save and view saved recipes 
+* save recipes from search results and view saved recipes 
 * change servings to see how the serving size affects nutrient composition 
 * analyze saved recipes to determine how a nutrient compares with his or her goals set in the profile section 
 
-![alt text](/home/vagrant/src/project/static/profile.png "User's Profile")
+![User Profile Image](/home/vagrant/src/project/static/profile.png)
+
 
 
 
