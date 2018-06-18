@@ -55,7 +55,7 @@ A user can analyze all saved reicpes. Chart.js is used to visualize how the amou
 
 ###  Setup 
 
-1. Clone the repository 
+1. Clone the repository to a local directory.
 
 2. From an activated virtual environment: 
 
@@ -80,8 +80,7 @@ A user can analyze all saved reicpes. Chart.js is used to visualize how the amou
    * `python server.py`
 
  
-
-
+7. Run `localhost:5000` in the browser window
 
 
 
