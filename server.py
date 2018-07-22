@@ -139,17 +139,13 @@ def open_user_portal():
 
 @app.route("/recommend-recipe", methods=["GET"])
 def recommend_recipe():
-	""" recommends a recipe based on allergies and goals """ 
+	""" recommends a recipe based on allergies and goals. Since a user may have allergies or may not, 4 conditionals used""" 
 
 	session_user_id = session['id']
 	logged_in_user = User.query.get(session_user_id)
 
 	goals = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id).all()
 	allergies = UserToAllergy.query.filter(UserToAllergy.user_id==logged_in_user.user_id).all()
-
-	print goals
-	print allergies
-	print "!!!!!!!!!!!!!!!!!!!!"
 
 	allergens = []
 	for allergy in allergies:
@@ -172,10 +168,7 @@ def recommend_recipe():
 			allergens = []
 			for allergy in allergies:
 				allergens.append(allergy.allergy_name)
-			
 			allergy_free_recipes = get_recipes_meeting_goals(goals, allergens)
-			print "!!!!!!!!!!!!!"
-			print allergy_free_recipes
 			random_recipe = sample((allergy_free_recipes), 1)
 			data_dict = {'recipeid': random_recipe[0].recipe_id, 
 			'recipe_name': random_recipe[0].recipe_name, 
@@ -187,7 +180,6 @@ def recommend_recipe():
 
 
 	elif goals and not allergies:
-			print "got into not allergies but goals"
 			recipes = get_recipes_meeting_goals(goals)
 			random_recipe = sample((recipes), 1)
 			data_dict = {'recipeid': random_recipe[0].recipe_id, 
@@ -199,7 +191,6 @@ def recommend_recipe():
 			return jsonify(data_dict)
 
 	else: 
-		print "ALLERGIES BUT NOT GOALS"
 		allergens = []
 		for allergy in allergies:
 			allergens.append(allergy.allergy_name)
@@ -210,9 +201,6 @@ def recommend_recipe():
 				if allergy not in recipe.ingredients_list:
 					recipes.add(recipe)
 		random_recipe = sample((recipes), 1)
-		print random_recipe
-		print "!!!!!!!!!!!!!!!!!"
-
 
 		data_dict = {'recipeid': random_recipe[0].recipe_id, 
 		'recipe_name': random_recipe[0].recipe_name, 
@@ -494,8 +482,6 @@ def save_recipe():
 		if check_if_user_has_recipe:
 
 			# print "\n\nRECIPE ALREADY EXISTS"
-
-			print "\n\nRECIPE ALREADY EXISTS"
 			return "Recipe already EXISTS"
 
 			# flash("recipe already exist")
@@ -513,8 +499,7 @@ def save_recipe():
 			# return "Recipe Saved"
 
 			# flash("recipe saved!")
-			# return redirect("/view-saved-recipe")
-			print "\n\nRECIPE SAVED"
+	
 			return "Recipe saved"
 
 @app.route("/delete-recipe", methods=["POST"])
@@ -534,7 +519,6 @@ def delete_recipe():
 	db.session.delete(recipe_tagged_for_deletion_by_user)
 	db.session.commit()
 
-	print "\n\nRecipe deleted"
 	return "recipe deleted!"
 
 ##################################################################################################################
