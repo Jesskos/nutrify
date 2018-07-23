@@ -124,7 +124,7 @@ def log_out():
 
 
 ##################################################################################################################
-# OPENS USER PROFILE, USER PORTAL, FINDS AND GETS RECIPES FROM API
+# OPENS USER PROFILE, USER PORTAL, RECOMMENDS RECIPE ON USER PORTAL, FINDS AND GETS RECIPES FROM API
 
 @app.route("/user-portal")
 def open_user_portal():
@@ -191,6 +191,7 @@ def recommend_recipe():
 			return jsonify(data_dict)
 
 	else: 
+		# AKA elif allergies and not goals 
 		allergens = []
 		for allergy in allergies:
 			allergens.append(allergy.allergy_name)
