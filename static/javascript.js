@@ -44,7 +44,6 @@
 	// userprofile.html
 
 	function showDiets(evt) {
-		console.log("got inside showDiets")
 		$('#hiddenadd').attr('class', 'show');
 	}
 
@@ -55,7 +54,6 @@
 // on click, this will show a nutrient text box with text about the nutrient
 	function showNutrientTextBox(evt) {
 		evt.preventDefault();
-		console.log("got inside showNutrientTextBox");
 		let nutrientvalue = $(this).val();
 		$("h5").html(nutrientvalue);
 		$('#invisibletextbox').attr('class', 'show');
@@ -86,9 +84,6 @@
 	$(".nutrient").on("click", showNutrientTextBox);
 
 	function showResults(results) {
-		console.log("got inside showResults")
-		console.log(results)
-		console.log("testing")
 		$('#hiddenadd').attr('class', 'hidden');
 		$('#invisibletextbox').attr('class', 'hidden');
 		$("#description").html('')
@@ -107,8 +102,6 @@
 
 	function addDiet(evt) {
 		evt.preventDefault()
-		console.log("got inside addRecipe")
-		console.log(evt)
 		let radioButtonValue = 'none';
 		$("#nogoals").remove()
 
