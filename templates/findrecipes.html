@@ -4,10 +4,11 @@
 
 {% block content %}
 
-<script src="https://developer.edamam.com/attribution/badge.js"></script>
+<head><script src="https://developer.edamam.com/attribution/badge.js"></script></head>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"> </script>
 
 <div class="container2"> 
+	<div id="edamam-badge" data-color="white"></div>
 <ul> 
 	{% for message in get_flashed_messages() %}
 	<li>{{ message }}</li>
