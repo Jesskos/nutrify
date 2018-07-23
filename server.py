@@ -62,6 +62,7 @@ def add_registration_info():
 	email = request.form.get("email")
 	password = request.form.get("password")
 	allergies = request.form.getlist("allergy")
+	yesno = request.form.get("yesno")
 	print allergies
 
 	user = User.query.filter_by(user_email=email).first()
@@ -74,11 +75,12 @@ def add_registration_info():
 		db.session.add(new_user)
 		db.session.commit()
 
-		if allergies and allergies[0].isalpha():
-			for allergy in allergies: 
-				new_allergy = UserToAllergy(user=new_user, allergy_name=allergy)
-				db.session.add(new_allergy)
-			db.session.commit()
+		if yesno == "yes":
+			if allergies and allergies[0].isalpha():
+				for allergy in allergies: 
+					new_allergy = UserToAllergy(user=new_user, allergy_name=allergy)
+					db.session.add(new_allergy)
+				db.session.commit()
 
 
 		flash("You have now been registered! Please log in")
