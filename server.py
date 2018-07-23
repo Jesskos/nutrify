@@ -532,8 +532,6 @@ def add_diet():
 	nutrient_goal = int(request.form.get("goal"))
 
 	high_or_low = request.form.get("highlow")
-	print high_or_low
-	print "!!!!!!!!!!!!!!!"
 
 
 	nutrient_name = request.form.get("nutrient")
@@ -544,9 +542,6 @@ def add_diet():
 
 	check_if_nutrient_goal_added_exists_in_db = UserToDiet.query.filter(UserToDiet.user_id==logged_in_user.user_id, 
 		UserToDiet.nutrient_name==nutrient_name).first()
-
-
-	print check_if_nutrient_goal_added_exists_in_db 
 
 	if check_if_nutrient_goal_added_exists_in_db:
 		return "undefined"
