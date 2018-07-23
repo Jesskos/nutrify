@@ -211,6 +211,7 @@ def recommend_recipe():
 		'blog_url': random_recipe[0].blog_url,
 		'image': random_recipe[0].recipe_image,
 		'ingredients': random_recipe[0].ingredients_list}
+		
 		return jsonify(data_dict)
 
 
