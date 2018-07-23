@@ -531,6 +531,9 @@ def add_diet():
 	nutrient_goal = int(request.form.get("goal"))
 
 	high_or_low = request.form.get("highlow")
+	print high_or_low
+	print "!!!!!!!!!!!!!!!"
+
 
 	nutrient_name = request.form.get("nutrient")
 
@@ -547,7 +550,11 @@ def add_diet():
 	if check_if_nutrient_goal_added_exists_in_db:
 		return "undefined"
 
-	else:
+	elif high_or_low == 'none':
+		print "checked if none"
+		missing = {"goal": "missing"}
+		return jsonify(missing)
+	else: 
 		new_nutrient_goal  = UserToDiet(user=logged_in_user, nutrient_name=nutrient_name, high_or_low=high_or_low, 
 			nutrient_goal=nutrient_goal)
 		db.session.add(new_nutrient_goal)
@@ -556,6 +563,8 @@ def add_diet():
 		new_goal = {"high_or_low": high_or_low,
 				"nutrient_name": nutrient_name,
 				"nutrient_goal":nutrient_goal }
+		print "added to db"
+		print "!!!"
 		return jsonify(new_goal)
 
 

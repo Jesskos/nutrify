@@ -86,6 +86,9 @@
 	$(".nutrient").on("click", showNutrientTextBox);
 
 	function showResults(results) {
+		console.log("got inside showResults")
+		console.log(results)
+		console.log("testing")
 		$('#hiddenadd').attr('class', 'hidden');
 		$('#invisibletextbox').attr('class', 'hidden');
 		$("#description").html('')
@@ -93,9 +96,9 @@
 		let words = document.querySelector("#dietgoals");
 		if (results==='undefined') {
 			(alert("A nutrient goal for this nutrient has already been added. Please remove nutrient to add a new goal for this nutrient")) 
-		}	
-		else {
-
+		} else if (results['goal']==='missing') {
+			alert("Please select high or low for this nutrient")
+		} else {
 			let tempNutrientGoal = results['high_or_low'] + ' ' + results['nutrient_name'] + ' | ' + 'Goal: ' + results['nutrient_goal'] + button;
 				$("#dietgoals").append("<li>"+tempNutrientGoal+ "</li>");
 		}
