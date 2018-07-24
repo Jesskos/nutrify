@@ -63,8 +63,6 @@ def add_registration_info():
 	password = request.form.get("password")
 	allergies = request.form.getlist("allergy")
 	yesno = request.form.get("yesno")
-	print allergies
-
 	user = User.query.filter_by(user_email=email).first()
 
 	if user:
@@ -550,7 +548,6 @@ def add_diet():
 		return "undefined"
 
 	elif high_or_low == 'none':
-		print "checked if none"
 		missing = {"goal": "missing"}
 		return jsonify(missing)
 	else: 
@@ -562,8 +559,6 @@ def add_diet():
 		new_goal = {"high_or_low": high_or_low,
 				"nutrient_name": nutrient_name,
 				"nutrient_goal":nutrient_goal }
-		print "added to db"
-		print "!!!"
 		return jsonify(new_goal)
 
 

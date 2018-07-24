@@ -105,7 +105,6 @@ def get_recipes_meeting_goals(users_goals, allergies=None):
 	 				list_of_recipes.append(high_sodium_recipes_set)
 	
 	 		elif goal_nutrient == 'protein':
-	 			print "got inside protein"
 	 			if high_or_low  == 'low':
 	 				low_protein_recipes = Recipe.query.filter(Recipe.protein <= 4).all()
 	 				low_protein_recipes_set = set()
@@ -226,8 +225,6 @@ def get_recipes_meeting_goals(users_goals, allergies=None):
 	 					high_carbohydrates_recipes_set.add(recipe)
 	 				list_of_recipes.append(high_carbohydrates_recipes_set)
 
-
-	print list_of_recipes
 
 
 	set_of_recipes_meeting_goals = set(list_of_recipes[0])
