@@ -6,7 +6,7 @@ After=syslog.target network.target
 User=ubuntu
 ExecStart=/bin/bash -c "source /home/ubuntu/nutrify/secrets.sh\
 && source /home/ubuntu/nutrify/env/bin/activate\
-&& python3 /home/ubuntu/nutrify/server.py &>> /home/ubuntu/nutrify/flask.log"
+&& python /home/ubuntu/nutrify/server.py &>> /home/ubuntu/nutrify/flask.log"
 Restart=always
 
 [Install]
