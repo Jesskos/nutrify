@@ -44,20 +44,22 @@ def get_nutrient_search_parameters(unicode_nutrients_list):
 	nutrients_string = ""
 
 	# makes dictionary of nutrition search criteria 
-	nutrient_choice_to_search_parameter= {'lowpotassium':'&nutrients[K]=200', 'lowphosphorus':'&nutrients[P]=50', 
-	'carbohydratecontrolled34':'&nutrients[CHOCDF]=45-60&nutrients[SUGAR]=7',
-	'carbohydratecontrolled45':'&nutrients[CHOCDF]=60-75&nutrients[SUGAR]=7',
-	'highfiber':'&nutrients[FIBTG]=5-20', 'lowfat':'&nutrients[FAT]=3', 'lowprotein':'&nutrients[PROCNT]=4',
-	'highprotein':'&nutrients[PROCNT]=7-30', 'lowcalories': '&nutrients[ENERC_KCAL]=200', 'lowsodium':'&nutrients[NA]=140',
-	'lowsaturatedfat':'&nutrients[FASAT]=2', 'lowfiber':'&nutrients[FIBTG]=2', 'highiron':'&nutrients[FE]=5-10'}
+	nutrient_choice_to_search_parameter= {'lowpotassium':'&nutrients%5BFE%5D=200', 'lowphosphorus':'&nutrients%5BP%5D=50', 
+	'carbohydratecontrolled34':'&nutrients%5BCHOCDF%5D=45-60&nutrients%5BSUGAR%5D=7',
+	'carbohydratecontrolled45':'&nutrients%5BCHOCDF%5D=60-75&nutrients%5BSUGAR%5D=7',
+	'highfiber':'&nutrients%5BFIBTG%5D=5-20', 'lowfat':'&nutrients%5BFAT%5D=3', 'lowprotein':'&nutrients%5BPROCNT%5D=4',
+	'highprotein':'&nutrients%5BPROCNT%5D=7-30', 'lowcalories': '&nutrients%5BENERC_KCAL%5D=200', 'lowsodium':'&nutrients%5BNA%5D=140',
+	'lowsaturatedfat':'&%5BFASAT%5D=2', 'lowfiber':'&nutrients%5BFIBTG%5D=2', 'highiron':'&nutrients%5BFE%5D=5-10'}
 
 	if unicode_nutrients_list == []:
 		return nutrients_string
 
 	for unicode_nutrient in unicode_nutrients_list:
+		print "unicode nutrient is {}".format(unicode_nutrient)
 		search_parameter = nutrient_choice_to_search_parameter[unicode_nutrient]
 		nutrients_string += search_parameter
 
+	print "nutrient string is {}".format(nutrients_string)
 	return nutrients_string
 
 
